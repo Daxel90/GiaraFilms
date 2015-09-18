@@ -13,24 +13,23 @@ public class DefaultGui extends JPanel
 	
 	public DefaultGui()
 	{
-	    setLayout(null); 
-	    setOpaque(false);
+		setLayout(null);
+		setOpaque(false);
 	}
-    
 	
 	public void init(int width, int height)
 	{
 		FRAME_WIDTH = width;
-		FRAME_HEIGHT = height-30;
-		setBounds(0, 0, FRAME_WIDTH/2, FRAME_HEIGHT);
-	    setSize(new Dimension(FRAME_WIDTH,FRAME_HEIGHT));
-	    this.removeAll();
-	    loadComponent();
+		FRAME_HEIGHT = height - 30;
+		setBounds(0, 0, FRAME_WIDTH / 2, FRAME_HEIGHT);
+		setSize(new Dimension(FRAME_WIDTH, FRAME_HEIGHT));
+		this.removeAll();
+		loadComponent();
 	}
 	
 	public void loadComponent()
 	{
-		
+	
 	}
-
+	
 }

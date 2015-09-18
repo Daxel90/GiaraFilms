@@ -2,29 +2,29 @@ package it.giara.utils;
 
 import java.io.File;
 
-public class DirUtils 
+public class DirUtils
 {
-
+	
 	public static File workDir = null;
-
+	
 	public static File getWorkingDirectory()
 	{
 		if (workDir == null)
 		{
 			workDir = getWorkingDirectory("giarafilms");
 		}
-
+		
 		return workDir;
 	}
 	
 	public static File getDownloadDir()
 	{
-		return new File(getWorkingDirectory(),"download");
+		return new File(getWorkingDirectory(), "download");
 	}
 	
 	public static File getCacheDir()
 	{
-		return new File(getWorkingDirectory(),"cache");
+		return new File(getWorkingDirectory(), "cache");
 	}
 	
 	public static File getWorkingDirectory(String applicationName)
@@ -41,7 +41,7 @@ public class DirUtils
 				final String applicationData = System.getenv("APPDATA");
 				if (applicationData != null)
 				{
-					workingDirectory = new File(applicationData,  applicationName + '/');
+					workingDirectory = new File(applicationData, applicationName + '/');
 				}
 				else
 				{
@@ -54,17 +54,15 @@ public class DirUtils
 			default:
 				workingDirectory = new File(userHome, applicationName + '/');
 		}
-
+		
 		if (!workingDirectory.exists())
 		{
 			;
 		}
 		workingDirectory.mkdirs();
-
+		
 		return workingDirectory;
 	}
-	
-	
 	
 	public static OS getPlatform()
 	{
@@ -96,19 +94,21 @@ public class DirUtils
 		return OS.unknown;
 	}
 	
-	public static double getJavaVersion() 
-	{    
+	public static double getJavaVersion()
+	{
 		String version = System.getProperty("java.version");
-		Log.log(Log.INFO,"version:" + version);
+		Log.log(Log.INFO, "version:" + version);
 		int pos = 0, count = 0;
-		for (; pos < version.length() && count < 2; pos++) {
-			if (version.charAt(pos) == '.') {
+		for (; pos < version.length() && count < 2; pos++)
+		{
+			if (version.charAt(pos) == '.')
+			{
 				count++;
 			}
-		}	
-		--pos; 
+		}
+		--pos;
 		double dversion = Double.parseDouble(version.substring(0, pos));
-		Log.log(Log.INFO,"Java Version:" + dversion);
+		Log.log(Log.INFO, "Java Version:" + dversion);
 		return dversion;
 	}
 	

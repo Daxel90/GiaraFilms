@@ -22,7 +22,7 @@ public class LoadScreen extends DefaultGui
 	public LoadScreen instance;
 	public JLabel logo;
 	public JProgressBar bar;
-	public  JLabel textProgress;
+	public JLabel textProgress;
 	private Timer timer1;
 	private Timer timer2;
 	public float alpha = 0F;
@@ -35,40 +35,40 @@ public class LoadScreen extends DefaultGui
 		logo = new JLabel();
 		logo.setIcon(ImageUtils.getIcon(ImageUtils.alphaSet(ImageUtils.getImage("logo.png"), alpha)));
 		logo.setHorizontalAlignment(JLabel.CENTER);
-		logo.setBounds(0, -FRAME_HEIGHT*shift/80, FRAME_WIDTH, FRAME_HEIGHT);
+		logo.setBounds(0, -FRAME_HEIGHT * shift / 80, FRAME_WIDTH, FRAME_HEIGHT);
 		add(logo);
 		
-	    timer1 = new Timer(20, fade);
-	    timer1.setInitialDelay(500);
-	    timer1.start();
-	    
-	    bar = new JProgressBar();
-	    bar.setBounds(FRAME_WIDTH/6, FRAME_HEIGHT*3/4, FRAME_WIDTH*2/3, 20);
-	    bar.setVisible(false);
-	    add(bar);
-	    
-	    textProgress = new JLabel();
-	    textProgress.setBounds(FRAME_WIDTH/6, FRAME_HEIGHT*3/4-30, FRAME_WIDTH*2/3, 20);
-	    textProgress.setVisible(false);
-	    add(textProgress);
+		timer1 = new Timer(20, fade);
+		timer1.setInitialDelay(500);
+		timer1.start();
+		
+		bar = new JProgressBar();
+		bar.setBounds(FRAME_WIDTH / 6, FRAME_HEIGHT * 3 / 4, FRAME_WIDTH * 2 / 3, 20);
+		bar.setVisible(false);
+		add(bar);
+		
+		textProgress = new JLabel();
+		textProgress.setBounds(FRAME_WIDTH / 6, FRAME_HEIGHT * 3 / 4 - 30, FRAME_WIDTH * 2 / 3, 20);
+		textProgress.setVisible(false);
+		add(textProgress);
 	}
 	
 	ActionListener fade = new ActionListener()
 	{
 		@Override
 		public void actionPerformed(ActionEvent e)
-		{	
-			if(alpha >= 0.9)
+		{
+			if (alpha >= 0.9)
 			{
 				timer1.stop();
-			    timer1 = null;
+				timer1 = null;
 				timer2 = new Timer(20, up);
 				timer2.setInitialDelay(100);
 				timer2.start();
 			}
 			else
 			{
-				alpha+=0.02f;
+				alpha += 0.02f;
 				logo.setIcon(ImageUtils.getIcon(ImageUtils.alphaSet(ImageUtils.getImage("logo.png"), alpha)));
 				repaint();
 			}
@@ -79,13 +79,13 @@ public class LoadScreen extends DefaultGui
 	{
 		@Override
 		public void actionPerformed(ActionEvent e)
-		{	
-			if(shift >= 10)
+		{
+			if (shift >= 10)
 			{
 				timer2.stop();
-			    timer2 = null;
+				timer2 = null;
 				bar.setVisible(true);
-				ThreadManager.submitCacheTask( new Runnable()
+				ThreadManager.submitCacheTask(new Runnable()
 				{
 					@Override
 					public void run()
@@ -111,7 +111,7 @@ public class LoadScreen extends DefaultGui
 			else
 			{
 				shift++;
-				logo.setBounds(0, -FRAME_HEIGHT*shift/80, FRAME_WIDTH, FRAME_HEIGHT);
+				logo.setBounds(0, -FRAME_HEIGHT * shift / 80, FRAME_WIDTH, FRAME_HEIGHT);
 				repaint();
 			}
 		}

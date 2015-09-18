@@ -45,7 +45,7 @@ public class ImageUtils
 			return ImageIO.read(getResourceAsStream("/it/resources/" + imageName));
 		} catch (final IOException e)
 		{
-			Log.stack(Log.GUI,e);
+			Log.stack(Log.GUI, e);
 			return null;
 		}
 	}
@@ -58,7 +58,7 @@ public class ImageUtils
 			return ImageIO.read(imageFile);
 		} catch (final IOException e)
 		{
-			Log.stack(Log.GUI,e);
+			Log.stack(Log.GUI, e);
 			return null;
 		}
 	}
@@ -75,7 +75,7 @@ public class ImageUtils
 			return new ImageIcon(image);
 		} catch (final Exception e)
 		{
-			Log.stack(Log.GUI,e);
+			Log.stack(Log.GUI, e);
 		}
 		return null;
 	}
@@ -91,11 +91,10 @@ public class ImageUtils
 			return image;
 		} catch (final Exception e)
 		{
-//			Log.stack(e);
+			// Log.stack(e);
 		}
 		return null;
 	}
-	
 	
 	// Convert Icon to Image
 	public static Image imageToIcon(Icon icon)
@@ -103,7 +102,8 @@ public class ImageUtils
 		if (icon instanceof ImageIcon)
 		{
 			return ((ImageIcon) icon).getImage();
-		} else
+		}
+		else
 		{
 			final int w = icon.getIconWidth();
 			final int h = icon.getIconHeight();
@@ -139,7 +139,7 @@ public class ImageUtils
 			return scaleImage(ImageIO.read(getResourceAsStream("/it/resources/" + imageName)), w, h);
 		} catch (final IOException e)
 		{
-			Log.stack(Log.GUI,e);
+			Log.stack(Log.GUI, e);
 			return null;
 		}
 	}
@@ -152,7 +152,7 @@ public class ImageUtils
 			return new ImageIcon(scaleImage(ImageIO.read(getResourceAsStream("/it/resources/" + iconName)), w, h));
 		} catch (final IOException e)
 		{
-			Log.stack(Log.GUI,e);
+			Log.stack(Log.GUI, e);
 			return null;
 		}
 	}
@@ -163,16 +163,17 @@ public class ImageUtils
 		Font font;
 		try
 		{
-			font = Font.createFont(Font.TRUETYPE_FONT, getResourceAsStream("/it/resources/" + FontName + ".ttf")).deriveFont((float) size);
+			font = Font.createFont(Font.TRUETYPE_FONT, getResourceAsStream("/it/resources/" + FontName + ".ttf"))
+					.deriveFont((float) size);
 		} catch (final Exception e)
 		{
-			Log.stack(Log.GUI,e);
+			Log.stack(Log.GUI, e);
 			font = new Font("Arial", Font.PLAIN, size);
 		}
 		return font;
 	}
 	
-	//RenderAlpha
+	// RenderAlpha
 	public static BufferedImage alphaSet(BufferedImage img, float alpha)
 	{
 		final BufferedImage newImage = new BufferedImage(img.getWidth(), img.getHeight(), BufferedImage.TYPE_INT_ARGB);
@@ -182,8 +183,8 @@ public class ImageUtils
 			g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 			g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 			g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-			AlphaComposite ac = AlphaComposite.getInstance(AlphaComposite.SRC_OVER,alpha);
-	        g.setComposite(ac);
+			AlphaComposite ac = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha);
+			g.setComposite(ac);
 			g.drawImage(img, 0, 0, img.getWidth(), img.getHeight(), null);
 		} finally
 		{
@@ -219,27 +220,28 @@ public class ImageUtils
 		return newImage;
 	}
 	
-//	//scalare immagine con qualita' superiore senza conservare aspect ratio
-	public static BufferedImage scaleImage(BufferedImage img,int targetWidth,int targetHeight)
+	// //scalare immagine con qualita' superiore senza conservare aspect ratio
+	public static BufferedImage scaleImage(BufferedImage img, int targetWidth, int targetHeight)
 	{
-		BufferedImage ret = (BufferedImage)img;
-		int	w = img.getWidth();
-		int	h = img.getHeight();
+		BufferedImage ret = (BufferedImage) img;
+		int w = img.getWidth();
+		int h = img.getHeight();
 		
-		do {
-			if (w > targetWidth) 
+		do
+		{
+			if (w > targetWidth)
 			{
 				w /= 2;
-				if (w < targetWidth) 
+				if (w < targetWidth)
 				{
 					w = targetWidth;
 				}
 			}
-				
-			if (h > targetHeight) 
+			
+			if (h > targetHeight)
 			{
 				h /= 2;
-				if (h < targetHeight) 
+				if (h < targetHeight)
 				{
 					h = targetHeight;
 				}

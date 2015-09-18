@@ -9,30 +9,33 @@ import java.io.File;
 import java.net.URISyntaxException;
 import java.security.CodeSource;
 
-public class UpdateProgram 
+public class UpdateProgram
 {
 	
 	public static void checkUpdate(LoadScreen screen)
 	{
-		try {
+		try
+		{
 			CodeSource codeSource = MainClass.class.getProtectionDomain().getCodeSource();
 			File jarFile = new File(codeSource.getLocation().toURI().getPath());
-			if(jarFile.getAbsolutePath().endsWith(".jar"))
+			if (jarFile.getAbsolutePath().endsWith(".jar"))
 			{
 				String md5 = MD5.getMD5Checksum(jarFile);
-				if(HttpPost.post("http://giaratest.altervista.org/giarafilms/MD5Update.php", "md5", md5).equals("update"))
+				if (HttpPost.post("http://giaratest.altervista.org/giarafilms/MD5Update.php", "md5", md5)
+						.equals("update"))
 				{
 					startUpdate(screen);
 				}
 			}
 			
-		} catch (URISyntaxException e) {}
+		} catch (URISyntaxException e)
+		{}
 		
 	}
 	
 	public static void startUpdate(LoadScreen screen)
 	{
-		//TODO
+		// TODO
 	}
 	
 }

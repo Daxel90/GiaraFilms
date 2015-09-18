@@ -10,7 +10,7 @@ import javax.swing.JTextField;
 public class HomePage extends DefaultGui
 {
 	private static final long serialVersionUID = -5303561242288508484L;
-
+	
 	public void loadComponent()
 	{
 		JLabel sep2 = new JLabel();
@@ -19,8 +19,8 @@ public class HomePage extends DefaultGui
 		this.add(sep2);
 		
 		JTextField search = new JTextField();
-		search.setBounds(FRAME_WIDTH*3/4-50, 5, FRAME_WIDTH/4, 30);
-
+		search.setBounds(FRAME_WIDTH * 3 / 4 - 50, 5, FRAME_WIDTH / 4, 30);
+		
 		this.add(search);
 	}
 }

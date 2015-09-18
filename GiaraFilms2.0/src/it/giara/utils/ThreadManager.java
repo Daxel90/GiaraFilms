@@ -3,7 +3,7 @@ package it.giara.utils;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class ThreadManager 
+public class ThreadManager
 {
 	public static ExecutorService CachedExecutor;
 	public static ExecutorService PoolExecutor;
@@ -13,7 +13,6 @@ public class ThreadManager
 		CachedExecutor = Executors.newCachedThreadPool();
 		PoolExecutor = Executors.newFixedThreadPool(10);
 	}
-	
 	
 	public static void submitCacheTask(Runnable task)
 	{

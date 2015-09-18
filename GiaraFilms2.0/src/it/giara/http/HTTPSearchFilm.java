@@ -13,7 +13,7 @@ import org.apache.commons.lang3.StringEscapeUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class HTTPSearchFilm 
+public class HTTPSearchFilm
 {
 	// http://www.animeclick.it/
 	
@@ -30,23 +30,22 @@ public class HTTPSearchFilm
 	{
 		Log.log(Log.FILMINFO, search);
 		scheda = new PreSchedaFilm();
-		try {
+		try
+		{
 			getFileInfo(search);
-		} catch (Exception e) 
+		} catch (Exception e)
 		{
 			Log.stack(Log.NET, e);
 		}
 		
-		if(scheda == null)
-			Log.log(Log.FILMINFO, search+ " NON TROVATO");
-		
+		if (scheda == null)
+			Log.log(Log.FILMINFO, search + " NON TROVATO");
+			
 	}
-	
-	
 	
 	private void getFileInfo(String title) throws IOException, JSONException
 	{
-		URL url = new URL("http://www.comingsoon.it/film/?titolo="+title.replace(" ", "%20"));
+		URL url = new URL("http://www.comingsoon.it/film/?titolo=" + title.replace(" ", "%20"));
 		final URLConnection conn = url.openConnection();
 		conn.connect();
 		BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF8"));
@@ -56,125 +55,136 @@ public class HTTPSearchFilm
 		while ((line = rd.readLine()) != null)
 		{
 			l++;
-			if(line.contains("<!-- /Component SectionContentsbox: MOVIE list -->"))
+			if (line.contains("<!-- /Component SectionContentsbox: MOVIE list -->"))
 			{
 				find = l;
 			}
-			if(find != -1 && l == find+7)
+			if (find != -1 && l == find + 7)
 			{
-				if(!line.contains("<a href="))
+				if (!line.contains("<a href="))
 				{
-					if(!advanceSearch)
-					getFileInfoAdvanced(title);
+					if (!advanceSearch)
+						getFileInfoAdvanced(title);
 					return;
 				}
-				scheda.link = "http://www.comingsoon.it"+line.trim().split("'")[1]; //link
+				scheda.link = "http://www.comingsoon.it" + line.trim().split("'")[1]; // link
 				Log.log(Log.FILMINFO, scheda.link);
 			}
-			if(find != -1 && l == find+8)
+			if (find != -1 && l == find + 8)
 			{
 				scheda.smallImage = line.trim().split("'")[3];
-				Log.log(Log.FILMINFO, scheda.smallImage); //small image
+				Log.log(Log.FILMINFO, scheda.smallImage); // small image
 			}
-			if(find != -1 && l == find+11)
+			if (find != -1 && l == find + 11)
 			{
 				scheda.Titolo = StringEscapeUtils.unescapeHtml4(line.trim().replace("<h3>", "").replace("</h3>", ""));
-				Log.log(Log.FILMINFO, scheda.Titolo); //Titolo
+				Log.log(Log.FILMINFO, scheda.Titolo); // Titolo
 			}
-			if(find != -1 && l == find+14)
+			if (find != -1 && l == find + 14)
 			{
-				scheda.Generi = line.trim().replace("<li><span>GENERE</span>:", "").replace("</li>", "").trim().split(", ");
-				Log.log(Log.FILMINFO, scheda.Generi[0]); //Genere
+				scheda.Generi = line.trim().replace("<li><span>GENERE</span>:", "").replace("</li>", "").trim()
+						.split(", ");
+				Log.log(Log.FILMINFO, scheda.Generi[0]); // Genere
 			}
-			if(find != -1 && l == find+15)
+			if (find != -1 && l == find + 15)
 			{
-				scheda.anno = Integer.parseInt(line.trim().replace("<li><span>ANNO</span>:", "").replace("</li>", "").trim());
-				Log.log(Log.FILMINFO, scheda.anno); //Anno
+				scheda.anno = Integer
+						.parseInt(line.trim().replace("<li><span>ANNO</span>:", "").replace("</li>", "").trim());
+				Log.log(Log.FILMINFO, scheda.anno); // Anno
 			}
-			if(find != -1 && l == find+16)
+			if (find != -1 && l == find + 16)
 			{
-				scheda.nazionalita = StringEscapeUtils.unescapeHtml4(line.trim().replace("<li><span>NAZIONALITA'</span>:", "").replace("</li>", "").trim() );
-				Log.log(Log.FILMINFO, scheda.nazionalita); //Nazionalità
+				scheda.nazionalita = StringEscapeUtils.unescapeHtml4(
+						line.trim().replace("<li><span>NAZIONALITA'</span>:", "").replace("</li>", "").trim());
+				Log.log(Log.FILMINFO, scheda.nazionalita); // Nazionalità
 			}
-			if(find != -1 && l == find+17)
+			if (find != -1 && l == find + 17)
 			{
-				scheda.regia = StringEscapeUtils.unescapeHtml4(line.trim().replace("<li><span>REGIA</span>:", "").replace("</li>", "").trim() );
-				Log.log(Log.FILMINFO, scheda.regia); //Regia
+				scheda.regia = StringEscapeUtils
+						.unescapeHtml4(line.trim().replace("<li><span>REGIA</span>:", "").replace("</li>", "").trim());
+				Log.log(Log.FILMINFO, scheda.regia); // Regia
 			}
 		}
 		rd.close();
-
+		
 	}
-	
-	
 	
 	public void getFileInfoAdvanced(String title) throws IOException, JSONException
 	{
 		advanceSearch = true;
 		String result = "";
-		URL url = new URL("https://www.googleapis.com/customsearch/v1element?key=AIzaSyCVAXiUzRYsML1Pv6RwSG1gunmMikTzQqY&num=10&hl=it5&cx=001228879720830619245:WMX2023538107&q="+title.replace(" ", "%20"));
+		URL url = new URL(
+				"https://www.googleapis.com/customsearch/v1element?key=AIzaSyCVAXiUzRYsML1Pv6RwSG1gunmMikTzQqY&num=10&hl=it5&cx=001228879720830619245:WMX2023538107&q="
+						+ title.replace(" ", "%20"));
 		final URLConnection conn = url.openConnection();
 		conn.connect();
 		BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF8"));
 		String line;
-		while ((line = rd.readLine()) != null) 
+		while ((line = rd.readLine()) != null)
 		{
 			result += line;
 		}
 		rd.close();
 		JSONObject json = new JSONObject(result);
-        
-	     if(json.getJSONArray("results").length() <1)
-		    {
-		    	scheda = null;
-		    	return;
-		    }
-	        
-	    int x = -1;
-	    for(int k = 0; k < json.getJSONArray("results").length()-1; k++)
-	    {
-	    	if(!json.getJSONArray("results").getJSONObject(k).has("perResultLabels"))
-	    	continue;
-//	    	Log.log(Log.FILMINFO, json.getJSONArray("results").getJSONObject(k).getJSONArray("perResultLabels").getJSONObject(0).getString("label"));
-	    	if(json.getJSONArray("results").getJSONObject(k).getJSONArray("perResultLabels").getJSONObject(0).getString("label").trim().equals("film"))
-	    	{
-	    		x = k;
-	    		break;
-	    	}
-	    }
-	    if(x == -1)
-	    {
-	    	scheda = null;
-	    	return;
-	    }
-	    String Titolo = json.getJSONArray("results").getJSONObject(x).getJSONObject("richSnippet").getJSONObject("movie").getString("name");
-	    
-	    getFileInfo(Titolo);
-	    
-//	    scheda.Titolo = json.getJSONArray("results").getJSONObject(x).getJSONObject("richSnippet").getJSONObject("movie").getString("name");
-//	    scheda.link = json.getJSONArray("results").getJSONObject(x).getString("url");
-//	    scheda.smallImage = json.getJSONArray("results").getJSONObject(x).getJSONObject("richSnippet").getJSONObject("movie").getString("image");
-//	    scheda.regia = json.getJSONArray("results").getJSONObject(x).getJSONObject("richSnippet").getJSONObject("movie").getString("director");
-//        String[] prt = json.getJSONArray("results").getJSONObject(x).getJSONObject("richSnippet").getJSONObject("movie").getString("datepublished").split(" ");
-//        String genere = json.getJSONArray("results").getJSONObject(x).getJSONObject("richSnippet").getJSONObject("movie").getString("genre");
-//        scheda.anno = 0;
-//        try
-//        {
-//        	scheda.anno = Integer.parseInt(prt[prt.length-1]);
-//        }catch(Exception e)
-//        {
-//        	Log.stack(Log.FILMINFO, e);
-//        }
-//        Log.log(Log.FILMINFO, scheda.Titolo);
-//        Log.log(Log.FILMINFO, scheda.link);
-//        Log.log(Log.FILMINFO, scheda.smallImage);
-//        Log.log(Log.FILMINFO, scheda.anno);
-//        Log.log(Log.FILMINFO, scheda.regia);
-//        Log.log(Log.FILMINFO, genere);
-	
+		
+		if (json.getJSONArray("results").length() < 1)
+		{
+			scheda = null;
+			return;
+		}
+		
+		int x = -1;
+		for (int k = 0; k < json.getJSONArray("results").length() - 1; k++)
+		{
+			if (!json.getJSONArray("results").getJSONObject(k).has("perResultLabels"))
+				continue;
+			// Log.log(Log.FILMINFO,
+			// json.getJSONArray("results").getJSONObject(k).getJSONArray("perResultLabels").getJSONObject(0).getString("label"));
+			if (json.getJSONArray("results").getJSONObject(k).getJSONArray("perResultLabels").getJSONObject(0)
+					.getString("label").trim().equals("film"))
+			{
+				x = k;
+				break;
+			}
+		}
+		if (x == -1)
+		{
+			scheda = null;
+			return;
+		}
+		String Titolo = json.getJSONArray("results").getJSONObject(x).getJSONObject("richSnippet")
+				.getJSONObject("movie").getString("name");
+				
+		getFileInfo(Titolo);
+		
+		// scheda.Titolo =
+		// json.getJSONArray("results").getJSONObject(x).getJSONObject("richSnippet").getJSONObject("movie").getString("name");
+		// scheda.link =
+		// json.getJSONArray("results").getJSONObject(x).getString("url");
+		// scheda.smallImage =
+		// json.getJSONArray("results").getJSONObject(x).getJSONObject("richSnippet").getJSONObject("movie").getString("image");
+		// scheda.regia =
+		// json.getJSONArray("results").getJSONObject(x).getJSONObject("richSnippet").getJSONObject("movie").getString("director");
+		// String[] prt =
+		// json.getJSONArray("results").getJSONObject(x).getJSONObject("richSnippet").getJSONObject("movie").getString("datepublished").split("
+		// ");
+		// String genere =
+		// json.getJSONArray("results").getJSONObject(x).getJSONObject("richSnippet").getJSONObject("movie").getString("genre");
+		// scheda.anno = 0;
+		// try
+		// {
+		// scheda.anno = Integer.parseInt(prt[prt.length-1]);
+		// }catch(Exception e)
+		// {
+		// Log.stack(Log.FILMINFO, e);
+		// }
+		// Log.log(Log.FILMINFO, scheda.Titolo);
+		// Log.log(Log.FILMINFO, scheda.link);
+		// Log.log(Log.FILMINFO, scheda.smallImage);
+		// Log.log(Log.FILMINFO, scheda.anno);
+		// Log.log(Log.FILMINFO, scheda.regia);
+		// Log.log(Log.FILMINFO, genere);
+		
 	}
-	
-	
-	
 	
 }

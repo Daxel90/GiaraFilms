@@ -1,6 +1,6 @@
 package it.giara.schede;
 
-public class PreSchedaFilm 
+public class PreSchedaFilm
 {
 	public String Titolo;
 	public String link;
@@ -13,19 +13,14 @@ public class PreSchedaFilm
 	public String getGeneri()
 	{
 		String result = "";
-		if(Generi != null)
-		for(String s: Generi)
-		{
-			result+=s.toUpperCase()+",";
-		}
-		if(result.endsWith(","))
-			result = result.substring(0, result.length()-1);
+		if (Generi != null)
+			for (String s : Generi)
+			{
+				result += s.toUpperCase() + ",";
+			}
+		if (result.endsWith(","))
+			result = result.substring(0, result.length() - 1);
 		return result;
 	}
-	
-	
-	
-	
-	
 	
 }

@@ -7,9 +7,9 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
 
-public class HttpPost 
+public class HttpPost
 {
-
+	
 	public static String post(String pagina, String variabile, String valore)
 	{
 		String risultato = "error";
@@ -31,8 +31,7 @@ public class HttpPost
 			risultato = removeUTF8BOM(risultato);
 			wr.close();
 			rd.close();
-		}
-		catch (Exception e)
+		} catch (Exception e)
 		{
 			Log.stack(Log.NET, e);
 		}
@@ -47,6 +46,5 @@ public class HttpPost
 		}
 		return s;
 	}
-
 	
 }

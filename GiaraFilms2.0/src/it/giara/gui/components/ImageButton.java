@@ -24,7 +24,7 @@ public class ImageButton extends JLabel implements MouseListener
 	
 	public ImageButton(BufferedImage i1, Runnable action)
 	{
-		this(i1,i1,i1,action);
+		this(i1, i1, i1, action);
 	}
 	
 	public ImageButton(BufferedImage i1, BufferedImage i2, BufferedImage bufferedImage, Runnable action)
@@ -38,45 +38,40 @@ public class ImageButton extends JLabel implements MouseListener
 		current = normal;
 		
 	}
-
-
+	
 	@Override
 	public void mouseClicked(MouseEvent e)
 	{
-		if(act != null)
-		act.run();
+		if (act != null)
+			act.run();
 	}
-
-
+	
 	@Override
 	public void mouseEntered(MouseEvent e)
 	{
 		isOver = true;
-		if(over != null)
+		if (over != null)
 			current = over;
 		repaint();
 	}
-
-
+	
 	@Override
 	public void mouseExited(MouseEvent e)
 	{
 		isOver = false;
-		if(normal != null)
+		if (normal != null)
 			current = normal;
 		repaint();
 	}
-
-
+	
 	@Override
 	public void mousePressed(MouseEvent e)
 	{
-		if(clicked != null)
+		if (clicked != null)
 			current = clicked;
 		repaint();
 	}
-
-
+	
 	@Override
 	public void mouseReleased(MouseEvent e)
 	{
@@ -87,7 +82,6 @@ public class ImageButton extends JLabel implements MouseListener
 	public void paint(Graphics g)
 	{
 		super.paint(g);
-		
 		
 		Graphics2D g2d = (Graphics2D) g.create();
 		Color old = g2d.getColor();
@@ -103,14 +97,10 @@ public class ImageButton extends JLabel implements MouseListener
 		
 	}
 	
-	
 	public void updateImage(BufferedImage i1)
 	{
 		normal = i1;
 		repaint();
 	}
-	
-	
-	
 	
 }

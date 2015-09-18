@@ -1,6 +1,6 @@
 package it.giara.utils;
 
-public class Log 
+public class Log
 {
 	public static LogType ERROR = LogType.ERROR;
 	public static LogType NET = LogType.NETWORK;
@@ -14,8 +14,8 @@ public class Log
 	
 	public static void log(LogType l, Object o)
 	{
-		if(!l.equals(NET) && !l.equals(FILEINFO))
-		System.out.println(o);
+		if (!l.equals(NET) && !l.equals(FILEINFO))
+			System.out.println(o);
 	}
 	
 	public static void stack(LogType l, Exception e)
@@ -27,5 +27,5 @@ public class Log
 
 enum LogType
 {
-	NETWORK, DEBUG , INFO, CONFIG, FILEINFO, FILMINFO, DB, GUI, ERROR
-} 
+	NETWORK, DEBUG, INFO, CONFIG, FILEINFO, FILMINFO, DB, GUI, ERROR
+}
