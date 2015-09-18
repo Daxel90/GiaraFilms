@@ -1,11 +1,16 @@
 package it.giara.gui.section;
 
-import it.giara.gui.DefaultGui;
-import it.giara.gui.utils.ColorUtils;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+
+import it.giara.gui.DefaultGui;
+import it.giara.gui.components.ImageButton;
+import it.giara.gui.utils.ColorUtils;
+import it.giara.gui.utils.ImageUtils;
 
 public class HomePage extends DefaultGui
 {
@@ -18,9 +23,32 @@ public class HomePage extends DefaultGui
 		sep2.setBorder(BorderFactory.createLineBorder(ColorUtils.Separator));
 		this.add(sep2);
 		
-		JTextField search = new JTextField();
-		search.setBounds(FRAME_WIDTH * 3 / 4 - 50, 5, FRAME_WIDTH / 4, 30);
+		JTextField searchTx = new JTextField();
+		searchTx.setBounds(FRAME_WIDTH * 3 / 4 - 50, 5, FRAME_WIDTH / 4, 30);
+		searchTx.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent arg0)
+			{
+				RunSearch.run();
+			}
+		});
+		this.add(searchTx);
 		
+		ImageButton search = new ImageButton(ImageUtils.getImage("gui/search.png"),
+				ImageUtils.getImage("gui/search_over.png"), ImageUtils.getImage("gui/search_clicked.png"), RunSearch);
+				
+		search.setBounds(FRAME_WIDTH - 50, 5, 32, 32);
 		this.add(search);
 	}
+	
+	Runnable RunSearch = new Runnable()
+	{
+		@Override
+		public void run()
+		{
+			// TODO
+		}
+	};
+	
 }
