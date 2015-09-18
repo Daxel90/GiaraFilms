@@ -10,7 +10,6 @@ import java.util.ArrayList;
 
 public class HTTPList
 {
-	// http://www.animeclick.it/
 	
 	static
 	{
@@ -50,7 +49,7 @@ public class HTTPList
 					continue;
 				String name = info[3];
 				
-				if (info.length > 4)
+				if (info.length > 4) // correction for file name containing space
 					for (int j = 4; j < info.length; j++)
 					{
 						if (info[j].contains("/"))

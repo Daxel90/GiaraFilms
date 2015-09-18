@@ -51,7 +51,7 @@ public class HTTPSearchFilm
 		BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF8"));
 		String line;
 		int l = 0;
-		int find = -1;
+		int find = -1; // row number of result table in HTML Page
 		while ((line = rd.readLine()) != null)
 		{
 			l++;

@@ -40,7 +40,7 @@ public class SQLQuery
 		
 		String query5 = "CREATE TABLE IF NOT EXISTS `CacheSearch` ("
 				+ "`ID`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE," + "`Search`	TEXT NOT NULL UNIQUE,"
-				+ "`Type`	INTEGER," + "`IdResult`	INTEGER" + ");";
+				+ "`Type`	INTEGER," + "`IdResult`	INTEGER," + "`LastUpdate`	INTEGER NOT NULL" + ");";
 		SQL.ExecuteQuery(query5);
 		
 		String query6 = "CREATE TABLE IF NOT EXISTS `EpisodeInfo` (" + "`IdFile`	INTEGER UNIQUE,"
@@ -95,8 +95,8 @@ public class SQLQuery
 	
 	public synchronized static void writeCacheSearch(String search, MainType type, int ID)
 	{
-		SQL.ExecuteQuery("INSERT OR IGNORE INTO `CacheSearch`(`Search`, `Type`, `IdResult`) VALUES (\""
-				+ SQL.escape(search) + "\", " + type.ID + ", " + ID + ");");
+		SQL.ExecuteQuery("INSERT OR REPLACE INTO `CacheSearch`(`Search`, `Type`, `IdResult`, `LastUpdate`) VALUES (\""
+				+ SQL.escape(search) + "\", " + type.ID + ", " + ID + ", " + FunctionsUtils.getTime() + ");");
 	}
 	
 	public synchronized static int getCacheSearch(String search, MainType type)
@@ -107,6 +107,10 @@ public class SQLQuery
 		{
 			if (r.next())
 			{
+				if(r.getInt("IdResult") == -1 && r.getInt("LastUpdate")+60+60+24>= FunctionsUtils.getTime())
+				{
+					return -2;
+				}
 				return r.getInt("IdResult");
 			}
 		} catch (SQLException e)

@@ -1,5 +1,9 @@
 package it.giara;
 
+import java.io.File;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import it.giara.analyze.FileInfo;
 import it.giara.http.HTTPList;
 import it.giara.http.HTTPSearchFilm;
@@ -10,10 +14,6 @@ import it.giara.sql.SQL;
 import it.giara.sql.SQLQuery;
 import it.giara.utils.DirUtils;
 import it.giara.utils.Log;
-
-import java.io.File;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class ScanService
 {
@@ -46,11 +46,18 @@ public class ScanService
 							{
 								case Film:
 									int cache = SQLQuery.getCacheSearch(f.title, f.type);
+									
+									if (cache == -2)
+										return;
+										
 									if (cache == -1)
 									{
 										HTTPSearchFilm httpF = new HTTPSearchFilm(f.title);
 										if (httpF.scheda == null)
+										{
+											SQLQuery.writeCacheSearch(f.title, f.type, -1);
 											break;
+										}
 										int schedaF = SQLQuery.writePreSchedaFilm(httpF.scheda);
 										
 										SQLQuery.writeCacheSearch(f.title, f.type, schedaF);
@@ -63,11 +70,18 @@ public class ScanService
 									break;
 								case SerieTV:
 									int cache2 = SQLQuery.getCacheSearch(f.title, f.type);
+									
+									if (cache2 == -2)
+										return;
+										
 									if (cache2 == -1)
 									{
 										HTTPSearchTVSerie httpF = new HTTPSearchTVSerie(f.title);
 										if (httpF.scheda == null)
+										{
+											SQLQuery.writeCacheSearch(f.title, f.type, -1);
 											break;
+										}
 										int schedaSTV = SQLQuery.writePreSchedaTvSeries(httpF.scheda);
 										
 										SQLQuery.writeCacheSearch(f.title, f.type, schedaSTV);
