@@ -1,31 +1,32 @@
 package it.giara;
 
-import java.util.ArrayList;
-
-import it.giara.analyze.FileInfo;
-import it.giara.http.HTTPList;
-import it.giara.source.ListLoader;
-import it.giara.source.SourceChan;
-import it.giara.sql.SQL;
+import it.giara.gui.MainFrame;
+import it.giara.gui.utils.FontUtils;
 import it.giara.utils.Log;
 
-public class MainClass
-{
-  public static ArrayList<String> sorgenti = new ArrayList<String>();
+import java.util.ArrayList;
 
-  public static void main(String[] args)
-  {
-	    Log.log(Log.INFO, "GiaraFilms");
-	    ListLoader.loadSources();
-	    SQL.connect();
-	    for (SourceChan s : ListLoader.sources)
-	    {
-		      HTTPList search = new HTTPList(s.link, "misfits");
-		      Log.log(Log.DEBUG, Integer.valueOf(search.file.size()));
-		      for (String s2 : search.file)
-		      {
-		    	  new FileInfo(s2);
-		      }
-	    }
-  }
+import javax.swing.UIManager;
+
+public class MainClass 
+{
+	public static ArrayList<String> sorgenti = new ArrayList<String>();
+	
+	
+	public static void main(String[] args)
+	{
+		try {
+		    UIManager.setLookAndFeel("de.javasoft.plaf.synthetica.SyntheticaBlackEyeLookAndFeel");
+		    FontUtils.initUIFont();
+		} catch (Exception e) {
+		    e.printStackTrace();
+		}
+		Log.log(Log.INFO, "GiaraFilms 2.0");
+		
+		new MainFrame();
+		
+	}
+	
+	
+	
 }
