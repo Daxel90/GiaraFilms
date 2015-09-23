@@ -1,20 +1,21 @@
 package it.giara.gui.section;
 
-import it.giara.gui.DefaultGui;
-import it.giara.gui.MainFrame;
-import it.giara.gui.utils.ImageUtils;
-import it.giara.phases.UpdateProgram;
-import it.giara.source.ListLoader;
-import it.giara.sql.SQL;
-import it.giara.utils.FunctionsUtils;
-import it.giara.utils.ThreadManager;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JLabel;
 import javax.swing.JProgressBar;
 import javax.swing.Timer;
+
+import it.giara.gui.DefaultGui;
+import it.giara.gui.MainFrame;
+import it.giara.gui.utils.ImageUtils;
+import it.giara.phases.ScanService;
+import it.giara.phases.UpdateProgram;
+import it.giara.source.ListLoader;
+import it.giara.sql.SQL;
+import it.giara.utils.FunctionsUtils;
+import it.giara.utils.ThreadManager;
 
 public class LoadScreen extends DefaultGui
 {
@@ -103,6 +104,7 @@ public class LoadScreen extends DefaultGui
 						UpdateProgram.checkUpdate(instance);
 						textProgress.setText("Verifica Completata");
 						bar.setValue(3);
+						ThreadManager.submitCacheTask(new ScanService());
 						FunctionsUtils.sleep(500);
 						MainFrame.getInstance().setInternalPane(new HomePage());
 					}

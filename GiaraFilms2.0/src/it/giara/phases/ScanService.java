@@ -1,8 +1,4 @@
-package it.giara;
-
-import java.io.File;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+package it.giara.phases;
 
 import it.giara.analyze.FileInfo;
 import it.giara.http.HTTPList;
@@ -10,21 +6,19 @@ import it.giara.http.HTTPSearchFilm;
 import it.giara.http.HTTPSearchTVSerie;
 import it.giara.source.ListLoader;
 import it.giara.source.SourceChan;
-import it.giara.sql.SQL;
 import it.giara.sql.SQLQuery;
-import it.giara.utils.DirUtils;
 import it.giara.utils.Log;
+import it.giara.utils.ThreadManager;
 
-public class ScanService
+public class ScanService implements Runnable
 {
+	public static boolean scanning = false;
 	
-	public static void main(String[] arg)
+	public void run()
 	{
-		ExecutorService executor = Executors.newFixedThreadPool(10);
-		Log.log(Log.INFO, "GiaraFilms News Scanner");
-		DirUtils.workDir = new File(".");
-		ListLoader.loadSources();
-		SQL.connect();
+		Log.log(Log.INFO, "GiaraFilms Start Scanner");
+		scanning = true;
+		
 		for (SourceChan s : ListLoader.sources)
 		{
 			HTTPList search = new HTTPList(s.link, ".");
@@ -102,8 +96,7 @@ public class ScanService
 							}
 						}
 					};
-					
-					executor.execute(check);
+					ThreadManager.submitPoolTask(check);
 				}
 				
 			}
