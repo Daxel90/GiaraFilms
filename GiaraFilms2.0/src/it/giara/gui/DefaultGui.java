@@ -10,11 +10,13 @@ public class DefaultGui extends JPanel
 	
 	public int FRAME_WIDTH;
 	public int FRAME_HEIGHT;
+	public DefaultGui guiInstance;
 	
 	public DefaultGui()
 	{
 		setLayout(null);
 		setOpaque(false);
+		guiInstance = this;
 	}
 	
 	public void init(int width, int height)

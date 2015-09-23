@@ -39,9 +39,14 @@ public class HomePage extends DefaultGui
 		
 		ImageButton search = new ImageButton(ImageUtils.getImage("gui/search.png"),
 				ImageUtils.getImage("gui/search_over.png"), ImageUtils.getImage("gui/search_clicked.png"), RunSearch);
-				
 		search.setBounds(FRAME_WIDTH - 50, 5, 32, 32);
 		this.add(search);
+		
+		ImageButton options = new ImageButton(ImageUtils.getImage("gui/options.png"),ImageUtils.getImage("gui/options_over.png"),ImageUtils.getImage("gui/options_over.png"), OpenOptions);
+		options.setBounds(5, 5, 32, 32);
+		this.add(options);
+		
+		
 	}
 	
 	Runnable RunSearch = new Runnable()
@@ -50,6 +55,15 @@ public class HomePage extends DefaultGui
 		public void run()
 		{
 			MainFrame.getInstance().setInternalPane(new Search(searchTx.getText()));
+		}
+	};
+	
+	Runnable OpenOptions = new Runnable()
+	{
+		@Override
+		public void run()
+		{
+			MainFrame.getInstance().setInternalPane(new Options(guiInstance));
 		}
 	};
 	
