@@ -13,10 +13,17 @@ import it.giara.gui.components.ImageButton;
 import it.giara.gui.utils.ColorUtils;
 import it.giara.gui.utils.ImageUtils;
 
-public class HomePage extends DefaultGui
+public class Search extends DefaultGui
 {
 	private static final long serialVersionUID = -5303561242288508484L;
-	public JTextField searchTx;
+	private String searchText;
+	JTextField searchTx;
+	
+	public Search(String search)
+	{
+		super();
+		searchText = search;
+	}
 	
 	public void loadComponent()
 	{
@@ -27,6 +34,7 @@ public class HomePage extends DefaultGui
 		
 		searchTx = new JTextField();
 		searchTx.setBounds(FRAME_WIDTH * 3 / 4 - 50, 5, FRAME_WIDTH / 4, 30);
+		searchTx.setText(searchText);
 		searchTx.addActionListener(new ActionListener()
 		{
 			@Override
@@ -39,9 +47,15 @@ public class HomePage extends DefaultGui
 		
 		ImageButton search = new ImageButton(ImageUtils.getImage("gui/search.png"),
 				ImageUtils.getImage("gui/search_over.png"), ImageUtils.getImage("gui/search_clicked.png"), RunSearch);
-				
 		search.setBounds(FRAME_WIDTH - 50, 5, 32, 32);
 		this.add(search);
+		
+		JLabel topText = new JLabel("<html><h3>Sto cercando \"" + searchText + "\"</html>");
+		topText.setHorizontalAlignment(JLabel.CENTER);
+		topText.setBounds(FRAME_WIDTH / 4, 40, FRAME_WIDTH / 2, 32);
+		
+		this.add(topText);
+		
 	}
 	
 	Runnable RunSearch = new Runnable()
