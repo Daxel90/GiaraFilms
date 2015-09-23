@@ -13,11 +13,22 @@ import it.giara.utils.ThreadManager;
 public class ScanService implements Runnable
 {
 	public static boolean scanning = false;
+	public static int Nfile = 0;
+	public static int Nfilm = 0;
+	public static int NEpisode = 0;
 	
 	public void run()
 	{
 		Log.log(Log.INFO, "GiaraFilms Start Scanner");
 		scanning = true;
+		
+		Nfile = SQLQuery.getFileNumber();
+		Nfilm = SQLQuery.getFilmNumber();
+		NEpisode = SQLQuery.getEpisodeNumbers();
+		
+		Log.log(Log.DEBUG, "Nfile: "+Nfile);
+		Log.log(Log.DEBUG, "Nfilm: "+Nfilm);
+		Log.log(Log.DEBUG, "NEpisode: "+NEpisode);
 		
 		for (SourceChan s : ListLoader.sources)
 		{
@@ -27,7 +38,7 @@ public class ScanService implements Runnable
 			{
 				if (!SQLQuery.existFile(s2))
 				{
-					
+					Nfile++;
 					Runnable check = new Runnable()
 					{
 						@Override
@@ -56,6 +67,7 @@ public class ScanService implements Runnable
 										
 										SQLQuery.writeCacheSearch(f.title, f.type, schedaF);
 										SQLQuery.writeFileInfo(fileID, f.type, schedaF);
+										Nfilm++;
 									}
 									else
 									{
@@ -82,12 +94,13 @@ public class ScanService implements Runnable
 										SQLQuery.writeFileInfo(fileID, f.type, schedaSTV);
 										
 										SQLQuery.writeEpisodeInfo(fileID, schedaSTV, f.episode, f.series);
+										NEpisode++;
 									}
 									else
 									{
-										
 										SQLQuery.writeFileInfo(fileID, f.type, cache2);
 										SQLQuery.writeEpisodeInfo(fileID, cache2, f.episode, f.series);
+										NEpisode++;
 									}
 									
 									break;
@@ -102,6 +115,8 @@ public class ScanService implements Runnable
 			}
 			
 		}
+		
+		scanning = false;
 	}
 	
 }

@@ -1,13 +1,13 @@
 package it.giara.sql;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 import it.giara.analyze.enums.MainType;
 import it.giara.schede.PreSchedaFilm;
 import it.giara.schede.PreSchedaTVSerie;
 import it.giara.utils.FunctionsUtils;
 import it.giara.utils.Log;
-
-import java.sql.ResultSet;
-import java.sql.SQLException;
 
 public class SQLQuery
 {
@@ -205,6 +205,55 @@ public class SQLQuery
 				"INSERT OR IGNORE INTO `EpisodeInfo`(`IdFile`, `IdSerie`, `Episode`, `Serie`, `LastUpdate`) VALUES ("
 						+ fileID + ", " + IdSerie + ", " + episode + ", " + serie + ", " + FunctionsUtils.getTime()
 						+ ");");
+	}
+	
+	
+	public synchronized static int getFilmNumber()
+	{
+		ResultSet r = SQL.FetchData("SELECT count(ID) FROM SchedaFilm;");
+		try
+		{
+			if (r.next())
+			{
+				return r.getInt("count(ID)");
+			}
+		} catch (SQLException e)
+		{
+			Log.stack(Log.DB, e);
+		}
+		return -1;
+	}
+	
+	public synchronized static int getFileNumber()
+	{
+		ResultSet r = SQL.FetchData("SELECT count(ID) FROM File;");
+		try
+		{
+			if (r.next())
+			{
+				return r.getInt("count(ID)");
+			}
+		} catch (SQLException e)
+		{
+			Log.stack(Log.DB, e);
+		}
+		return -1;
+	}
+	
+	public synchronized static int getEpisodeNumbers()
+	{
+		ResultSet r = SQL.FetchData("SELECT count(IdFile) FROM EpisodeInfo;");
+		try
+		{
+			if (r.next())
+			{
+				return r.getInt("count(IdFile)");
+			}
+		} catch (SQLException e)
+		{
+			Log.stack(Log.DB, e);
+		}
+		return -1;
 	}
 	
 }
