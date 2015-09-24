@@ -23,4 +23,8 @@ public class PreSchedaFilm
 		return result;
 	}
 	
+	public void setGeneri(String d)
+	{
+		Generi = d.split(",");
+	}
 }

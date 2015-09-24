@@ -71,6 +71,31 @@ public class SQLQuery
 		return -1;
 	}
 	
+	public synchronized static PreSchedaFilm readPreSchedaFilm(int IdSection)
+	{
+		PreSchedaFilm scheda = new PreSchedaFilm();
+		ResultSet r = SQL.FetchData("SELECT * FROM `SchedaFilm` WHERE `ID` = " + IdSection + ";");
+		try
+		{
+			if (r.next())
+			{
+				scheda.Titolo = r.getNString("Titolo");
+				scheda.link = r.getNString("Link");
+				scheda.smallImage = r.getNString("Image");
+				scheda.anno = r.getInt("Anno");
+				scheda.regia = r.getNString("Regia");
+				scheda.nazionalita = r.getNString("Nazionalita");
+				scheda.setGeneri(r.getNString("Nazionalita"));
+			}
+			else
+				return null;
+		} catch (SQLException e)
+		{
+			Log.stack(Log.DB, e);
+		}
+		return scheda;
+	}
+	
 	public synchronized static int writePreSchedaTvSeries(PreSchedaTVSerie i)
 	{
 		SQL.ExecuteQuery(
