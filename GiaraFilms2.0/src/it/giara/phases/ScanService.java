@@ -14,6 +14,7 @@ import it.giara.utils.ThreadManager;
 public class ScanService implements Runnable
 {
 	public static boolean scanning = false;
+	public static boolean HaveList = false;
 	public static int Nfile = 0;
 	public static int Nfilm = 0;
 	public static int NEpisode = 0;
@@ -37,10 +38,12 @@ public class ScanService implements Runnable
 		for (SourceChan s : ListLoader.sources)
 		{
 			NList++;
+			HaveList = false;
 			HTTPList search = new HTTPList(s.link, ".");
 			Log.log(Log.DEBUG, search.file.size());
 			LSize = search.file.size();
 			LStatus = 0;
+			HaveList = true;
 			for (final String s2 : search.file)
 			{
 				LStatus++;
