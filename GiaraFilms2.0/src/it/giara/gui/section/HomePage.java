@@ -9,14 +9,19 @@ import javax.swing.JTextField;
 
 import it.giara.gui.DefaultGui;
 import it.giara.gui.MainFrame;
+import it.giara.gui.components.AnimatedImageButton;
 import it.giara.gui.components.ImageButton;
 import it.giara.gui.utils.ColorUtils;
 import it.giara.gui.utils.ImageUtils;
+import it.giara.phases.ScanService;
 
 public class HomePage extends DefaultGui
 {
 	private static final long serialVersionUID = -5303561242288508484L;
 	public JTextField searchTx;
+	
+	public static AnimatedImageButton sync = null; // static for using same
+													// instance in all section
 	
 	public void loadComponent()
 	{
@@ -42,10 +47,16 @@ public class HomePage extends DefaultGui
 		search.setBounds(FRAME_WIDTH - 50, 5, 32, 32);
 		this.add(search);
 		
-		ImageButton options = new ImageButton(ImageUtils.getImage("gui/options.png"),ImageUtils.getImage("gui/options_over.png"),ImageUtils.getImage("gui/options_over.png"), OpenOptions);
+		ImageButton options = new ImageButton(ImageUtils.getImage("gui/options.png"),
+				ImageUtils.getImage("gui/options_over.png"), ImageUtils.getImage("gui/options_over.png"), OpenOptions);
 		options.setBounds(5, 5, 32, 32);
 		this.add(options);
 		
+		if (sync == null)
+			sync = new AnimatedImageButton("sync(n)", 5, OpenSync,CheckSync);
+		sync.setBounds(40, 5, 32, 32);
+		CheckSync.run();
+		this.add(sync);
 		
 	}
 	
@@ -67,4 +78,24 @@ public class HomePage extends DefaultGui
 		}
 	};
 	
+	Runnable OpenSync = new Runnable()
+	{
+		@Override
+		public void run()
+		{
+			MainFrame.getInstance().setInternalPane(new ScanStatus(guiInstance));
+		}
+	};
+	
+	Runnable CheckSync = new Runnable()
+	{
+		@Override
+		public void run()
+		{
+			if(ScanService.scanning)
+				sync.setVisible(true);
+			else
+				sync.setVisible(false);
+		}
+	};
 }

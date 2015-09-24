@@ -16,6 +16,9 @@ public class ScanService implements Runnable
 	public static int Nfile = 0;
 	public static int Nfilm = 0;
 	public static int NEpisode = 0;
+	public static int NList = 0;
+	public static int LSize = 0;
+	public static int LStatus = 0;
 	
 	public void run()
 	{
@@ -32,10 +35,14 @@ public class ScanService implements Runnable
 		
 		for (SourceChan s : ListLoader.sources)
 		{
+			NList++;
 			HTTPList search = new HTTPList(s.link, ".");
 			Log.log(Log.DEBUG, search.file.size());
+			LSize = search.file.size();
+			LStatus = 0;
 			for (final String s2 : search.file)
 			{
+				LStatus++;
 				if (!SQLQuery.existFile(s2))
 				{
 					Nfile++;
