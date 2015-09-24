@@ -7,6 +7,7 @@ import it.giara.http.HTTPSearchTVSerie;
 import it.giara.source.ListLoader;
 import it.giara.source.SourceChan;
 import it.giara.sql.SQLQuery;
+import it.giara.utils.FunctionsUtils;
 import it.giara.utils.Log;
 import it.giara.utils.ThreadManager;
 
@@ -29,9 +30,9 @@ public class ScanService implements Runnable
 		Nfilm = SQLQuery.getFilmNumber();
 		NEpisode = SQLQuery.getEpisodeNumbers();
 		
-		Log.log(Log.DEBUG, "Nfile: "+Nfile);
-		Log.log(Log.DEBUG, "Nfilm: "+Nfilm);
-		Log.log(Log.DEBUG, "NEpisode: "+NEpisode);
+		Log.log(Log.DEBUG, "Nfile: " + Nfile);
+		Log.log(Log.DEBUG, "Nfilm: " + Nfilm);
+		Log.log(Log.DEBUG, "NEpisode: " + NEpisode);
 		
 		for (SourceChan s : ListLoader.sources)
 		{
@@ -116,6 +117,10 @@ public class ScanService implements Runnable
 							}
 						}
 					};
+					while(ThreadManager.getPoolWait()>=ThreadManager.poolSize)
+					{
+						FunctionsUtils.sleep(10);
+					}
 					ThreadManager.submitPoolTask(check);
 				}
 				
