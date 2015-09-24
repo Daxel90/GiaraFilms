@@ -93,6 +93,30 @@ public class SQLQuery
 		return -1;
 	}
 	
+	public synchronized static PreSchedaTVSerie readPreSchedaTVSerie(int IdSection)
+	{
+		PreSchedaTVSerie scheda = new PreSchedaTVSerie();
+		ResultSet r = SQL.FetchData("SELECT * FROM `SchedaTelefilm` WHERE `ID` = " + IdSection + ";");
+		try
+		{
+			if (r.next())
+			{
+				scheda.Titolo = r.getNString("Titolo");
+				scheda.link = r.getNString("Link");
+				scheda.smallImage = r.getNString("Image");
+				scheda.anno = r.getInt("Anno");
+				scheda.nazionalita = r.getNString("Nazionalita");
+				scheda.setGeneri(r.getNString("Nazionalita"));
+			}
+			else
+				return null;
+		} catch (SQLException e)
+		{
+			Log.stack(Log.DB, e);
+		}
+		return scheda;
+	}
+	
 	public synchronized static void writeCacheSearch(String search, MainType type, int ID)
 	{
 		SQL.ExecuteQuery("INSERT OR REPLACE INTO `CacheSearch`(`Search`, `Type`, `IdResult`, `LastUpdate`) VALUES (\""
@@ -107,7 +131,7 @@ public class SQLQuery
 		{
 			if (r.next())
 			{
-				if(r.getInt("IdResult") == -1 && r.getInt("LastUpdate")+60+60+24>= FunctionsUtils.getTime())
+				if (r.getInt("IdResult") == -1 && r.getInt("LastUpdate") + 60 + 60 + 24 >= FunctionsUtils.getTime())
 				{
 					return -2;
 				}
@@ -206,7 +230,6 @@ public class SQLQuery
 						+ fileID + ", " + IdSerie + ", " + episode + ", " + serie + ", " + FunctionsUtils.getTime()
 						+ ");");
 	}
-	
 	
 	public synchronized static int getFilmNumber()
 	{

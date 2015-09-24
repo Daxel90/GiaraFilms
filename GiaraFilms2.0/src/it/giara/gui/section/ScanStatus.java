@@ -15,7 +15,6 @@ import it.giara.gui.utils.ColorUtils;
 import it.giara.gui.utils.ImageUtils;
 import it.giara.phases.ScanService;
 import it.giara.source.ListLoader;
-import it.giara.utils.Log;
 
 public class ScanStatus extends DefaultGui
 {
@@ -48,15 +47,15 @@ public class ScanStatus extends DefaultGui
 		title.setText("<html><h1>Scansione File</html>");
 		title.setHorizontalAlignment(JLabel.CENTER);
 		this.add(title);
-				
+		
 		stat = new JLabel();
-		stat.setBounds(FRAME_WIDTH / 6, FRAME_HEIGHT*3 / 4 - 35, FRAME_WIDTH * 2 / 3, 80);
+		stat.setBounds(FRAME_WIDTH / 6, FRAME_HEIGHT * 3 / 4 - 35, FRAME_WIDTH * 2 / 3, 80);
 		stat.setText("<html><h3>Film: " + ScanService.Nfilm + "<br>Episodi SerieTV: " + ScanService.NEpisode
 				+ "<br>File Totali: " + ScanService.Nfile + "</html>");
 		this.add(stat);
 		
 		list = new JLabel();
-		list.setBounds(FRAME_WIDTH / 6, (int) (FRAME_HEIGHT *1.5f / 4 - 35), FRAME_WIDTH * 2 / 3, 30);
+		list.setBounds(FRAME_WIDTH / 6, (int) (FRAME_HEIGHT * 1.5f / 4 - 35), FRAME_WIDTH * 2 / 3, 30);
 		list.setText(
 				"<html><h3>Controllate " + ScanService.NList + " liste su " + ListLoader.sources.size() + "</html>");
 		list.setHorizontalAlignment(JLabel.CENTER);
@@ -65,7 +64,7 @@ public class ScanStatus extends DefaultGui
 		listBar = new JProgressBar();
 		listBar.setMaximum(ListLoader.sources.size());
 		listBar.setValue(ScanService.NList);
-		listBar.setBounds(FRAME_WIDTH / 6, (int) (FRAME_HEIGHT *1.5f / 4), FRAME_WIDTH * 2 / 3, 20);
+		listBar.setBounds(FRAME_WIDTH / 6, (int) (FRAME_HEIGHT * 1.5f / 4), FRAME_WIDTH * 2 / 3, 20);
 		this.add(listBar);
 		
 		file = new JLabel();

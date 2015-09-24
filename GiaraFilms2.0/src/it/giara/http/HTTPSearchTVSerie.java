@@ -154,6 +154,12 @@ public class HTTPSearchTVSerie
 		{
 			Title += pt[l] + "-";
 		}
+		
+		if (Title.length() < 1)
+		{
+			scheda = null;
+			return;
+		}
 		Title = Title.substring(0, Title.length() - 1).trim();
 		if (Title.length() < 1)
 		{

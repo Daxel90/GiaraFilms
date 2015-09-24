@@ -22,4 +22,9 @@ public class PreSchedaTVSerie
 		return result;
 	}
 	
+	public void setGeneri(String d)
+	{
+		Generi = d.split(",");
+	}
+	
 }
