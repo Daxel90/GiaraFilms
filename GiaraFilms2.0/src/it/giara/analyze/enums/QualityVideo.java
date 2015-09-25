@@ -8,7 +8,7 @@ public enum QualityVideo
 	BDRip("Ottimo", 9, "BDRip"), BRRip("Ottimo", 9, "BRRip"), DVDMux("DVDMux", 8, "DVDMux"), PDTV("Buono", 8, "PDTV"),
 	SATRip("Buono", 8, "SATRip"), DVBRip("Buono", 8, "DVBRip"), DTTRip("Buono", 8, "DTTRip"),
 	WEBRip("Decente", 7, "WEBRip"), WEBDLRip("Decente", 7, "WEBDLRip"), DLRip("Decente", 7, "DLRip"),
-	HD720("Ottimo HD", 10, "720p"), HD1080("Ottimo Full HD", 10, "1080p");
+	HD720("Ottimo HD", 10, "720p"), HD1080("Ottimo Full HD", 10, "1080p"), HD1080i("Ottimo Full HD", 10, "1080i");
 	
 	public String descrizione;
 	public float qualita;
