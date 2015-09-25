@@ -79,13 +79,13 @@ public class SQLQuery
 		{
 			if (r.next())
 			{
-				scheda.Titolo = r.getNString("Titolo");
-				scheda.link = r.getNString("Link");
-				scheda.smallImage = r.getNString("Image");
+				scheda.Titolo = r.getString("Titolo");
+				scheda.link = r.getString("Link");
+				scheda.smallImage = r.getString("Image");
 				scheda.anno = r.getInt("Anno");
-				scheda.regia = r.getNString("Regia");
-				scheda.nazionalita = r.getNString("Nazionalita");
-				scheda.setGeneri(r.getNString("Nazionalita"));
+				scheda.regia = r.getString("Regia");
+				scheda.nazionalita = r.getString("Nazionalita");
+				scheda.setGeneri(r.getString("Generi"));
 			}
 			else
 				return null;
@@ -126,12 +126,12 @@ public class SQLQuery
 		{
 			if (r.next())
 			{
-				scheda.Titolo = r.getNString("Titolo");
-				scheda.link = r.getNString("Link");
-				scheda.smallImage = r.getNString("Image");
+				scheda.Titolo = r.getString("Titolo");
+				scheda.link = r.getString("Link");
+				scheda.smallImage = r.getString("Image");
 				scheda.anno = r.getInt("Anno");
-				scheda.nazionalita = r.getNString("Nazionalita");
-				scheda.setGeneri(r.getNString("Nazionalita"));
+				scheda.nazionalita = r.getString("Nazionalita");
+				scheda.setGeneri(r.getString("Generi"));
 			}
 			else
 				return null;
