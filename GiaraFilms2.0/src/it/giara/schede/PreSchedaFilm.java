@@ -66,7 +66,7 @@ public class PreSchedaFilm
 							
 							if (img != null)
 							{
-								img = ImageUtils.scaleImage(img, 140, 200);
+								img = ImageUtils.scaleImageOld(img, 140, 200);
 								try
 								{
 									if (!f.getParentFile().exists())
