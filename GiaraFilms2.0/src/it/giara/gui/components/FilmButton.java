@@ -27,7 +27,8 @@ public class FilmButton extends JLabel implements MouseListener
 	{
 		super();
 		film = f;
-		
+		if(film == null)
+			return;
 		if (film.img == null)
 			Cover = film.initImage(this);
 		else

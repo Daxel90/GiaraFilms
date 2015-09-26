@@ -2,8 +2,10 @@ package it.giara.gui.section;
 
 import javax.swing.JLabel;
 
+import it.giara.gui.MainFrame;
 import it.giara.gui.components.FilmListPanel;
 import it.giara.gui.utils.AbstractFilmList;
+import it.giara.phases.SearchService;
 
 public class Search extends HomePage
 {
@@ -11,12 +13,26 @@ public class Search extends HomePage
 	private String searchText;
 	FilmListPanel panel;
 	AbstractFilmList lista = new AbstractFilmList();
+	SearchService searchService;
 	
 	public Search(String search)
 	{
 		super();
 		searchText = search;
 		panel = new FilmListPanel(lista);
+		searchService = new SearchService(lista,searchText);
+		
+		RunSearch = new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				searchService.StopService();
+				lista.clear();
+				MainFrame.getInstance().setInternalPane(new Search(searchTx.getText()));
+			}
+		};
+		
 	}
 	
 	public void loadComponent()

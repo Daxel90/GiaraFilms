@@ -8,16 +8,20 @@ import it.giara.gui.utils.AbstractFilmList;
 import it.giara.gui.utils.ColorUtils;
 import it.giara.sql.SQLQuery;
 
-public class FilmListPanel extends JPanel 
+public class FilmListPanel extends JPanel
 {
 	private static final long serialVersionUID = 1L;
 	private AbstractFilmList list;
-
+	
+	private int FileButtonWidth = 140;
+	private int FileButtonHeight = 240;
+	private int spaceFileButton = 10;
+	
 	public FilmListPanel(AbstractFilmList l)
 	{
 		setLayout(null);
 		setOpaque(false);
-		list =l;
+		list = l;
 		list.setJPanel(this);
 		init();
 	}
@@ -30,19 +34,38 @@ public class FilmListPanel extends JPanel
 		sep2.setBorder(BorderFactory.createLineBorder(ColorUtils.Separator));
 		this.add(sep2);
 		
-		FilmButton f = new FilmButton(SQLQuery.readPreSchedaFilm(46), 100, 100);
-		this.add(f);
+		int column = (this.getWidth() - 2 * spaceFileButton) / (FileButtonWidth + spaceFileButton);
+		int COLUMNcenterOffset = ((this.getWidth() - 2 * spaceFileButton)
+				- (FileButtonWidth + spaceFileButton) * column) / 2;
+		int row = (this.getHeight() - 40) / (FileButtonHeight + spaceFileButton);
+		int ROWcenterOffset = (((this.getHeight() - 40) - ((FileButtonHeight + spaceFileButton) * row)))/2;
 		
-		FilmButton f2 = new FilmButton(SQLQuery.readPreSchedaFilm(300), 300, 100);
-		this.add(f2);
-		
+		int number = 0;
+		for (int j = 0; j < row; j++)
+			for (int k = 0; k < column; k++)
+			{
+				if(number>= list.films.size())
+					continue;
+				FilmButton f = new FilmButton(list.films.get(number),
+						COLUMNcenterOffset + spaceFileButton + k * (FileButtonWidth + spaceFileButton),
+						ROWcenterOffset + 40 + spaceFileButton + j * (FileButtonHeight + spaceFileButton));
+				this.add(f);
+				number++;
+			}
+			
 	}
 	
 	@Override
-	public void setBounds(int a,int b,int c,int d)
+	public void setBounds(int a, int b, int c, int d)
 	{
 		super.setBounds(a, b, c, d);
 		init();
+	}
+	
+	public void updateFromList()
+	{
+		init();
+		this.repaint();
 	}
 	
 }
