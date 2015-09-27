@@ -7,26 +7,30 @@ public class ThreadManager
 {
 	public static ExecutorService CachedExecutor;
 	public static ExecutorService PoolExecutor;
-	public static ExecutorService PoolExecutorHightPriority;
-	public static int poolWait = 0;
-	public static int poolHeightWait = 0;
-	public static int poolSize = 10;
 	
+	public static ExecutorService PoolExecutorSearch; // this pool is for Loading List File
+	public static ExecutorService PoolExecutorSearchIndicizer; //this pool run file indicizer
+	
+	public static int poolWait = 0;
+	public static int poolSearchWait = 0;
+	public static int poolSize = 10;
 	
 	static
 	{
 		CachedExecutor = Executors.newCachedThreadPool();
 		PoolExecutor = Executors.newFixedThreadPool(poolSize);
-		PoolExecutorHightPriority = Executors.newFixedThreadPool(poolSize*2);
+		
+		PoolExecutorSearch = Executors.newFixedThreadPool(poolSize /2);
+		PoolExecutorSearchIndicizer = Executors.newFixedThreadPool(poolSize * 2);
 	}
 	
-	//Very Hight priority, execute instant task
+	// Very Height priority, execute instant task
 	public static void submitCacheTask(Runnable task)
 	{
 		CachedExecutor.submit(task);
 	}
 	
-	// insert task without check poolWait, create medium priority
+	// insert task without checking poolWait, create medium priority
 	public static void submitPoolTask(final Runnable task)
 	{
 		poolWait++;
@@ -38,8 +42,7 @@ public class ThreadManager
 				try
 				{
 					task.run();
-				}
-				finally
+				} finally
 				{
 					poolWait--;
 				}
@@ -49,10 +52,21 @@ public class ThreadManager
 		PoolExecutor.submit(runnable);
 	}
 	
-	//pool for Hight Priority
-	public static void submitPoolTaskHightPriority(final Runnable task)
+	public static int getPoolWait()
 	{
-		poolHeightWait++;
+		return poolWait;
+	}
+	
+	//SEARCH SECTION
+	
+	public static int getPoolSearchWait()
+	{
+		return poolSearchWait;
+	}
+	
+	public static void submitPoolExecutorSearchIndicizer(final Runnable task)
+	{
+		poolSearchWait++;
 		Runnable runnable = new Runnable()
 		{
 			@Override
@@ -61,23 +75,27 @@ public class ThreadManager
 				try
 				{
 					task.run();
-				}
-				finally
+				} finally
 				{
-					poolHeightWait--;
+					poolSearchWait--;
 				}
 			}
 		};
-		PoolExecutorHightPriority.submit(runnable);
+		PoolExecutorSearchIndicizer.submit(runnable);
 	}
 	
-	public static int getPoolWait()
+	// Very Height priority, execute instant task
+	public static void submitSearchTask(Runnable task)
 	{
-		return poolWait;
+		PoolExecutorSearch.submit(task);
 	}
 	
-	public static int getPoolHeightWait()
+	public static void resetThreadSearch()
 	{
-		return poolHeightWait;
+		PoolExecutorSearchIndicizer.shutdownNow();
+		PoolExecutorSearch.shutdownNow();
+		poolSearchWait = 0;
+		PoolExecutorSearchIndicizer = Executors.newFixedThreadPool(poolSize * 2);
+		PoolExecutorSearch = Executors.newFixedThreadPool(poolSize /2);
 	}
 }
