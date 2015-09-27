@@ -29,19 +29,26 @@ public class LoadScreen extends DefaultGui
 	public float alpha = 0F;
 	private int shift = 0;
 	
+	public LoadScreen()
+	{
+		logo = new JLabel();
+		timer1 = new Timer(20, fade);
+	}
+	
 	public void loadComponent()
 	{
 		instance = this;
 		
-		logo = new JLabel();
 		logo.setIcon(ImageUtils.getIcon(ImageUtils.alphaSet(ImageUtils.getImage("logo.png"), alpha)));
 		logo.setHorizontalAlignment(JLabel.CENTER);
 		logo.setBounds(0, -FRAME_HEIGHT * shift / 80, FRAME_WIDTH, FRAME_HEIGHT);
 		add(logo);
 		
-		timer1 = new Timer(20, fade);
-		timer1.setInitialDelay(500);
-		timer1.start();
+		if (timer1 != null)
+		{
+			timer1.setInitialDelay(500);
+			timer1.start();
+		}
 		
 		bar = new JProgressBar();
 		bar.setBounds(FRAME_WIDTH / 6, FRAME_HEIGHT * 3 / 4, FRAME_WIDTH * 2 / 3, 20);
