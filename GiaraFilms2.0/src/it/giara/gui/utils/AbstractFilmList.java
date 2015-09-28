@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import javax.swing.JPanel;
 
+import it.giara.analyze.enums.MainType;
 import it.giara.gui.components.FilmListPanel;
 import it.giara.schede.PreSchedaFilm;
 import it.giara.schede.PreSchedaTVSerie;
@@ -32,7 +33,7 @@ public class AbstractFilmList
 		}
 		
 		films.add(p);
-		notifyChange();
+		notifyChange(MainType.Film);
 	}
 	
 	public void addPreSchedaTVSerie(PreSchedaTVSerie p)
@@ -46,7 +47,7 @@ public class AbstractFilmList
 		}
 		
 		series.add(p);
-		notifyChange();
+		notifyChange(MainType.SerieTV);
 	}
 	
 	public void addUnknowFile(String p)
@@ -58,13 +59,13 @@ public class AbstractFilmList
 			return;
 			
 		unknowFile.add(p);
-		notifyChange();
+		notifyChange(MainType.NULL);
 	}
 	
-	private void notifyChange()
+	private void notifyChange(MainType type)
 	{
 		if (panel instanceof FilmListPanel)
-			((FilmListPanel) panel).updateFromList();
+			((FilmListPanel) panel).updateFromList(type);
 		else
 			panel.repaint();
 	}
