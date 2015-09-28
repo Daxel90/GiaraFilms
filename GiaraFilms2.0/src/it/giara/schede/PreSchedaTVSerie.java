@@ -5,6 +5,7 @@ import java.io.File;
 
 import javax.imageio.ImageIO;
 
+import it.giara.gui.components.TvSerieButton;
 import it.giara.gui.utils.ImageUtils;
 import it.giara.utils.DirUtils;
 import it.giara.utils.Log;
@@ -40,7 +41,7 @@ public class PreSchedaTVSerie
 		Generi = d.split(",");
 	}
 	
-	public BufferedImage initSmall()
+	public BufferedImage initImage(final TvSerieButton filmButton)
 	{
 		if (img == null)
 		{
@@ -58,31 +59,36 @@ public class PreSchedaTVSerie
 					@Override
 					public void run()
 					{
-						img = ImageUtils.getHttpBufferedImage(smallImage);
-						
-						if (img != null)
+						try
 						{
-							img = ImageUtils.scaleImage(img, 140, 200);
-							try
+							img = ImageUtils.getHttpBufferedImage(smallImage);
+							
+							if (img != null)
 							{
-								if (!f.getParentFile().exists())
-									f.getParentFile().mkdirs();
-									
-								ImageIO.write(img, "PNG", f);
-							} catch (Exception e)
-							{
-								Log.stack(Log.IMAGE, e);
+								img = ImageUtils.scaleImageOld(img, 140, 200);
+								try
+								{
+									if (!f.getParentFile().exists())
+										f.getParentFile().mkdirs();
+										
+									ImageIO.write(img, "PNG", f);
+								} catch (Exception e)
+								{
+									Log.stack(Log.IMAGE, e);
+								}
 							}
-						}
-						else
+							else
+							{
+								img = ImageUtils.getImage("notFound.png");
+							}
+						} finally
 						{
-							img = ImageUtils.getImage("notFound.png");
+							filmButton.updateImage(img);
 						}
 					}
 				};
 				
 				ThreadManager.submitPoolTask(task);
-				
 				img = ImageUtils.getImage("loading.png");
 			}
 		}
