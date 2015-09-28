@@ -101,7 +101,10 @@ public class SearchService
 												int cache = SQLQuery.getCacheSearch(f.title, f.type);
 												
 												if (cache == -2)
+												{
+													list.addUnknowFile(s2);
 													return;
+												}
 													
 												if (cache == -1)
 												{
@@ -127,7 +130,10 @@ public class SearchService
 												int cache2 = SQLQuery.getCacheSearch(f.title, f.type);
 												
 												if (cache2 == -2)
+												{
+													list.addUnknowFile(s2);
 													return;
+												}
 													
 												if (cache2 == -1)
 												{
@@ -154,6 +160,7 @@ public class SearchService
 												
 												break;
 											default:
+												list.addUnknowFile(s2);
 												break;
 										}
 									}
