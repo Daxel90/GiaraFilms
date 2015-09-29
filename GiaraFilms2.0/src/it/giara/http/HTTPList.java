@@ -59,7 +59,7 @@ public class HTTPList
 					}
 				
 				//remove html body end if present
-				name = name.replace("</body>", "");
+				name = name.replace("</body>", "").replace("<br/>", "");
 					
 				if (!file.contains(name))
 				{
