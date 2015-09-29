@@ -14,7 +14,7 @@ public class AbstractFilmList
 	public boolean loading = false;
 	public ArrayList<PreSchedaFilm> films = new ArrayList<PreSchedaFilm>();
 	public ArrayList<PreSchedaTVSerie> series = new ArrayList<PreSchedaTVSerie>();
-	public ArrayList<String> unknowFile = new ArrayList<String>();
+	public ArrayList<String> allFile = new ArrayList<String>();
 	private JPanel panel;
 	
 	public void setJPanel(JPanel pane)
@@ -50,15 +50,15 @@ public class AbstractFilmList
 		notifyChange(MainType.SerieTV);
 	}
 	
-	public void addUnknowFile(String p)
+	public void addFile(String p)
 	{
 		if (p == null)
 			return;
 			
-		if (unknowFile.contains(p))
+		if (allFile.contains(p))
 			return;
 			
-		unknowFile.add(p);
+		allFile.add(p);
 		notifyChange(MainType.NULL);
 	}
 	
@@ -76,7 +76,7 @@ public class AbstractFilmList
 		loading = false;
 		films.clear();
 		series.clear();
-		unknowFile.clear();
+		allFile.clear();
 		System.gc(); 
 	}
 	

@@ -63,16 +63,12 @@ public class SearchService
 						{
 							if (!run)
 								return;
-								
+							list.addFile(s2);
 							if (SQLQuery.existFile(s2))
 							{
 								int IDFile = SQLQuery.getFile(s2);
 								int[] FileInfo = SQLQuery.readFileInfo(IDFile);
-								if (FileInfo[0] == -1 && FileInfo[1] == -1)
-								{
-									list.addUnknowFile(s2);
-								}
-								else if (FileInfo[0] == MainType.Film.ID)
+								if (FileInfo[0] == MainType.Film.ID)
 								{
 									PreSchedaFilm film = SQLQuery.readPreSchedaFilm(FileInfo[1]);
 									if (film != null)
@@ -101,10 +97,7 @@ public class SearchService
 												int cache = SQLQuery.getCacheSearch(f.title, f.type);
 												
 												if (cache == -2)
-												{
-													list.addUnknowFile(s2);
 													return;
-												}
 													
 												if (cache == -1)
 												{
@@ -130,10 +123,7 @@ public class SearchService
 												int cache2 = SQLQuery.getCacheSearch(f.title, f.type);
 												
 												if (cache2 == -2)
-												{
-													list.addUnknowFile(s2);
 													return;
-												}
 													
 												if (cache2 == -1)
 												{
@@ -160,7 +150,6 @@ public class SearchService
 												
 												break;
 											default:
-												list.addUnknowFile(s2);
 												break;
 										}
 									}

@@ -1,14 +1,15 @@
 package it.giara.gui.components;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
 
 import it.giara.analyze.enums.MainType;
 import it.giara.gui.utils.AbstractFilmList;
@@ -23,7 +24,9 @@ public class FilmListPanel extends JPanel
 	private int FileButtonHeight = 240;
 	private int spaceFileButton = 10;
 	
-	MainType show = MainType.NULL;
+	MainType show = MainType.Film;
+	
+	private JButton film, serietv, unknowfile;
 	
 	public FilmListPanel(AbstractFilmList l, MainType t)
 	{
@@ -37,12 +40,54 @@ public class FilmListPanel extends JPanel
 		setOpaque(false);
 		list = l;
 		list.setJPanel(this);
+		
+		film = new JButton();
+		film.addActionListener(filmAL);
+		serietv = new JButton();
+		serietv.addActionListener(serieTvAL);
+		unknowfile = new JButton();
+		unknowfile.addActionListener(altroAL);
+		
 		init();
+		
 	}
 	
 	public void init()
 	{
 		this.removeAll();
+		
+		film.setBounds(this.getWidth() / 16, 5, this.getWidth() / 4, 30);
+		serietv.setBounds(2 * this.getWidth() / 16 + this.getWidth() / 4, 5, this.getWidth() / 4, 30);
+		unknowfile.setBounds(3 * this.getWidth() / 16 + this.getWidth() / 4 * 2, 5, this.getWidth() / 4, 30);
+		
+		film.setText("<html><h3>Film    "+list.films.size()+"</html>");
+		serietv.setText("<html><h3>SerieTv    "+list.series.size()+"</html>");
+		unknowfile.setText("<html><h3>Tutti i File    "+list.allFile.size()+"</html>");
+		switch (show)
+		{
+			case Film:
+				film.setEnabled(false);
+				serietv.setEnabled(true);
+				unknowfile.setEnabled(true);
+				break;
+			case SerieTV:
+				serietv.setEnabled(false);
+				film.setEnabled(true);
+				unknowfile.setEnabled(true);
+				break;
+			case NULL:
+				unknowfile.setEnabled(false);
+				serietv.setEnabled(true);
+				film.setEnabled(true);
+				break;
+			default:
+				break;
+		}
+		
+		this.add(film);
+		this.add(serietv);
+		this.add(unknowfile);
+		
 		JLabel sep2 = new JLabel();
 		sep2.setBounds(0, 40, this.getWidth(), 1);
 		sep2.setBorder(BorderFactory.createLineBorder(ColorUtils.Separator));
@@ -92,21 +137,18 @@ public class FilmListPanel extends JPanel
 				
 			case NULL:
 			{
-				Object[][] tamplate = {{}};
+				Object[][] tamplate = { { "" } };
 				ArrayList<Object[]> data = new ArrayList<Object[]>();
 				
-				for (int l = 0; l < list.unknowFile.size(); l++)
-					data.add(new Object[] { list.unknowFile.get(l) });
-					
+				for (int l = 0; l < list.allFile.size(); l++)
+					data.add(new Object[] { list.allFile.get(l) });
+				if (data.size() > 0)
+					tamplate = data.toArray(tamplate);
 				Object[] columnNames = { "Nome del File" };
-				JTable table = new JTable(data.toArray(tamplate), columnNames);
+				JTable table = new JTable(tamplate, columnNames);
 				JScrollPane scrollPane = new JScrollPane(table);
 				scrollPane.setBounds(10, 50, this.getWidth() - 20, this.getHeight() - 60);
 				this.add(scrollPane);
-				// ListSelectionModel selectionModel = new
-				// DefaultListSelectionModel();
-				// selectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-				
 			}
 			
 			default:
@@ -132,4 +174,33 @@ public class FilmListPanel extends JPanel
 		}
 	}
 	
+	private ActionListener filmAL = new ActionListener()
+	{
+		@Override
+		public void actionPerformed(ActionEvent e)
+		{
+			show = MainType.Film;
+			updateFromList(MainType.Film);
+		}
+	};
+	
+	private ActionListener serieTvAL = new ActionListener()
+	{
+		@Override
+		public void actionPerformed(ActionEvent e)
+		{
+			show = MainType.SerieTV;
+			updateFromList(MainType.SerieTV);
+		}
+	};
+	
+	private ActionListener altroAL = new ActionListener()
+	{
+		@Override
+		public void actionPerformed(ActionEvent e)
+		{
+			show = MainType.NULL;
+			updateFromList(MainType.NULL);
+		}
+	};
 }
