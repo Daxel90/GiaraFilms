@@ -15,24 +15,25 @@ import it.giara.gui.utils.ColorUtils;
 import it.giara.gui.utils.ImageUtils;
 import it.giara.phases.ScanService;
 import it.giara.source.ListLoader;
+import it.giara.utils.Log;
 
 public class ScanStatus extends DefaultGui
 {
 	private static final long serialVersionUID = -1;
 	
-	DefaultGui back;
-	
-	JLabel list;
-	JLabel file;
-	JLabel stat;
-	JProgressBar listBar;
-	JProgressBar fileBar;
-	Timer timer;
+	private DefaultGui back;
+	private JLabel list;
+	private JLabel file;
+	private JLabel stat;
+	private JProgressBar listBar;
+	private JProgressBar fileBar;
+	private Timer timer;
 	
 	public ScanStatus(DefaultGui gui)
 	{
 		super();
 		back = gui;
+		Log.log(Log.DEBUG, gui.getClass());
 	}
 	
 	public void loadComponent()
@@ -82,8 +83,8 @@ public class ScanStatus extends DefaultGui
 		
 		timer = new Timer(500, UpdateStatus);
 		timer.start();
-		ImageButton options = new ImageButton(ImageUtils.getImage("gui/back.png"),
-				ImageUtils.getImage("gui/back_over.png"), ImageUtils.getImage("gui/back_over.png"), BackGui);
+		ImageButton options = new ImageButton(ImageUtils.getImage("gui/arrow_left.png"),
+				ImageUtils.getImage("gui/arrow_left_over.png"), ImageUtils.getImage("gui/arrow_left_over.png"), BackGui);
 		options.setBounds(5, 5, 32, 32);
 		this.add(options);
 	}

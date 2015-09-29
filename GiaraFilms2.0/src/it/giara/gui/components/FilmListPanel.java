@@ -48,6 +48,10 @@ public class FilmListPanel extends JPanel
 		unknowfile = new JButton();
 		unknowfile.addActionListener(altroAL);
 		
+		film.setText("<html><h3>Film    "+list.films.size()+"</html>");
+		serietv.setText("<html><h3>SerieTv    "+list.series.size()+"</html>");
+		unknowfile.setText("<html><h3>Tutti i File    "+list.allFile.size()+"</html>");
+		
 		init();
 		
 	}
@@ -60,9 +64,6 @@ public class FilmListPanel extends JPanel
 		serietv.setBounds(2 * this.getWidth() / 16 + this.getWidth() / 4, 5, this.getWidth() / 4, 30);
 		unknowfile.setBounds(3 * this.getWidth() / 16 + this.getWidth() / 4 * 2, 5, this.getWidth() / 4, 30);
 		
-		film.setText("<html><h3>Film    "+list.films.size()+"</html>");
-		serietv.setText("<html><h3>SerieTv    "+list.series.size()+"</html>");
-		unknowfile.setText("<html><h3>Tutti i File    "+list.allFile.size()+"</html>");
 		switch (show)
 		{
 			case Film:
@@ -167,6 +168,10 @@ public class FilmListPanel extends JPanel
 	
 	public void updateFromList(MainType type)
 	{
+		film.setText("<html><h3>Film    "+list.films.size()+"</html>");
+		serietv.setText("<html><h3>SerieTv    "+list.series.size()+"</html>");
+		unknowfile.setText("<html><h3>Tutti i File    "+list.allFile.size()+"</html>");
+		
 		if (type.equals(show))
 		{
 			init();

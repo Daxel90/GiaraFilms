@@ -111,6 +111,12 @@ public class AnimatedImageButton extends JLabel implements MouseListener
 		super.setVisible(vis);
 	}
 	
+	public void updateRunnable(Runnable r)
+	{
+		act = r;
+	}
+	
+	
 	ActionListener updateFrame = new ActionListener()
 	{
 		@Override

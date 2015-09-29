@@ -23,6 +23,13 @@ public class HomePage extends DefaultGui
 	public static AnimatedImageButton sync = null; // static for using same
 													// instance in all section
 	
+	public HomePage()
+	{
+		super();
+		if (sync != null)
+			sync.updateRunnable(OpenSync);
+	}
+	
 	public void loadComponent()
 	{
 		JLabel sep2 = new JLabel();
@@ -53,7 +60,7 @@ public class HomePage extends DefaultGui
 		this.add(options);
 		
 		if (sync == null)
-			sync = new AnimatedImageButton("sync(n)", 5, OpenSync,CheckSync);
+			sync = new AnimatedImageButton("sync(n)", 5, OpenSync, CheckSync);
 		sync.setBounds(40, 5, 32, 32);
 		CheckSync.run();
 		this.add(sync);
@@ -92,7 +99,7 @@ public class HomePage extends DefaultGui
 		@Override
 		public void run()
 		{
-			if(ScanService.scanning)
+			if (ScanService.scanning)
 				sync.setVisible(true);
 			else
 				sync.setVisible(false);

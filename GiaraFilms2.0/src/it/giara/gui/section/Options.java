@@ -28,7 +28,7 @@ public class Options extends DefaultGui
 		sep2.setBorder(BorderFactory.createLineBorder(ColorUtils.Separator));
 		this.add(sep2);
 		
-		ImageButton options = new ImageButton(ImageUtils.getImage("gui/back.png"),ImageUtils.getImage("gui/back_over.png"),ImageUtils.getImage("gui/back_over.png"), BackGui);
+		ImageButton options = new ImageButton(ImageUtils.getImage("gui/arrow_left.png"),ImageUtils.getImage("gui/arrow_left_over.png"),ImageUtils.getImage("gui/arrow_left_over.png"), BackGui);
 		options.setBounds(5, 5, 32, 32);
 		this.add(options);
 	}
