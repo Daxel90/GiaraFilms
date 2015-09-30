@@ -97,6 +97,11 @@ public class ImageButton extends JLabel implements MouseListener
 		
 	}
 	
+	public void updateRunnable(Runnable r)
+	{
+		act = r;
+	}
+	
 	public void updateImage(BufferedImage i1)
 	{
 		normal = i1;

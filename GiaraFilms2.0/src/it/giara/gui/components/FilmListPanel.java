@@ -14,6 +14,7 @@ import javax.swing.JTable;
 import it.giara.analyze.enums.MainType;
 import it.giara.gui.utils.AbstractFilmList;
 import it.giara.gui.utils.ColorUtils;
+import it.giara.gui.utils.ImageUtils;
 
 public class FilmListPanel extends JPanel
 {
@@ -23,10 +24,14 @@ public class FilmListPanel extends JPanel
 	private int FileButtonWidth = 140;
 	private int FileButtonHeight = 240;
 	private int spaceFileButton = 10;
+	private int row = 1;
+	private int column = 1;
+	private int offset = 0;
 	
 	MainType show = MainType.Film;
 	
 	private JButton film, serietv, unknowfile;
+	private ImageButton ArrowUp, ArrowDown;
 	
 	public FilmListPanel(AbstractFilmList l, MainType t)
 	{
@@ -48,10 +53,15 @@ public class FilmListPanel extends JPanel
 		unknowfile = new JButton();
 		unknowfile.addActionListener(altroAL);
 		
-		film.setText("<html><h3>Film    "+list.films.size()+"</html>");
-		serietv.setText("<html><h3>SerieTv    "+list.series.size()+"</html>");
-		unknowfile.setText("<html><h3>Tutti i File    "+list.allFile.size()+"</html>");
+		film.setText("<html><h3>Film    " + list.films.size() + "</html>");
+		serietv.setText("<html><h3>SerieTv    " + list.series.size() + "</html>");
+		unknowfile.setText("<html><h3>Tutti i File    " + list.allFile.size() + "</html>");
 		
+		ArrowUp = new ImageButton(ImageUtils.getImage("gui/arrow_up.png"), ImageUtils.getImage("gui/arrow_up_over.png"),
+				ImageUtils.getImage("gui/arrow_up_over.png"), RunUp);
+		ArrowDown = new ImageButton(ImageUtils.getImage("gui/arrow_down.png"),
+				ImageUtils.getImage("gui/arrow_down_over.png"), ImageUtils.getImage("gui/arrow_down_over.png"), RunDown);
+				
 		init();
 		
 	}
@@ -94,17 +104,51 @@ public class FilmListPanel extends JPanel
 		sep2.setBorder(BorderFactory.createLineBorder(ColorUtils.Separator));
 		this.add(sep2);
 		
-		int column = (this.getWidth() - 2 * spaceFileButton) / (FileButtonWidth + spaceFileButton);
-		int COLUMNcenterOffset = ((this.getWidth() - 2 * spaceFileButton)
+		column = (this.getWidth() - 32 - 2 * spaceFileButton) / (FileButtonWidth + spaceFileButton);
+		int COLUMNcenterOffset = ((this.getWidth() - 32 - 2 * spaceFileButton)
 				- (FileButtonWidth + spaceFileButton) * column) / 2;
-		int row = (this.getHeight() - 40) / (FileButtonHeight + spaceFileButton);
+		row = (this.getHeight() - 40) / (FileButtonHeight + spaceFileButton);
 		int ROWcenterOffset = (((this.getHeight() - 40) - ((FileButtonHeight + spaceFileButton) * row))) / 2;
+		
+		boolean upArr = false;
+		boolean downArr = false;
+		switch (show)
+		{
+			case Film:
+				film.setEnabled(false);
+				serietv.setEnabled(true);
+				unknowfile.setEnabled(true);
+				
+				upArr = offset > 0;
+				downArr = list.films.size() > ((column * row)+offset);
+				
+				break;
+			case SerieTV:
+				serietv.setEnabled(false);
+				film.setEnabled(true);
+				unknowfile.setEnabled(true);
+				
+				upArr = offset > 0;
+				downArr = list.series.size() > ((column * row)+offset);
+				
+				break;
+			default:
+				break;
+		}
+		
+		ArrowUp.setBounds(this.getWidth() - 37, 55, 32, 32);
+		ArrowUp.setVisible(upArr);
+		this.add(ArrowUp);
+		
+		ArrowDown.setBounds(this.getWidth() - 37, this.getHeight() - 42, 32, 32);
+		ArrowDown.setVisible(downArr);
+		this.add(ArrowDown);
 		
 		switch (show)
 		{
 			case Film:
 			{
-				int number = 0;
+				int number = offset;
 				for (int j = 0; j < row; j++)
 					for (int k = 0; k < column; k++)
 					{
@@ -121,7 +165,7 @@ public class FilmListPanel extends JPanel
 				
 			case SerieTV:
 			{
-				int number = 0;
+				int number = offset;
 				for (int j = 0; j < row; j++)
 					for (int k = 0; k < column; k++)
 					{
@@ -168,9 +212,9 @@ public class FilmListPanel extends JPanel
 	
 	public void updateFromList(MainType type)
 	{
-		film.setText("<html><h3>Film    "+list.films.size()+"</html>");
-		serietv.setText("<html><h3>SerieTv    "+list.series.size()+"</html>");
-		unknowfile.setText("<html><h3>Tutti i File    "+list.allFile.size()+"</html>");
+		film.setText("<html><h3>Film    " + list.films.size() + "</html>");
+		serietv.setText("<html><h3>SerieTv    " + list.series.size() + "</html>");
+		unknowfile.setText("<html><h3>Tutti i File    " + list.allFile.size() + "</html>");
 		
 		if (type.equals(show))
 		{
@@ -185,6 +229,7 @@ public class FilmListPanel extends JPanel
 		public void actionPerformed(ActionEvent e)
 		{
 			show = MainType.Film;
+			offset = 0;
 			updateFromList(MainType.Film);
 		}
 	};
@@ -195,6 +240,7 @@ public class FilmListPanel extends JPanel
 		public void actionPerformed(ActionEvent e)
 		{
 			show = MainType.SerieTV;
+			offset = 0;
 			updateFromList(MainType.SerieTV);
 		}
 	};
@@ -205,7 +251,35 @@ public class FilmListPanel extends JPanel
 		public void actionPerformed(ActionEvent e)
 		{
 			show = MainType.NULL;
+			offset = 0;
 			updateFromList(MainType.NULL);
 		}
+	};
+	
+	Runnable RunUp = new Runnable()
+	{
+		@Override
+		public void run()
+		{
+			offset-=column;
+			if(offset <0)
+				offset = 0;
+			
+			init();
+			repaint();
+		}
+		
+	};
+	
+	Runnable RunDown = new Runnable()
+	{
+		@Override
+		public void run()
+		{
+			offset+=column;
+			init();
+			repaint();
+		}
+		
 	};
 }
