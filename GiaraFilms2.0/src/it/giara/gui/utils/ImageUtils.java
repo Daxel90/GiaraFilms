@@ -221,6 +221,7 @@ public class ImageUtils
 	}
 	
 	// //scalare immagine con qualita' superiore senza conservare aspect ratio
+	//TO SLOW AND CREATE LOOP ON PROCESSOR
 	public static BufferedImage scaleImage(BufferedImage img, int targetWidth, int targetHeight)
 	{
 		BufferedImage ret = (BufferedImage) img;

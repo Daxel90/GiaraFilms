@@ -13,6 +13,8 @@ import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.border.EtchedBorder;
 
+import it.giara.gui.MainFrame;
+import it.giara.gui.section.FilmInfoSchede;
 import it.giara.schede.PreSchedaFilm;
 
 public class FilmButton extends JLabel implements MouseListener
@@ -27,7 +29,7 @@ public class FilmButton extends JLabel implements MouseListener
 	{
 		super();
 		film = f;
-		if(film == null)
+		if (film == null)
 			return;
 		if (film.img == null)
 			Cover = film.initImage(this);
@@ -42,26 +44,26 @@ public class FilmButton extends JLabel implements MouseListener
 		
 		String Stext = "<html><h3>" + film.Titolo + "</html>";
 		
-		if(film.Titolo.length()> 8)
+		if (film.Titolo.length() > 8)
 			Stext = "<html><h4>" + film.Titolo + "</html>";
-		
-		if(film.Titolo.length()> 16)
+			
+		if (film.Titolo.length() > 16)
 			Stext = "<html><h5>" + film.Titolo + "</html>";
-		
-		if(film.Titolo.length()> 24)
+			
+		if (film.Titolo.length() > 24)
 		{
 			String[] p = film.Titolo.split(" ");
 			String newTitle = "";
-			for(int j = 0; j <p.length; j++)
+			for (int j = 0; j < p.length; j++)
 			{
-				if(j == (p.length/2)+1)
-					newTitle +="<br>";
-				newTitle += p[j]+" ";
+				if (j == (p.length / 2) + 1)
+					newTitle += "<br>";
+				newTitle += p[j] + " ";
 			}
 			newTitle = newTitle.trim();
 			Stext = "<html><h5>" + newTitle + "</html>";
 		}
-				
+		
 		text = new JLabel(Stext);
 		text.setBounds(0, 200, this.getWidth(), 40);
 		text.setHorizontalAlignment(JLabel.CENTER);
@@ -74,6 +76,7 @@ public class FilmButton extends JLabel implements MouseListener
 	@Override
 	public void mouseClicked(MouseEvent e)
 	{
+		MainFrame.getInstance().setInternalPane(new FilmInfoSchede(MainFrame.getInstance().internalPane, film));
 		// MainFrame.instance.setInternalPane(new FilmInfoPanel(film,
 		// MainFrame.instance.internalPane));
 	}
