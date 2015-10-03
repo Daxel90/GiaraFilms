@@ -191,7 +191,10 @@ public class FilmListPanel extends JPanel
 					tamplate = data.toArray(tamplate);
 				Object[] columnNames = { "Nome del File" };
 				JTable table = new JTable(tamplate, columnNames);
+				table.setFocusable(false);
+				table.setEnabled(false);
 				JScrollPane scrollPane = new JScrollPane(table);
+				scrollPane.setFocusable(false);
 				scrollPane.setBounds(10, 50, this.getWidth() - 20, this.getHeight() - 60);
 				this.add(scrollPane);
 			}
