@@ -4,6 +4,8 @@ import java.awt.Dimension;
 
 import javax.swing.JPanel;
 
+import it.giara.gui.utils.ColorUtils;
+
 public class DefaultGui extends JPanel
 {
 	private static final long serialVersionUID = -1085038245651589565L;
@@ -15,7 +17,8 @@ public class DefaultGui extends JPanel
 	public DefaultGui()
 	{
 		setLayout(null);
-		setOpaque(false);
+		setOpaque(true);
+		this.setBackground(ColorUtils.Back);
 		guiInstance = this;
 	}
 	
