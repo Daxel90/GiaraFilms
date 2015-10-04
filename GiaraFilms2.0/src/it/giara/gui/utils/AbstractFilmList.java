@@ -26,7 +26,9 @@ public class AbstractFilmList
 	{
 		if (p == null)
 			return;
-		if(p.Titolo == null)
+		if (p.Titolo == null)
+			return;
+		if (p.Titolo.equals(""))
 			return;
 		for (int k = 0; k < films.size(); k++)
 		{
@@ -42,7 +44,9 @@ public class AbstractFilmList
 	{
 		if (p == null)
 			return;
-		if(p.Titolo == null)
+		if (p.Titolo == null)
+			return;
+		if (p.Titolo.equals(""))
 			return;
 		for (int k = 0; k < series.size(); k++)
 		{
@@ -57,6 +61,8 @@ public class AbstractFilmList
 	public void addFile(String p)
 	{
 		if (p == null)
+			return;
+		if (p.equals(""))
 			return;
 			
 		if (allFile.contains(p))
@@ -74,14 +80,14 @@ public class AbstractFilmList
 			panel.repaint();
 	}
 	
-	//remove a lot of memory
+	// remove a lot of memory
 	public void clear()
 	{
 		loading = false;
 		films.clear();
 		series.clear();
 		allFile.clear();
-		System.gc(); 
+		System.gc();
 	}
 	
 }

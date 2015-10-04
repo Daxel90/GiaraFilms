@@ -74,6 +74,7 @@ public class FilmInfoSchede extends DefaultGui
 			loading.setBounds((FRAME_WIDTH - 128) / 2, (FRAME_HEIGHT - 128) / 2, 128, 128);
 			add(loading);
 		}
+		if(cover == null)
 		cover = new JLabel();
 		if ((int) ((FRAME_WIDTH / 4) * 1.49) < FRAME_HEIGHT / 2)
 			cover.setBounds(20, 80, FRAME_WIDTH / 4, (int) ((FRAME_WIDTH / 4) * 1.5));
@@ -102,10 +103,10 @@ public class FilmInfoSchede extends DefaultGui
 		
 		if ((int) ((FRAME_WIDTH / 4) * 1.49) < FRAME_HEIGHT / 2)
 			scroll.setBounds(FRAME_WIDTH / 4 + 60, 80, FRAME_WIDTH - (FRAME_WIDTH / 4 + 80),
-					(int) ((FRAME_WIDTH / 4) * 1.49) -35);
+					(int) ((FRAME_WIDTH / 4) * 1.49) - 35);
 		else
 			scroll.setBounds((int) ((FRAME_HEIGHT / 2) * 0.67) + 60, 80,
-					FRAME_WIDTH - ((int) ((FRAME_HEIGHT / 2) * 0.67) + 80), FRAME_HEIGHT / 2 -35);
+					FRAME_WIDTH - ((int) ((FRAME_HEIGHT / 2) * 0.67) + 80), FRAME_HEIGHT / 2 - 35);
 					
 		scroll.setVisible(!scheda.loading);
 		scroll.setOpaque(false);
@@ -113,15 +114,61 @@ public class FilmInfoSchede extends DefaultGui
 		
 		info = new JLabel();
 		if ((int) ((FRAME_WIDTH / 4) * 1.49) < FRAME_HEIGHT / 2)
-			info.setBounds(FRAME_WIDTH / 4 + 60, (int) ((FRAME_WIDTH / 4) * 1.49) + 50, FRAME_WIDTH - (FRAME_WIDTH / 4 + 80), 30);
+			info.setBounds(FRAME_WIDTH / 4 + 60, (int) ((FRAME_WIDTH / 4) * 1.49) + 50,
+					FRAME_WIDTH - (FRAME_WIDTH / 4 + 80), 30);
 		else
-			info.setBounds((int) ((FRAME_HEIGHT / 2) * 0.67) + 60, FRAME_HEIGHT / 2 + 50, FRAME_WIDTH - ((int) ((FRAME_HEIGHT / 2) * 0.67) + 80), 30);
+			info.setBounds((int) ((FRAME_HEIGHT / 2) * 0.67) + 60, FRAME_HEIGHT / 2 + 50,
+					FRAME_WIDTH - ((int) ((FRAME_HEIGHT / 2) * 0.67) + 80), 30);
 		info.setText("<html><h4> " + "Anno: " + film.anno
 				+ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + "Paese: " + film.nazionalita
 				+ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + "Regia: " + film.regia + "<br>"
 				+ "Genere: " + film.getGeneri().replace(",", ", ") + "</html>");
 		info.setVisible(!scheda.loading);
 		this.add(info);
+		drawRating();
+	}
+	
+	public void drawRating()
+	{
+		if (!scheda.loading)
+		{
+			int x = 0;
+			for (x = 0; x < scheda.vote - 1; x++)
+			{
+				JLabel star = new JLabel();
+				if ((int) ((FRAME_WIDTH / 4) * 1.49) < FRAME_HEIGHT / 2)
+					star.setBounds(20 + FRAME_WIDTH / 8 - 50 + (20 * x), (int) ((FRAME_WIDTH / 4) * 1.49) + 85, 20, 20);
+				else
+					star.setBounds(20 + (int) ((FRAME_HEIGHT / 2) * 0.67) / 2 - 50 + (20 * x), FRAME_HEIGHT / 2 + 85,
+							20, 20);
+				star.setIcon(ImageUtils.getIcon("star_full.png"));
+				this.add(star);
+			}
+			if (x + 0.5f >= scheda.vote)
+			{
+				JLabel star = new JLabel();
+				if ((int) ((FRAME_WIDTH / 4) * 1.49) < FRAME_HEIGHT / 2)
+					star.setBounds(20 + FRAME_WIDTH / 8 - 50 + (20 * x), (int) ((FRAME_WIDTH / 4) * 1.49) + 85, 20, 20);
+				else
+					star.setBounds(20 + (int) ((FRAME_HEIGHT / 2) * 0.67) / 2 - 50 + (20 * x), FRAME_HEIGHT / 2 + 85,
+							20, 20);
+				star.setIcon(ImageUtils.getIcon("star_half.png"));
+				this.add(star);
+				x++;
+			}
+			for (; x < 5; x++)
+			{
+				JLabel star = new JLabel();
+				if ((int) ((FRAME_WIDTH / 4) * 1.49) < FRAME_HEIGHT / 2)
+					star.setBounds(20 + FRAME_WIDTH / 8 - 50 + (20 * x), (int) ((FRAME_WIDTH / 4) * 1.49) + 85, 20, 20);
+				else
+					star.setBounds(20 + (int) ((FRAME_HEIGHT / 2) * 0.67) / 2 - 50 + (20 * x), FRAME_HEIGHT / 2 + 85,
+							20, 20);
+				star.setIcon(ImageUtils.getIcon("star_empty.png"));
+				this.add(star);
+			}
+			this.repaint();
+		}
 	}
 	
 	Runnable BackGui = new Runnable()
@@ -148,6 +195,7 @@ public class FilmInfoSchede extends DefaultGui
 				text.setText("<html><h2>" + scheda.desc + "</html>");
 				scroll.setVisible(true);
 				info.setVisible(true);
+				drawRating();
 			}
 		}
 	};
