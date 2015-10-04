@@ -26,6 +26,8 @@ public class AbstractFilmList
 	{
 		if (p == null)
 			return;
+		if(p.Titolo == null)
+			return;
 		for (int k = 0; k < films.size(); k++)
 		{
 			if (p.Titolo.equals(films.get(k).Titolo))
@@ -39,6 +41,8 @@ public class AbstractFilmList
 	public void addPreSchedaTVSerie(PreSchedaTVSerie p)
 	{
 		if (p == null)
+			return;
+		if(p.Titolo == null)
 			return;
 		for (int k = 0; k < series.size(); k++)
 		{

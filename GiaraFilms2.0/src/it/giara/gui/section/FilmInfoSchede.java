@@ -1,12 +1,9 @@
 package it.giara.gui.section;
 
-import java.awt.Color;
-
 import javax.swing.BorderFactory;
 import javax.swing.JEditorPane;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 
 import it.giara.gui.DefaultGui;
 import it.giara.gui.MainFrame;
@@ -31,6 +28,7 @@ public class FilmInfoSchede extends DefaultGui
 	JEditorPane text;
 	JLabel cover;
 	JScrollPane scroll;
+	JLabel info;
 	
 	public FilmInfoSchede(DefaultGui gui, PreSchedaFilm f)
 	{
@@ -77,7 +75,10 @@ public class FilmInfoSchede extends DefaultGui
 			add(loading);
 		}
 		cover = new JLabel();
-		cover.setBounds(50, 80, FRAME_WIDTH / 4, (int) ((FRAME_WIDTH / 4) * 1.49));
+		if ((int) ((FRAME_WIDTH / 4) * 1.49) < FRAME_HEIGHT / 2)
+			cover.setBounds(20, 80, FRAME_WIDTH / 4, (int) ((FRAME_WIDTH / 4) * 1.5));
+		else
+			cover.setBounds(20, 80, (int) ((FRAME_HEIGHT / 2) * 0.67), FRAME_HEIGHT / 2);
 		cover.setBorder(BorderFactory.createEtchedBorder());
 		if (scheda.img != null)
 			cover.setIcon(ImageUtils
@@ -98,11 +99,29 @@ public class FilmInfoSchede extends DefaultGui
 		scroll.setFocusable(false);
 		scroll.setBorder(BorderFactory.createEmptyBorder());
 		scroll.setBackground(ColorUtils.Back);
-		scroll.setBounds(FRAME_WIDTH / 4 + 60, 100, FRAME_WIDTH - (FRAME_WIDTH / 4 + 80),
-				(int) ((FRAME_WIDTH / 4) * 1.49) - 20);
+		
+		if ((int) ((FRAME_WIDTH / 4) * 1.49) < FRAME_HEIGHT / 2)
+			scroll.setBounds(FRAME_WIDTH / 4 + 60, 80, FRAME_WIDTH - (FRAME_WIDTH / 4 + 80),
+					(int) ((FRAME_WIDTH / 4) * 1.49) -35);
+		else
+			scroll.setBounds((int) ((FRAME_HEIGHT / 2) * 0.67) + 60, 80,
+					FRAME_WIDTH - ((int) ((FRAME_HEIGHT / 2) * 0.67) + 80), FRAME_HEIGHT / 2 -35);
+					
 		scroll.setVisible(!scheda.loading);
 		scroll.setOpaque(false);
 		this.add(scroll);
+		
+		info = new JLabel();
+		if ((int) ((FRAME_WIDTH / 4) * 1.49) < FRAME_HEIGHT / 2)
+			info.setBounds(FRAME_WIDTH / 4 + 60, (int) ((FRAME_WIDTH / 4) * 1.49) + 50, FRAME_WIDTH - (FRAME_WIDTH / 4 + 80), 30);
+		else
+			info.setBounds((int) ((FRAME_HEIGHT / 2) * 0.67) + 60, FRAME_HEIGHT / 2 + 50, FRAME_WIDTH - ((int) ((FRAME_HEIGHT / 2) * 0.67) + 80), 30);
+		info.setText("<html><h4> " + "Anno: " + film.anno
+				+ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + "Paese: " + film.nazionalita
+				+ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + "Regia: " + film.regia + "<br>"
+				+ "Genere: " + film.getGeneri().replace(",", ", ") + "</html>");
+		info.setVisible(!scheda.loading);
+		this.add(info);
 	}
 	
 	Runnable BackGui = new Runnable()
@@ -128,6 +147,7 @@ public class FilmInfoSchede extends DefaultGui
 						ImageUtils.scaleImageOld(scheda.initImage(cover), cover.getWidth(), cover.getHeight())));
 				text.setText("<html><h2>" + scheda.desc + "</html>");
 				scroll.setVisible(true);
+				info.setVisible(true);
 			}
 		}
 	};

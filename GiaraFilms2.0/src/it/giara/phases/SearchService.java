@@ -159,7 +159,7 @@ public class SearchService
 								{
 									FunctionsUtils.sleep(10);
 								}
-								if (!run)
+								if (run)
 									ThreadManager.submitPoolExecutorSearchIndicizer(check);
 							}
 							
