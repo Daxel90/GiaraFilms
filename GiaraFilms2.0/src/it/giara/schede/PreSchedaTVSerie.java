@@ -65,7 +65,6 @@ public class PreSchedaTVSerie
 							
 							if (img != null)
 							{
-								img = ImageUtils.scaleImageOld(img, 140, 200);
 								try
 								{
 									if (!f.getParentFile().exists())
