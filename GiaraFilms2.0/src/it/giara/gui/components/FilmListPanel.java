@@ -157,7 +157,7 @@ public class FilmListPanel extends JPanel
 							continue;
 						FilmButton f = new FilmButton(list.films.get(number),
 								COLUMNcenterOffset + spaceFileButton + k * (FileButtonWidth + spaceFileButton),
-								ROWcenterOffset + 40 + spaceFileButton + j * (FileButtonHeight + spaceFileButton));
+								ROWcenterOffset + 40 + spaceFileButton + j * (FileButtonHeight + spaceFileButton),this);
 						this.add(f);
 						number++;
 					}
@@ -174,7 +174,7 @@ public class FilmListPanel extends JPanel
 							continue;
 						TvSerieButton f = new TvSerieButton(list.series.get(number),
 								COLUMNcenterOffset + spaceFileButton + k * (FileButtonWidth + spaceFileButton),
-								ROWcenterOffset + 40 + spaceFileButton + j * (FileButtonHeight + spaceFileButton));
+								ROWcenterOffset + 40 + spaceFileButton + j * (FileButtonHeight + spaceFileButton),this);
 						this.add(f);
 						number++;
 					}

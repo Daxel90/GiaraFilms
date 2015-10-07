@@ -5,6 +5,7 @@ import java.io.File;
 
 import javax.imageio.ImageIO;
 
+import it.giara.gui.components.FilmListPanel;
 import it.giara.gui.components.TvSerieButton;
 import it.giara.gui.utils.ImageUtils;
 import it.giara.utils.DirUtils;
@@ -41,7 +42,7 @@ public class PreSchedaTVSerie
 		Generi = d.split(",");
 	}
 	
-	public BufferedImage initImage(final TvSerieButton filmButton)
+	public BufferedImage initImage(final FilmListPanel filmListPanel)
 	{
 		if (img == null)
 		{
@@ -83,7 +84,8 @@ public class PreSchedaTVSerie
 							}
 						} finally
 						{
-							filmButton.updateImage(img);
+							filmListPanel.init();
+							filmListPanel.repaint();
 						}
 					}
 				};

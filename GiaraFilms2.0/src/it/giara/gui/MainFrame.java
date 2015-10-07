@@ -38,6 +38,7 @@ public class MainFrame extends JFrame
 		setTitle("GiaraFilms 2.0");
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		setBackground(ColorUtils.Back);
+		setExtendedState(JFrame.MAXIMIZED_BOTH); 
 		setLayout(null);
 		setIconImage(ImageUtils.getImage("icon.png"));
 		

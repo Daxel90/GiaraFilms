@@ -24,15 +24,17 @@ public class FilmButton extends JLabel implements MouseListener
 	public boolean isOver = false;
 	PreSchedaFilm film;
 	JLabel text = new JLabel();
+	FilmListPanel panel;
 	
-	public FilmButton(PreSchedaFilm f, int x, int y)
+	public FilmButton(PreSchedaFilm f, int x, int y, FilmListPanel pa)
 	{
 		super();
+		panel = pa;
 		film = f;
 		if (film == null)
 			return;
 		if (film.img == null)
-			Cover = film.initImage(this);
+			Cover = film.initImage(panel);
 		else
 			Cover = film.img;
 			
@@ -77,8 +79,6 @@ public class FilmButton extends JLabel implements MouseListener
 	public void mouseClicked(MouseEvent e)
 	{
 		MainFrame.getInstance().setInternalPane(new FilmInfoSchede(MainFrame.getInstance().internalPane, film));
-		// MainFrame.instance.setInternalPane(new FilmInfoPanel(film,
-		// MainFrame.instance.internalPane));
 	}
 	
 	@Override

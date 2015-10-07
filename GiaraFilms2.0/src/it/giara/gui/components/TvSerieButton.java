@@ -22,15 +22,17 @@ public class TvSerieButton extends JLabel implements MouseListener
 	public boolean isOver = false;
 	PreSchedaTVSerie film;
 	JLabel text = new JLabel();
+	FilmListPanel panel;
 	
-	public TvSerieButton(PreSchedaTVSerie f, int x, int y)
+	public TvSerieButton(PreSchedaTVSerie f, int x, int y, FilmListPanel pa)
 	{
 		super();
+		panel = pa;
 		film = f;
 		if (film == null)
 			return;
 		if (film.img == null)
-			Cover = film.initImage(this);
+			Cover = film.initImage(panel);
 		else
 			Cover = film.img;
 			

@@ -5,7 +5,7 @@ import java.io.File;
 
 import javax.imageio.ImageIO;
 
-import it.giara.gui.components.FilmButton;
+import it.giara.gui.components.FilmListPanel;
 import it.giara.gui.utils.ImageUtils;
 import it.giara.utils.DirUtils;
 import it.giara.utils.Log;
@@ -42,7 +42,7 @@ public class PreSchedaFilm
 		Generi = d.split(",");
 	}
 	
-	public BufferedImage initImage(final FilmButton filmButton)
+	public BufferedImage initImage(final FilmListPanel filmListPanel)
 	{
 		if (img == null)
 		{
@@ -84,7 +84,8 @@ public class PreSchedaFilm
 							}
 						} finally
 						{
-							filmButton.updateImage(img);
+							filmListPanel.init();
+							filmListPanel.repaint();
 						}
 					}
 				};
