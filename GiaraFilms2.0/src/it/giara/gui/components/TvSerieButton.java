@@ -13,6 +13,8 @@ import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.border.EtchedBorder;
 
+import it.giara.gui.MainFrame;
+import it.giara.gui.section.TVSerieInfoSchede;
 import it.giara.schede.PreSchedaTVSerie;
 
 public class TvSerieButton extends JLabel implements MouseListener
@@ -76,8 +78,7 @@ public class TvSerieButton extends JLabel implements MouseListener
 	@Override
 	public void mouseClicked(MouseEvent e)
 	{
-		// MainFrame.instance.setInternalPane(new FilmInfoPanel(film,
-		// MainFrame.instance.internalPane));
+		MainFrame.getInstance().setInternalPane(new TVSerieInfoSchede(MainFrame.getInstance().internalPane, film));
 	}
 	
 	@Override
