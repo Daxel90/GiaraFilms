@@ -1,13 +1,14 @@
 package it.giara;
 
-import it.giara.http.HTTPTVSerieInfo;
+import it.giara.download.DownloadManager;
+import it.giara.source.ListLoader;
 
 public class TEst
 {
 	public static void main(String[] args)
 	{
-		HTTPTVSerieInfo finfo = new HTTPTVSerieInfo("http://www.comingsoon.it/serietv/empire/450/scheda/");
-		finfo.getInfo();
+		ListLoader.loadSources();
+		DownloadManager.getFileSources("Sopravvissuto.The.Martian.2015.iTALiAN.MD.TS.XviD-iNCOMiNG.avi");
 		
 	}
 }

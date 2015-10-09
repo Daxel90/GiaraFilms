@@ -1,14 +1,16 @@
 package it.giara.http;
 
-import it.giara.utils.Log;
-
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.ArrayList;
 
-public class HTTPList
+import it.giara.download.BotPackage;
+import it.giara.download.FileSources;
+import it.giara.source.SourceChan;
+import it.giara.utils.Log;
+
+public class HTTPFileSources
 {
 	
 	static
@@ -16,17 +18,20 @@ public class HTTPList
 		System.setProperty("http.agent", "PoWeR-Script");
 	}
 	
-	public ArrayList<String> file = new ArrayList<String>();
+	FileSources fileSources;
+	SourceChan currentChan;
 	
-	public HTTPList(String site, String search)
+	public HTTPFileSources(SourceChan chan, FileSources file)
 	{
-		getFileList(site + "?m=1&q=(search)", search.replace(" ", "+"));
+		currentChan = chan;
+		fileSources = file;
+		getFileList(chan.link + "?m=1&q=(search)", fileSources.filename.replace(" ", "+"));
 		
 	}
 	
-	private ArrayList<String> getFileList(String site, String search)
+	private void getFileList(String site, String search)
 	{
-		Log.log(Log.NET, site.replace("(search)", search));
+		// Log.log(Log.DOWNLOAD, site.replace("(search)", search));
 		try
 		{
 			URL url = new URL(site.replace("(search)", search));
@@ -41,38 +46,43 @@ public class HTTPList
 					continue;
 					
 				line = line.trim();
+				
 				while (line.contains("  "))
 					line = line.replace("  ", " ");
 					
 				String[] info = line.split(" ");
 				if (info.length < 4)
 					continue;
+					
 				String name = info[3];
 				
-				if (info.length > 4) // correction for file name containing space
+				if (info.length > 4) // correction for file name containing
+										// space
 					for (int j = 4; j < info.length; j++)
 					{
-						if (info[j].contains("/") || info[j].contains("<"))
+						if (info[j].contains("/"))
 							break;
 							
 						name += " " + info[j];
 					}
-				
-				//remove html body end if present
+					
+				// remove html body end if present
 				name = name.replace("</body>", "").replace("<br/>", "");
 				name = name.trim();
 				
-				if(name.contains("<") && name.charAt(name.length()-4) != '.')
+				int pkid = Integer.parseInt(info[0].replace("#", ""));
+				String bot = info[1];
+				
+				if (fileSources.filename.equals(name))
 				{
-					name = name.split("<")[0];
+					fileSources.addBot(currentChan, new BotPackage(bot, pkid));
+					
+					Log.log(Log.DOWNLOAD, pkid);
+					Log.log(Log.DOWNLOAD, bot);
 				}
-				
-				
-				if (!file.contains(name))
+				else
 				{
-					file.add(name);
-					Log.log(Log.NET, name);
-					Log.log(Log.NET, file.size());
+					Log.log(Log.DOWNLOAD, "-" + name + "- != +" + fileSources.filename + "-");
 				}
 				
 			}
@@ -80,10 +90,8 @@ public class HTTPList
 			
 		} catch (Exception e)
 		{
-			Log.stack(Log.NET, e);
+			Log.stack(Log.DOWNLOAD, e);
 		}
-		
-		return file;
 		
 	}
 	
