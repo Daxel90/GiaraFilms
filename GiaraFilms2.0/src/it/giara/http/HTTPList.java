@@ -52,7 +52,7 @@ public class HTTPList
 				if (info.length > 4) // correction for file name containing space
 					for (int j = 4; j < info.length; j++)
 					{
-						if (info[j].contains("/"))
+						if (info[j].contains("/") || info[j].contains("<"))
 							break;
 							
 						name += " " + info[j];
@@ -60,7 +60,13 @@ public class HTTPList
 				
 				//remove html body end if present
 				name = name.replace("</body>", "").replace("<br/>", "");
-					
+				name = name.trim();
+				if(name.contains("<") && name.charAt(name.length()-4) != '.')
+				{
+					name = name.split("<")[0];
+				}
+				
+				
 				if (!file.contains(name))
 				{
 					file.add(name);

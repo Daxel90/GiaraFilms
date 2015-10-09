@@ -12,6 +12,8 @@ public class Log
 	public static LogType DB = LogType.DB;
 	public static LogType GUI = LogType.GUI;
 	public static LogType IMAGE = LogType.IMAGE;
+	public static LogType IRC = LogType.IRC;
+	public static LogType DOWNLOAD = LogType.DOWNLOAD;
 	
 	public static void log(LogType l, Object o)
 	{
@@ -28,5 +30,5 @@ public class Log
 
 enum LogType
 {
-	NETWORK, DEBUG, INFO, CONFIG, FILEINFO, FILMINFO, DB, GUI, ERROR, IMAGE
+	NETWORK, DEBUG, INFO, CONFIG, FILEINFO, FILMINFO, DB, GUI, ERROR, IMAGE, IRC, DOWNLOAD
 }

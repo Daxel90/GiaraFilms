@@ -1,16 +1,13 @@
 package it.giara;
 
+import javax.swing.UIManager;
+
 import it.giara.gui.MainFrame;
 import it.giara.gui.utils.FontUtils;
 import it.giara.utils.Log;
 
-import java.util.ArrayList;
-
-import javax.swing.UIManager;
-
 public class MainClass
 {
-	public static ArrayList<String> sorgenti = new ArrayList<String>();
 	
 	public static void main(String[] args)
 	{
