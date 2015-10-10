@@ -1,13 +1,10 @@
 package it.giara.irc;
 
-import java.io.File;
-
 import org.jibble.pircbot.DccFileTransfer;
 import org.jibble.pircbot.PircBot;
 
 import it.giara.download.DownloadManager;
 import it.giara.download.FileSources;
-import it.giara.utils.DirUtils;
 import it.giara.utils.ErrorHandler;
 import it.giara.utils.Log;
 
@@ -111,55 +108,7 @@ public class IrcConnection extends PircBot
 		sources.downloading = true;
 		sources.xdcc = transfer;
 		
-		File saveFile = new File(DirUtils.getDownloadDir(), transfer.getFile().getName());
-		
-		if (!saveFile.getParentFile().exists())
-			saveFile.getParentFile().mkdir();
-			
-		Log.log(Log.IRC, "INCOMING:\t" + transfer.getFile().toString() + " " + transfer.getSize() + " bytes");
-		
-		if (saveFile.exists() && (transfer.getSize() == saveFile.length()))
-		{
-			Log.log(Log.IRC, "EXISTS:\t try to close connection");
-			transfer.close();
-			
-		}
-		else
-		{
-			Log.log(Log.IRC, "SAVING TO:\t" + saveFile.toString());
-			transfer.receive(saveFile, true);
-		}
-		
-		// new Thread()
-		// {
-		//
-		// @Override
-		// public void run()
-		// {
-		// long data = 0;
-		// int speed = 0;
-		// while (true)
-		// {
-		// speed = (int) (curentTransfer.getProgress() - data);
-		// data = curentTransfer.getProgress();
-		// System.out.println("Size: " + curentTransfer.getProgress());
-		// System.out.println("Percent: " +
-		// curentTransfer.getProgressPercentage());
-		// System.out.println("Speed: " + speed);
-		//
-		// // DownloadPanel.updateDownload(curentTransfer.getFile().getName(),
-		// // curentTransfer.getProgressPercentage(), speed);
-		// try
-		// {
-		// Thread.sleep(1000);
-		// } catch (InterruptedException e)
-		// {
-		// e.printStackTrace();
-		// }
-		// }
-		//
-		// }
-		// }.start();
+		sources.startDownloadXDCC();
 		
 	}
 	
