@@ -13,7 +13,11 @@ public class SQL
 {
 	static Connection c = null;
 	static Statement stmt = null;
-	static File db = new File(DirUtils.getWorkingDirectory(), "Database.db");
+	static File db = new File(DirUtils.getWorkingDirectory(), "FileDatabase.db");
+	
+	static Connection cSett = null;
+	static Statement stmtSett = null;
+	static File settings = new File(DirUtils.getWorkingDirectory(), "Settings.db");
 	
 	public static void connect()
 	{
@@ -29,11 +33,28 @@ public class SQL
 			
 		} catch (Exception e)
 		{
+			Log.log(Log.DB, "IMPOSSIBILE ACCEDERE AL DATABASE DEI FILE");
+			Log.stack(Log.DB, e);
+		}
+		
+		try
+		{
+			System.out.println(settings.getAbsolutePath());
+			Class.forName("org.sqlite.JDBC");
+			cSett = DriverManager.getConnection("jdbc:sqlite:" + settings.getAbsolutePath());
+			cSett.setAutoCommit(true);
+			stmtSett = cSett.createStatement();
+			Log.log(Log.DB, "Accedo al Database");
+			SQLQuery.initTable();
+			
+		} catch (Exception e)
+		{
 			Log.log(Log.DB, "IMPOSSIBILE ACCEDERE AL DATABASE");
 			Log.stack(Log.DB, e);
 		}
 	}
 	
+	// FILE DB
 	public static void ExecuteQuery(String query)
 	{
 		try
@@ -51,6 +72,33 @@ public class SQL
 		try
 		{
 			return stmt.executeQuery(query);
+		} catch (Exception e)
+		{
+			Log.log(Log.DB, query);
+			Log.stack(Log.DB, e);
+			return null;
+		}
+		
+	}
+	
+	// SETTINGS DB
+	public static void ExecuteQuerySettings(String query)
+	{
+		try
+		{
+			stmtSett.executeUpdate(query);
+		} catch (Exception e)
+		{
+			Log.log(Log.DB, query);
+			Log.stack(Log.DB, e);
+		}
+	}
+	
+	public static ResultSet FetchDataSettings(String query)
+	{
+		try
+		{
+			return stmtSett.executeQuery(query);
 		} catch (Exception e)
 		{
 			Log.log(Log.DB, query);
