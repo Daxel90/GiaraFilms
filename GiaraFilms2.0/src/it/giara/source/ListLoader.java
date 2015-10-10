@@ -38,7 +38,7 @@ public class ListLoader
 				}
 				else
 				{
-					sources.add(new SourceChan(server, data[0], data[1]));
+					sources.add(new SourceChan(server, data[0].split("=")[1], data[1]));
 					Log.log(Log.CONFIG, data[1]);
 				}
 				
