@@ -1,7 +1,10 @@
 package it.giara.utils;
 
+import java.util.Random;
+
 public class FunctionsUtils
 {
+	public static Random r = new Random();
 	
 	public static int getTime()
 	{
@@ -17,6 +20,11 @@ public class FunctionsUtils
 		{
 			Log.stack(Log.ERROR, e);
 		}
+	}
+	
+	public static Random getRandom()
+	{
+		return r;
 	}
 	
 }
