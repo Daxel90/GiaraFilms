@@ -121,7 +121,7 @@ public class FileSources
 		//for reducing Heap Size
 		sourcesBot.clear();
 		
-		File saveFile = new File(DirUtils.getDownloadDir(), xdcc.getFile().getName());
+		File saveFile = new File(DirUtils.getDownloadDirectory(), xdcc.getFile().getName());
 		
 		if (!saveFile.getParentFile().exists())
 			saveFile.getParentFile().mkdir();

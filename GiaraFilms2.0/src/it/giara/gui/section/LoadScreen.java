@@ -11,6 +11,7 @@ import it.giara.gui.DefaultGui;
 import it.giara.gui.MainFrame;
 import it.giara.gui.utils.ImageUtils;
 import it.giara.phases.ScanService;
+import it.giara.phases.Settings;
 import it.giara.phases.UpdateProgram;
 import it.giara.source.ListLoader;
 import it.giara.sql.SQL;
@@ -98,19 +99,22 @@ public class LoadScreen extends DefaultGui
 					@Override
 					public void run()
 					{
-						bar.setMaximum(3);
+						bar.setMaximum(4);
 						bar.setValue(0);
-						textProgress.setText("Carico le sorgenti");
-						textProgress.setVisible(true);
-						ListLoader.loadSources();
-						bar.setValue(1);
 						textProgress.setText("Mi connetto al Database");
+						textProgress.setVisible(true);
 						SQL.connect();
+						bar.setValue(1);
+						textProgress.setText("Carico Impostazioni");
+						Settings.init();
 						bar.setValue(2);
+						textProgress.setText("Carico le sorgenti");
+						ListLoader.loadSources();
+						bar.setValue(3);
 						textProgress.setText("Verifico aggiornamenti");
 						UpdateProgram.checkUpdate(instance);
 						textProgress.setText("Verifica Completata");
-						bar.setValue(3);
+						bar.setValue(4);
 						ThreadManager.submitCacheTask(new ScanService());
 						FunctionsUtils.sleep(500);
 						MainFrame.getInstance().setInternalPane(new HomePage());

@@ -2,22 +2,35 @@ package it.giara.utils;
 
 import java.io.File;
 
+import it.giara.phases.Settings;
+
 public class DirUtils
 {
 	
 	public static File workDir = null;
+	public static File downloadDir = null;
 	
 	public static File getWorkingDirectory()
 	{
 		if (workDir == null)
 		{
-			workDir = getWorkingDirectory("giarafilms");
+			workDir = getApplicationsDir("giarafilms");
 		}
 		
 		return workDir;
 	}
 	
-	public static File getDownloadDir()
+	public static File getDownloadDirectory()
+	{
+		if (downloadDir == null)
+		{
+			downloadDir = new File(Settings.getParameter("downloadfolder"));
+		}
+		
+		return downloadDir;
+	}
+	
+	public static File getDefaultDownloadDir()
 	{
 		return new File(getWorkingDirectory(), "download");
 	}
@@ -27,7 +40,7 @@ public class DirUtils
 		return new File(getWorkingDirectory(), "cache");
 	}
 	
-	public static File getWorkingDirectory(String applicationName)
+	public static File getApplicationsDir(String applicationName)
 	{
 		final String userHome = System.getProperty("user.home", "");
 		File workingDirectory;

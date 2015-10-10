@@ -28,7 +28,7 @@ public class SQL
 			c = DriverManager.getConnection("jdbc:sqlite:" + db.getAbsolutePath());
 			c.setAutoCommit(true);
 			stmt = c.createStatement();
-			Log.log(Log.DB, "Accedo al Database");
+			Log.log(Log.DB, "Accedo al Database File");
 			SQLQuery.initTable();
 			
 		} catch (Exception e)
@@ -44,8 +44,8 @@ public class SQL
 			cSett = DriverManager.getConnection("jdbc:sqlite:" + settings.getAbsolutePath());
 			cSett.setAutoCommit(true);
 			stmtSett = cSett.createStatement();
-			Log.log(Log.DB, "Accedo al Database");
-			SQLQuery.initTable();
+			Log.log(Log.DB, "Accedo al Database Settings");
+			SQLQuerySettings.initTable();
 			
 		} catch (Exception e)
 		{
