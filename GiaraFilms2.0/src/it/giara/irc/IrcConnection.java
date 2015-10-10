@@ -2,17 +2,17 @@ package it.giara.irc;
 
 import java.io.File;
 
-import javax.swing.JOptionPane;
-
 import org.jibble.pircbot.DccFileTransfer;
 import org.jibble.pircbot.PircBot;
 
+import it.giara.download.DownloadManager;
+import it.giara.download.FileSources;
 import it.giara.utils.DirUtils;
+import it.giara.utils.ErrorHandler;
 import it.giara.utils.Log;
 
 public class IrcConnection extends PircBot
 {
-	private DccFileTransfer curentTransfer;
 	
 	public IrcConnection(String server)
 	{
@@ -38,7 +38,7 @@ public class IrcConnection extends PircBot
 			} catch (Exception e)
 			{
 				Log.stack(Log.IRC, e);
-				Log.log(Log.IRC, "Impossibile connettersi a: "+server);
+				Log.log(Log.IRC, "Impossibile connettersi a: " + server);
 				connect = false;
 				retry++;
 			}
@@ -46,20 +46,14 @@ public class IrcConnection extends PircBot
 		
 		if (!connect)
 		{
-			JOptionPane.showMessageDialog(null, "Impossibile connettersi al server " + server);
+			ErrorHandler.FailServerConnect("Impossibile connettersi al server " + server);
 		}
-		
-		// this.sendMessage("RLD|CINE|002 ","xdcc send #94");
 	}
 	
-	@Override
-	public void onMessage(String channel, String sender, String login, String hostname, String message)
+	public void joinChannelAndSayHello(String channel)
 	{
-		if (message.equalsIgnoreCase("time"))
-		{
-			String time = new java.util.Date().toString();
-			sendMessage(channel, sender + ": The time is now " + time);
-		}
+		this.sendRawLine("JOIN " + channel);
+		this.sendMessage(channel, "Ciao a tutti :D");
 	}
 	
 	@Override
@@ -67,35 +61,55 @@ public class IrcConnection extends PircBot
 	{
 		if (notice.contains("per richiedere questo pack, devi essere un un chan in cui ci sia anche io"))
 		{
+			DownloadManager.BotRequest.get(sourceNick).botResponse = 0;
 			Log.log(Log.IRC, "NON SEI NEL CANALE DEL BOT" + sourceNick);
 		}
-		
-		if (notice.contains("Invalid Pack Number"))
+		else if (notice.contains("pack errato"))
 		{
-			Log.log(Log.IRC, "DONE LEECHING BOT " + sourceNick);
+			DownloadManager.BotRequest.get(sourceNick).botResponse = 0;
+			Log.log(Log.IRC, "Numero del pack Errato" + sourceNick);
 		}
-		
-		if (notice.contains("point greater"))
+		else if (notice.contains("Tutti gli slots sono occupati"))
 		{
-			Log.log(Log.IRC, "EXISTS:\t try to close connection");
-			
-			curentTransfer.close();
-			// this.sendMessage(botName,"XDCC remove");
-			
+			DownloadManager.BotRequest.get(sourceNick).botResponse = 0;
+			Log.log(Log.IRC, "Il Bot ti ha messo in lista" + sourceNick);
 		}
-		
-		if (notice.contains("Closing Connection: Pack file changed"))
+		else if (notice.contains("Ti sto inviando il pack"))
 		{
-			// TODO do something here (retry?)
-			Log.log(Log.IRC, "PACK file changed");
+			DownloadManager.BotRequest.get(sourceNick).botResponse = 1;
 		}
-		
 	}
 	
 	@Override
 	public void onIncomingFileTransfer(DccFileTransfer transfer)
 	{
-		curentTransfer = transfer;
+		
+		FileSources sources = DownloadManager.BotRequest.get(transfer.getNick());
+		
+		if (sources == null)
+		{
+			ErrorHandler
+					.noRequestFileFromThisBot("Non è stato richiesto nessun file da questo bot: " + transfer.getNick());
+			transfer.close();
+			return;
+		}
+		else if (!sources.filename.trim().equals(transfer.getFile().getName().trim()))
+		{
+			ErrorHandler.BotSendWrongFile(sources.filename.trim(), transfer.getFile().getName().trim());
+			transfer.close();
+			sources.botResponse = 0;
+			return;
+		}
+		if (sources.downloading == true)
+		{
+			ErrorHandler.alreadyInDownload(transfer.getFile().getName().trim());
+			transfer.close();
+			return;
+		}
+		
+		sources.botResponse = 2;
+		sources.downloading = true;
+		sources.xdcc = transfer;
 		
 		File saveFile = new File(DirUtils.getDownloadDir(), transfer.getFile().getName());
 		
@@ -116,35 +130,36 @@ public class IrcConnection extends PircBot
 			transfer.receive(saveFile, true);
 		}
 		
-		new Thread()
-		{
-			
-			@Override
-			public void run()
-			{
-				long data = 0;
-				int speed = 0;
-				while (true)
-				{
-					speed = (int) (curentTransfer.getProgress() - data);
-					data = curentTransfer.getProgress();
-					System.out.println("Size: " + curentTransfer.getProgress());
-					System.out.println("Percent: " + curentTransfer.getProgressPercentage());
-					System.out.println("Speed: " + speed);
-					
-					// DownloadPanel.updateDownload(curentTransfer.getFile().getName(),
-					// curentTransfer.getProgressPercentage(), speed);
-					try
-					{
-						Thread.sleep(1000);
-					} catch (InterruptedException e)
-					{
-						e.printStackTrace();
-					}
-				}
-				
-			}
-		}.start();
+		// new Thread()
+		// {
+		//
+		// @Override
+		// public void run()
+		// {
+		// long data = 0;
+		// int speed = 0;
+		// while (true)
+		// {
+		// speed = (int) (curentTransfer.getProgress() - data);
+		// data = curentTransfer.getProgress();
+		// System.out.println("Size: " + curentTransfer.getProgress());
+		// System.out.println("Percent: " +
+		// curentTransfer.getProgressPercentage());
+		// System.out.println("Speed: " + speed);
+		//
+		// // DownloadPanel.updateDownload(curentTransfer.getFile().getName(),
+		// // curentTransfer.getProgressPercentage(), speed);
+		// try
+		// {
+		// Thread.sleep(1000);
+		// } catch (InterruptedException e)
+		// {
+		// e.printStackTrace();
+		// }
+		// }
+		//
+		// }
+		// }.start();
 		
 	}
 	
@@ -155,15 +170,9 @@ public class IrcConnection extends PircBot
 		{
 			System.out.println(ex.getClass().getName() + " -> " + ex.getMessage());
 		}
-		curentTransfer = null;
 		
 		Log.log(Log.IRC, "FINISHED:\t Transfer finished for " + transfer.getFile().getName());
 		
 	}
-	
-	// public void download(Bot b)
-	// {
-	// this.sendMessage(b.name, "xdcc send " + b.packId);
-	// }
 	
 }
