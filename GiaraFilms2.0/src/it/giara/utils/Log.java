@@ -17,7 +17,7 @@ public class Log
 	
 	public static void log(LogType l, Object o)
 	{
-		if (!l.equals(NET) && !l.equals(FILEINFO))
+		if (!l.equals(NET) && !l.equals(FILEINFO) && !l.equals(DOWNLOAD))
 			System.out.println(o);
 	}
 	

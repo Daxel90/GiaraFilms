@@ -8,7 +8,7 @@ public class TEst
 	public static void main(String[] args)
 	{
 		ListLoader.loadSources();
-		DownloadManager.getFileSources("Sopravvissuto.The.Martian.2015.iTALiAN.MD.TS.XviD-iNCOMiNG.avi");
+		DownloadManager.Download("Sopravvissuto.The.Martian.2015.iTALiAN.MD.TS.XviD-iNCOMiNG.avi");
 		
 	}
 }
