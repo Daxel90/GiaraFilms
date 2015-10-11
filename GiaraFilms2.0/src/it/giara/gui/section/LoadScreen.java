@@ -10,6 +10,7 @@ import javax.swing.Timer;
 import it.giara.gui.DefaultGui;
 import it.giara.gui.MainFrame;
 import it.giara.gui.utils.ImageUtils;
+import it.giara.phases.RecoverDownload;
 import it.giara.phases.ScanService;
 import it.giara.phases.Settings;
 import it.giara.phases.UpdateProgram;
@@ -99,7 +100,7 @@ public class LoadScreen extends DefaultGui
 					@Override
 					public void run()
 					{
-						bar.setMaximum(4);
+						bar.setMaximum(5);
 						bar.setValue(0);
 						textProgress.setText("Mi connetto al Database");
 						textProgress.setVisible(true);
@@ -113,8 +114,11 @@ public class LoadScreen extends DefaultGui
 						bar.setValue(3);
 						textProgress.setText("Verifico aggiornamenti");
 						UpdateProgram.checkUpdate(instance);
-						textProgress.setText("Verifica Completata");
+						textProgress.setText("Riavvio Download Interrotti");
+						RecoverDownload.asyncRestartDownload();
 						bar.setValue(4);
+						textProgress.setText("Verifica Completata");
+						bar.setValue(5);
 						ThreadManager.submitCacheTask(new ScanService());
 						FunctionsUtils.sleep(500);
 						MainFrame.getInstance().setInternalPane(new HomePage());

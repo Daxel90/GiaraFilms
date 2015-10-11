@@ -115,13 +115,8 @@ public class IrcConnection extends PircBot
 	@Override
 	protected void onFileTransferFinished(DccFileTransfer transfer, Exception ex)
 	{
-		if (ex != null)
-		{
-			System.out.println(ex.getClass().getName() + " -> " + ex.getMessage());
-		}
-		
-		Log.log(Log.IRC, "FINISHED:\t Transfer finished for " + transfer.getFile().getName());
-		
+		FileSources sources = DownloadManager.BotRequest.get(transfer.getNick());
+		sources.endXDCCTransfer(transfer, ex);
 	}
 	
 }

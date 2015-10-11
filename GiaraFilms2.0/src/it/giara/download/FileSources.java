@@ -10,6 +10,7 @@ import org.jibble.pircbot.DccFileTransfer;
 
 import it.giara.irc.IrcConnection;
 import it.giara.source.SourceChan;
+import it.giara.sql.SQLQuerySettings;
 import it.giara.utils.DirUtils;
 import it.giara.utils.ErrorHandler;
 import it.giara.utils.FunctionsUtils;
@@ -24,6 +25,8 @@ public class FileSources
 	public short botResponse = -1; // -1 wait 0 fail 1 connected 2 file transfer
 	public boolean downloading = false;
 	public DccFileTransfer xdcc;
+	File saveFile = null;
+	public boolean fileEnd = false;
 	
 	HashMap<SourceChan, ArrayList<BotPackage>> sourcesBot = new HashMap<SourceChan, ArrayList<BotPackage>>();
 	
@@ -41,6 +44,12 @@ public class FileSources
 		}
 		
 		sourcesBot.get(chan).add(bot);
+	}
+	
+	public void requestDownload(File file)
+	{
+		saveFile = file;
+		requestDownload();
 	}
 	
 	public void requestDownload()
@@ -118,10 +127,13 @@ public class FileSources
 	
 	public void startDownloadXDCC()
 	{
-		//for reducing Heap Size
+		// for reducing Heap Size
 		sourcesBot.clear();
 		
-		File saveFile = new File(DirUtils.getDownloadDirectory(), xdcc.getFile().getName());
+		if (saveFile == null)
+			saveFile = new File(DirUtils.getDownloadDirectory(), xdcc.getFile().getName());
+			
+		SQLQuerySettings.addDownload(filename, saveFile.getAbsolutePath());
 		
 		if (!saveFile.getParentFile().exists())
 			saveFile.getParentFile().mkdir();
@@ -139,6 +151,21 @@ public class FileSources
 			Log.log(Log.IRC, "SAVING TO:\t" + saveFile.toString());
 			xdcc.receive(saveFile, true);
 		}
+	}
+	
+	public void endXDCCTransfer(DccFileTransfer transfer, Exception ex)
+	{
+		if (ex != null)
+		{
+			requestDownload();
+			return;
+		}
+		
+		fileEnd = true;
+		
+		SQLQuerySettings.removeDownload(filename);
+		
+		Log.log(Log.IRC, "Trasferimento Completato: " + transfer.getFile().getName());
 	}
 	
 }
