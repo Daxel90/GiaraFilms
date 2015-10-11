@@ -501,21 +501,33 @@ public class DccFileTransfer
 		}
 	}
 	
+	private long lastCall = 0;
+	private long lastDataCall = 0;
+	private long lastSpeed = 0;
+	
 	/**
 	 * Returns the rate of data transfer in bytes per second. This value is an
-	 * estimate based on the number of bytes transfered since the connection was
+	 * estimate based on the number of bytes transfered since the last getTransferRate() Call
 	 * established.
 	 *
 	 * @return data transfer rate in bytes per second.
 	 */
 	public long getTransferRate()
 	{
-		long time = (System.currentTimeMillis() - _startTime) / 1000;
-		if (time <= 0)
+		long diff = (System.currentTimeMillis() - lastCall) / 1000;
+		if (lastCall == 0)
 		{
+			lastCall = System.currentTimeMillis();
+			lastDataCall = getProgress();
 			return 0;
 		}
-		return getProgress() / time;
+		else if (diff > 0)
+		{
+			long diffData = getProgress() - lastDataCall;
+			lastSpeed = diffData / diff;
+			return diffData / diff;
+		}
+		return lastSpeed;
 	}
 	
 	/**
