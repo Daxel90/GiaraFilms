@@ -26,25 +26,30 @@ public class DownloadManager
 	{
 		final FileSources result = new FileSources(filename);
 		
-		Runnable run = new Runnable()
+		result.loadingBotList = ListLoader.sources.size();
+		for (int x = 0; x < ListLoader.sources.size(); x++)
 		{
-			
-			@Override
-			public void run()
+			final int K = x;
+			Runnable run = new Runnable()
 			{
-				
-				for (int x = 0; x < ListLoader.sources.size(); x++)
+				@Override
+				public void run()
 				{
-					SourceChan chan = ListLoader.sources.get(x);
-					new HTTPFileSources(chan, result);
+					try
+					{
+						SourceChan chan = ListLoader.sources.get(K);
+						new HTTPFileSources(chan, result);
+					} finally
+					{
+						result.loadingBotList--;
+					}
 				}
-				result.loadingBotList = false;
-				
-				Log.log(Log.DEBUG, result.totalBot);
-			}
-		};
+			};
+			
+			ThreadManager.submitCacheTask(run);
+		}
 		
-		ThreadManager.submitCacheTask(run);
+		Log.log(Log.DEBUG, result.totalBot);
 		
 		return result;
 	}

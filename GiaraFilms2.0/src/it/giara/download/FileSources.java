@@ -20,7 +20,7 @@ public class FileSources
 {
 	public String filename;
 	public int totalBot = 0;
-	public boolean loadingBotList = true;
+	public int loadingBotList = 1;
 	
 	public short botResponse = -1; // -1 wait 0 fail 1 connected 2 file transfer
 	public boolean downloading = false;
@@ -56,7 +56,7 @@ public class FileSources
 	public void requestDownload()
 	{
 		
-		while (loadingBotList)
+		while (loadingBotList>0)
 		{
 			Log.log(Log.DEBUG, totalBot);
 			FunctionsUtils.sleep(1000);

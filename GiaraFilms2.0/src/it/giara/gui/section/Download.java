@@ -83,14 +83,15 @@ public class Download extends DefaultGui
 			loading += ".";
 		}
 		
-		if (file.loadingBotList)
-			bar.setString("Scansione Sorgenti In Corso" + loading);
+		if (file.loadingBotList > 0)
+			bar.setString("Scansione Sorgenti In Corso " + file.loadingBotList + " rimanenti");
 		else if (file.botResponse < 1)
 			bar.setString("In attesa di connessione" + loading);
 		else if (file.botResponse == 1)
 			bar.setString("Connessione in corso" + loading);
 		else if (file.botResponse == 2 && file.xdcc != null)
-			bar.setString("Download in corso: " + FunctionsUtils.arrotondamento(file.xdcc.getProgressPercentage())+"%  "+file.xdcc.getTransferRate()/1024+" kb/s");
+			bar.setString("Download in corso: " + FunctionsUtils.arrotondamento(file.xdcc.getProgressPercentage())
+					+ "%  " + file.xdcc.getTransferRate() / 1024 + " kb/s");
 		if (file.xdcc != null)
 		{
 			bar.setEnabled(true);
