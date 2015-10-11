@@ -14,10 +14,11 @@ public class Log
 	public static LogType IMAGE = LogType.IMAGE;
 	public static LogType IRC = LogType.IRC;
 	public static LogType DOWNLOAD = LogType.DOWNLOAD;
+	public static LogType SCANSERVICE = LogType.SCANSERVICE;
 	
 	public static void log(LogType l, Object o)
 	{
-		if (!l.equals(NET) && !l.equals(FILEINFO) && !l.equals(DOWNLOAD))
+		if (!l.equals(NET) && !l.equals(FILEINFO) && !l.equals(DOWNLOAD) && !l.equals(SCANSERVICE) && !l.equals(FILMINFO))
 			System.out.println(o);
 	}
 	
@@ -30,5 +31,5 @@ public class Log
 
 enum LogType
 {
-	NETWORK, DEBUG, INFO, CONFIG, FILEINFO, FILMINFO, DB, GUI, ERROR, IMAGE, IRC, DOWNLOAD
+	NETWORK, DEBUG, INFO, CONFIG, FILEINFO, FILMINFO, DB, GUI, ERROR, IMAGE, IRC, DOWNLOAD, SCANSERVICE
 }

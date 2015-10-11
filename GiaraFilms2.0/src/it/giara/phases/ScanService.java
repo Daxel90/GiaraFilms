@@ -31,16 +31,16 @@ public class ScanService implements Runnable
 		Nfilm = SQLQuery.getFilmNumber();
 		NEpisode = SQLQuery.getEpisodeNumbers();
 		
-		Log.log(Log.DEBUG, "Nfile: " + Nfile);
-		Log.log(Log.DEBUG, "Nfilm: " + Nfilm);
-		Log.log(Log.DEBUG, "NEpisode: " + NEpisode);
+		Log.log(Log.SCANSERVICE, "Nfile: " + Nfile);
+		Log.log(Log.SCANSERVICE, "Nfilm: " + Nfilm);
+		Log.log(Log.SCANSERVICE, "NEpisode: " + NEpisode);
 		
 		for (SourceChan s : ListLoader.sources)
 		{
 			NList++;
 			HaveList = false;
 			HTTPList search = new HTTPList(s.link, ".");
-			Log.log(Log.DEBUG, search.file.size());
+			Log.log(Log.SCANSERVICE, search.file.size());
 			LSize = search.file.size();
 			LStatus = 0;
 			HaveList = true;
