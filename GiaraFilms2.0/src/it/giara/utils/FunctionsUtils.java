@@ -27,4 +27,10 @@ public class FunctionsUtils
 		return r;
 	}
 	
+	public static double arrotondamento(double x){
+		x = Math.floor(x*100);
+		x = x/100;
+		return x;
+		}
+	
 }

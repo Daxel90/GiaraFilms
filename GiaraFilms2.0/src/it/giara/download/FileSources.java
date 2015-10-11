@@ -33,6 +33,7 @@ public class FileSources
 	public FileSources(String name)
 	{
 		filename = name;
+		DownloadManager.AllFile.put(filename, this);
 	}
 	
 	public void addBot(SourceChan chan, BotPackage bot)
@@ -54,6 +55,7 @@ public class FileSources
 	
 	public void requestDownload()
 	{
+		
 		while (loadingBotList)
 		{
 			Log.log(Log.DEBUG, totalBot);
@@ -120,6 +122,8 @@ public class FileSources
 				
 				if (botResponse == 2)
 					return;
+				else
+					DownloadManager.BotRequest.remove(bot.bot);
 			}
 		}
 		

@@ -37,6 +37,7 @@ public class HTTPFileSources
 			URL url = new URL(site.replace("(search)", search));
 			final URLConnection conn = url.openConnection();
 			conn.setRequestProperty("User-Agent", "PoWeR-Script");
+			conn.setConnectTimeout(30000);
 			conn.connect();
 			BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF8"));
 			String line;

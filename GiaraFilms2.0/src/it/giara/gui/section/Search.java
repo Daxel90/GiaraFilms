@@ -66,6 +66,12 @@ public class Search extends HomePage
 		
 	}
 	
+	@Override
+	public void content()
+	{
+	
+	}
+	
 	ActionListener updateprogression = new ActionListener()
 	{
 		
@@ -74,7 +80,7 @@ public class Search extends HomePage
 		{
 			list.setText("<html><h3>" + searchService.endCheckList + " / " + searchService.SizeCheckList
 					+ " liste controllate</html>");
-			if(!lista.loading)
+			if (!lista.loading)
 				timer.start();
 		}
 		

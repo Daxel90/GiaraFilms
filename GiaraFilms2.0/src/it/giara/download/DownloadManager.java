@@ -14,6 +14,7 @@ public class DownloadManager
 {
 	public static HashMap<String, IrcConnection> servers = new HashMap<String, IrcConnection>();
 	public static HashMap<String, FileSources> BotRequest = new HashMap<String, FileSources>();
+	public static HashMap<String, FileSources> AllFile = new HashMap<String, FileSources>();
 	
 	public static void downloadFile(String FileName, String file)
 	{

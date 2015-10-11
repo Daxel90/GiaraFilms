@@ -59,13 +59,29 @@ public class HomePage extends DefaultGui
 		options.setBounds(5, 5, 32, 32);
 		this.add(options);
 		
+		ImageButton downloads = new ImageButton(ImageUtils.getImage("gui/download.png"),
+				ImageUtils.getImage("gui/download_over.png"), ImageUtils.getImage("gui/download_over.png"), OpenDownloads);
+		downloads.setBounds(40, 5, 32, 32);
+		this.add(downloads);
+		
 		if (sync == null)
 			sync = new AnimatedImageButton("sync(n)", 5, OpenSync, CheckSync);
-		sync.setBounds(40, 5, 32, 32);
+		sync.setBounds(75, 5, 32, 32);
 		CheckSync.run();
 		this.add(sync);
 		
+		this.content();
 	}
+	
+	public void content()
+	{
+		JLabel avviso = new JLabel();
+		avviso.setText("<html><h1>L'Home page è ancora in sviluppo, <br><br>Puoi comunque effettuare ricerche</html>");
+		avviso.setBounds(FRAME_WIDTH/4, FRAME_HEIGHT*3/8, FRAME_WIDTH/2, FRAME_HEIGHT/4);
+		avviso.setHorizontalAlignment(JLabel.CENTER);
+		this.add(avviso);
+	}
+	
 	
 	Runnable RunSearch = new Runnable()
 	{
@@ -82,6 +98,15 @@ public class HomePage extends DefaultGui
 		public void run()
 		{
 			MainFrame.getInstance().setInternalPane(new Options(guiInstance));
+		}
+	};
+	
+	Runnable OpenDownloads = new Runnable()
+	{
+		@Override
+		public void run()
+		{
+			MainFrame.getInstance().setInternalPane(new Download(guiInstance));
 		}
 	};
 	
@@ -105,4 +130,5 @@ public class HomePage extends DefaultGui
 				sync.setVisible(false);
 		}
 	};
+
 }
