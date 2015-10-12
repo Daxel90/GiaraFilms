@@ -2,21 +2,23 @@ package it.giara.phases;
 
 import java.util.HashMap;
 
+import it.giara.gui.MainFrame;
 import it.giara.sql.SQLQuerySettings;
 import it.giara.utils.DirUtils;
 
 public class Settings
 {
-	
+	private final static int VERSION = -1;
 	private static HashMap<String, String> config = new HashMap<String, String>();
 	
 	public static void init()
 	{
-		config.put("version", SQLQuerySettings.getCurrentParameter("version", "1"));
-		config.put("downloadfolder",
-				SQLQuerySettings.getCurrentParameter("downloadfolder", DirUtils.getDefaultDownloadDir().getAbsolutePath()));
+		config.put("DBversion", SQLQuerySettings.getCurrentParameter("DBversion", ""+VERSION));
+		config.put("downloadfolder", SQLQuerySettings.getCurrentParameter("downloadfolder",
+				DirUtils.getDefaultDownloadDir().getAbsolutePath()));
 		config.put("lastdbcheck", SQLQuerySettings.getCurrentParameter("lastdbcheck", "0"));
 		
+		MainFrame.getInstance().setTitle(getTitle(VERSION));
 	}
 	
 	public static String getParameter(String key)
@@ -29,5 +31,16 @@ public class Settings
 		config.put(key, value);
 		SQLQuerySettings.removeParameters(key);
 		SQLQuerySettings.addParameters(key, value);
+	}
+	
+	public static String getTitle(int Version)
+	{
+		String result = "GiaraFilms 2.0";
+		if (Version <= 1)
+			result = "GiaraFilms 2.0 Dev PreRelese";
+		else if (Version > 1)
+			result = "GiaraFilms 2.0 Beta "+Version;
+			
+		return result;
 	}
 }
