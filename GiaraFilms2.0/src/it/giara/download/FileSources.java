@@ -56,7 +56,7 @@ public class FileSources
 	public void requestDownload()
 	{
 		SQLQuerySettings.addDownload(filename, saveFile.getAbsolutePath());
-		while (loadingBotList>0)
+		while (loadingBotList > 0)
 		{
 			Log.log(Log.DEBUG, totalBot);
 			FunctionsUtils.sleep(1000);
@@ -77,15 +77,9 @@ public class FileSources
 			SourceChan chan = data.getKey();
 			ArrayList<BotPackage> bots = data.getValue();
 			
-			if (DownloadManager.servers.containsKey(chan.server)
-					&& DownloadManager.servers.get(chan.server).isConnected())
-			{
-				DownloadManager.servers.get(chan.server).joinChannelAndSayHello(chan.server);
-			}
-			else if (!DownloadManager.servers.containsKey(chan.server))
+			if (!DownloadManager.servers.containsKey(chan.server))
 			{
 				IrcConnection conn = new IrcConnection(chan.server);
-				conn.joinChannelAndSayHello(chan.chan);
 				DownloadManager.servers.put(chan.server, conn);
 			}
 			else if (DownloadManager.servers.containsKey(chan.server)
@@ -94,13 +88,13 @@ public class FileSources
 				try
 				{
 					DownloadManager.servers.get(chan.server).reconnect();
-					DownloadManager.servers.get(chan.server).joinChannelAndSayHello(chan.chan);
-					
 				} catch (Exception e)
 				{
 					Log.stack(Log.IRC, e);
 				}
 			}
+			
+			DownloadManager.servers.get(chan.server).joinChannelAndSayHello(chan.chan);
 			
 			FunctionsUtils.sleep(1000);
 			
@@ -109,10 +103,13 @@ public class FileSources
 				botResponse = -1;
 				DownloadManager.BotRequest.put(bot.bot, this);
 				DownloadManager.servers.get(chan.server).sendMessage(bot.bot, "xdcc send #" + bot.packetID);
-				
+				int retry = 0;
 				while (botResponse == -1)
 				{
 					FunctionsUtils.sleep(2000);
+					retry++;
+					if (retry > 4)
+						break;
 				}
 				
 				if (botResponse == 1)
@@ -136,7 +133,7 @@ public class FileSources
 		
 		if (saveFile == null)
 			saveFile = new File(DirUtils.getDownloadDirectory(), xdcc.getFile().getName());
-		
+			
 		if (!saveFile.getParentFile().exists())
 			saveFile.getParentFile().mkdir();
 			
