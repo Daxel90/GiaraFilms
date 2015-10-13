@@ -30,11 +30,14 @@ public class LoadScreen extends DefaultGui
 	private Timer timer2;
 	public float alpha = 0F;
 	private int shift = 0;
+	boolean visible = false;
 	
 	public LoadScreen()
 	{
 		logo = new JLabel();
 		timer1 = new Timer(20, fade);
+		bar = new JProgressBar();
+		textProgress = new JLabel();
 	}
 	
 	public void loadComponent()
@@ -52,14 +55,12 @@ public class LoadScreen extends DefaultGui
 			timer1.start();
 		}
 		
-		bar = new JProgressBar();
 		bar.setBounds(FRAME_WIDTH / 6, FRAME_HEIGHT * 3 / 4, FRAME_WIDTH * 2 / 3, 20);
-		bar.setVisible(false);
+		bar.setVisible(visible);
 		add(bar);
 		
-		textProgress = new JLabel();
 		textProgress.setBounds(FRAME_WIDTH / 6, FRAME_HEIGHT * 3 / 4 - 30, FRAME_WIDTH * 2 / 3, 20);
-		textProgress.setVisible(false);
+		textProgress.setVisible(visible);
 		add(textProgress);
 	}
 	
@@ -95,6 +96,7 @@ public class LoadScreen extends DefaultGui
 				timer2.stop();
 				timer2 = null;
 				bar.setVisible(true);
+				visible = true;
 				ThreadManager.submitCacheTask(new Runnable()
 				{
 					@Override
