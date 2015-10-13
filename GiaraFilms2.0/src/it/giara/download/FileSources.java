@@ -55,7 +55,7 @@ public class FileSources
 	
 	public void requestDownload()
 	{
-		
+		SQLQuerySettings.addDownload(filename, saveFile.getAbsolutePath());
 		while (loadingBotList>0)
 		{
 			Log.log(Log.DEBUG, totalBot);
@@ -136,8 +136,6 @@ public class FileSources
 		
 		if (saveFile == null)
 			saveFile = new File(DirUtils.getDownloadDirectory(), xdcc.getFile().getName());
-			
-		SQLQuerySettings.addDownload(filename, saveFile.getAbsolutePath());
 		
 		if (!saveFile.getParentFile().exists())
 			saveFile.getParentFile().mkdir();
