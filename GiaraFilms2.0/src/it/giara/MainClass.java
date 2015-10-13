@@ -4,6 +4,7 @@ import javax.swing.UIManager;
 
 import it.giara.gui.MainFrame;
 import it.giara.gui.utils.FontUtils;
+import it.giara.phases.UpdateProgram;
 import it.giara.utils.Log;
 
 public class MainClass
@@ -11,6 +12,7 @@ public class MainClass
 	
 	public static void main(String[] args)
 	{
+		UpdateProgram.checkUpdateSuccess();
 		try
 		{
 			UIManager.setLookAndFeel("de.javasoft.plaf.synthetica.SyntheticaBlackEyeLookAndFeel");

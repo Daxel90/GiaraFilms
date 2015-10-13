@@ -125,6 +125,18 @@ public class DirUtils
 		return dversion;
 	}
 	
+	public static String getJavaDir()
+	{
+		final String separator = System.getProperty("file.separator");
+		final String path = System.getProperty("java.home") + separator + "bin" + separator;
+
+		if ((getPlatform() == OS.windows) && (new File(path + "javaw.exe").isFile()))
+		{
+			return path + "javaw.exe";
+		}
+		return path + "java";
+	}
+	
 	public static enum OS
 	{
 		linux, solaris, windows, macos, unknown;
