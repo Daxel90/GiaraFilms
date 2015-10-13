@@ -2,16 +2,14 @@ package it.giara.gui.components;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
 
 import it.giara.analyze.enums.MainType;
+import it.giara.gui.DefaultGui;
 import it.giara.gui.utils.AbstractFilmList;
 import it.giara.gui.utils.ColorUtils;
 import it.giara.gui.utils.ImageUtils;
@@ -33,19 +31,24 @@ public class FilmListPanel extends JPanel
 	private JButton film, serietv, unknowfile;
 	private ImageButton ArrowUp, ArrowDown;
 	
-	public FilmListPanel(AbstractFilmList l, MainType t)
+	DownloadList allFile;
+	DefaultGui gui;
+	
+	public FilmListPanel(AbstractFilmList l, MainType t, DefaultGui gui)
 	{
-		this(l);
+		this(l, gui);
 		show = t;
+		
 	}
 	
-	public FilmListPanel(AbstractFilmList l)
+	public FilmListPanel(AbstractFilmList l, DefaultGui g)
 	{
 		setLayout(null);
 		setOpaque(true);
 		setBackground(ColorUtils.Back);
 		list = l;
 		list.setJPanel(this);
+		gui = g;
 		
 		film = new JButton();
 		film.addActionListener(filmAL);
@@ -61,8 +64,11 @@ public class FilmListPanel extends JPanel
 		ArrowUp = new ImageButton(ImageUtils.getImage("gui/arrow_up.png"), ImageUtils.getImage("gui/arrow_up_over.png"),
 				ImageUtils.getImage("gui/arrow_up_over.png"), RunUp);
 		ArrowDown = new ImageButton(ImageUtils.getImage("gui/arrow_down.png"),
-				ImageUtils.getImage("gui/arrow_down_over.png"), ImageUtils.getImage("gui/arrow_down_over.png"), RunDown);
+				ImageUtils.getImage("gui/arrow_down_over.png"), ImageUtils.getImage("gui/arrow_down_over.png"),
+				RunDown);
 				
+		allFile = new DownloadList(list.allFile, gui);
+		
 		init();
 		
 	}
@@ -121,7 +127,7 @@ public class FilmListPanel extends JPanel
 				unknowfile.setEnabled(true);
 				
 				upArr = offset > 0;
-				downArr = list.films.size() > ((column * row)+offset);
+				downArr = list.films.size() > ((column * row) + offset);
 				
 				break;
 			case SerieTV:
@@ -130,7 +136,7 @@ public class FilmListPanel extends JPanel
 				unknowfile.setEnabled(true);
 				
 				upArr = offset > 0;
-				downArr = list.series.size() > ((column * row)+offset);
+				downArr = list.series.size() > ((column * row) + offset);
 				
 				break;
 			default:
@@ -157,7 +163,8 @@ public class FilmListPanel extends JPanel
 							continue;
 						FilmButton f = new FilmButton(list.films.get(number),
 								COLUMNcenterOffset + spaceFileButton + k * (FileButtonWidth + spaceFileButton),
-								ROWcenterOffset + 40 + spaceFileButton + j * (FileButtonHeight + spaceFileButton),this);
+								ROWcenterOffset + 40 + spaceFileButton + j * (FileButtonHeight + spaceFileButton),
+								this);
 						this.add(f);
 						number++;
 					}
@@ -174,7 +181,8 @@ public class FilmListPanel extends JPanel
 							continue;
 						TvSerieButton f = new TvSerieButton(list.series.get(number),
 								COLUMNcenterOffset + spaceFileButton + k * (FileButtonWidth + spaceFileButton),
-								ROWcenterOffset + 40 + spaceFileButton + j * (FileButtonHeight + spaceFileButton),this);
+								ROWcenterOffset + 40 + spaceFileButton + j * (FileButtonHeight + spaceFileButton),
+								this);
 						this.add(f);
 						number++;
 					}
@@ -183,21 +191,9 @@ public class FilmListPanel extends JPanel
 				
 			case NULL:
 			{
-				Object[][] tamplate = { { "" } };
-				ArrayList<Object[]> data = new ArrayList<Object[]>();
-				
-				for (int l = 0; l < list.allFile.size(); l++)
-					data.add(new Object[] { list.allFile.get(l) });
-				if (data.size() > 0)
-					tamplate = data.toArray(tamplate);
-				Object[] columnNames = { "Nome del File" };
-				JTable table = new JTable(tamplate, columnNames);
-				table.setFocusable(false);
-				table.setEnabled(false);
-				JScrollPane scrollPane = new JScrollPane(table);
-				scrollPane.setFocusable(false);
-				scrollPane.setBounds(10, 50, this.getWidth() - 20, this.getHeight() - 60);
-				this.add(scrollPane);
+				allFile.setBounds(10, 50, this.getWidth() - 20, this.getHeight() - 60);
+				allFile.init();
+				this.add(allFile);
 			}
 			
 			default:
@@ -265,10 +261,10 @@ public class FilmListPanel extends JPanel
 		@Override
 		public void run()
 		{
-			offset-=column;
-			if(offset <0)
+			offset -= column;
+			if (offset < 0)
 				offset = 0;
-			
+				
 			init();
 			repaint();
 		}
@@ -280,7 +276,7 @@ public class FilmListPanel extends JPanel
 		@Override
 		public void run()
 		{
-			offset+=column;
+			offset += column;
 			init();
 			repaint();
 		}

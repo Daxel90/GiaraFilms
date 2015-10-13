@@ -46,8 +46,9 @@ public class DownloadList extends JScrollPane
 	{
 		this.removeAll();
 		int n = 0;
-		for (final String file : fileList)
+		for (int l = 0; l < fileList.size(); l++)
 		{
+			final String file = fileList.get(l);
 			if (n < offset || 10 + (n - offset) * 40 > this.getHeight())
 			{
 				n++;

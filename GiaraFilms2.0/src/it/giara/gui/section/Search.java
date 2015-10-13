@@ -25,7 +25,7 @@ public class Search extends HomePage
 	{
 		super();
 		searchText = search;
-		panel = new FilmListPanel(lista);
+		panel = new FilmListPanel(lista,this);
 		searchService = new SearchService(lista, searchText);
 		RunSearch = new Runnable()
 		{
