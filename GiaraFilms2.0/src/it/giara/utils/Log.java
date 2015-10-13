@@ -1,5 +1,9 @@
 package it.giara.utils;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+
 public class Log
 {
 	public static LogType ERROR = LogType.ERROR;
@@ -18,13 +22,45 @@ public class Log
 	
 	public static void log(LogType l, Object o)
 	{
-		if (!l.equals(NET) && !l.equals(FILEINFO) && !l.equals(DOWNLOAD) && !l.equals(SCANSERVICE) && !l.equals(FILMINFO))
+		if (!l.equals(NET) && !l.equals(FILEINFO) && !l.equals(DOWNLOAD) && !l.equals(SCANSERVICE)
+				&& !l.equals(FILMINFO))
+		{
 			System.out.println(o);
+			writeLog(o.toString());
+		}
 	}
 	
 	public static void stack(LogType l, Exception e)
 	{
 		e.printStackTrace();
+		log(l, "--------------------------");
+		log(l, e.getMessage());
+		for (StackTraceElement s : e.getStackTrace())
+		{
+			log(l, s.toString());
+		}
+		log(l, "--------------------------");
+	}
+	
+	public static void writeLog(String text)
+	{
+		
+		FileWriter fWriter = null;
+		BufferedWriter writer = null;
+		try
+		{
+			File f = new File(DirUtils.getWorkingDirectory(), "log.txt");
+			if (!f.getParentFile().exists())
+				f.getParentFile().mkdirs();
+			fWriter = new FileWriter(f, true);
+			writer = new BufferedWriter(fWriter);
+			
+			writer.append(text);
+			writer.newLine();
+			writer.close();
+		} catch (Exception e)
+		{}
+		
 	}
 	
 }
