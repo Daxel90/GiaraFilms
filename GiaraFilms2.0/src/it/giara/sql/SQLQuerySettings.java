@@ -39,7 +39,7 @@ public class SQLQuerySettings
 		ResultSet r = SQL.FetchDataSettings("SELECT * FROM `Downloads` WHERE 1");
 		try
 		{
-			if (r.next())
+			while (r.next())
 			{
 				download.add(new String[] { r.getString("FileName"), r.getString("FileDirectory") });
 			}
