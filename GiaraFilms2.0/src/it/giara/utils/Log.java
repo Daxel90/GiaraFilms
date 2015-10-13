@@ -4,6 +4,8 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 
+import it.giara.phases.Settings;
+
 public class Log
 {
 	public static LogType ERROR = LogType.ERROR;
@@ -44,7 +46,8 @@ public class Log
 	
 	public static void writeLog(String text)
 	{
-		
+		if (Settings.prop.getBoolean("Savelog", false))
+			return;
 		FileWriter fWriter = null;
 		BufferedWriter writer = null;
 		try
