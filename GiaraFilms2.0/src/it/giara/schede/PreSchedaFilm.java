@@ -14,6 +14,7 @@ import it.giara.utils.ThreadManager;
 
 public class PreSchedaFilm
 {
+	public int IdDb = -1;
 	public String Titolo;
 	public String link;
 	public String smallImage;

@@ -52,7 +52,7 @@ public class Download extends DefaultGui
 		{
 			x++;
 			FileSources file = data.getValue();
-			int off = 40 * x;
+			int off = 80 * x;
 			
 			JLabel name = new JLabel();
 			name.setBounds(FRAME_WIDTH / 8, off + 40, FRAME_WIDTH * 3 / 4, 30);

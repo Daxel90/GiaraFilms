@@ -29,6 +29,7 @@ public class FilmInfoSchede extends DefaultGui
 	JLabel cover;
 	JScrollPane scroll;
 	JLabel info;
+	ImageButton downloads;
 	
 	public FilmInfoSchede(DefaultGui gui, PreSchedaFilm f)
 	{
@@ -74,8 +75,8 @@ public class FilmInfoSchede extends DefaultGui
 			loading.setBounds((FRAME_WIDTH - 128) / 2, (FRAME_HEIGHT - 128) / 2, 128, 128);
 			add(loading);
 		}
-		if(cover == null)
-		cover = new JLabel();
+		if (cover == null)
+			cover = new JLabel();
 		if ((int) ((FRAME_WIDTH / 4) * 1.49) < FRAME_HEIGHT / 2)
 			cover.setBounds(20, 80, FRAME_WIDTH / 4, (int) ((FRAME_WIDTH / 4) * 1.5));
 		else
@@ -126,6 +127,14 @@ public class FilmInfoSchede extends DefaultGui
 		info.setVisible(!scheda.loading);
 		this.add(info);
 		drawRating();
+		
+		downloads = new ImageButton(ImageUtils.getImage("gui/download.png"),
+				ImageUtils.getImage("gui/download_over.png"), ImageUtils.getImage("gui/download_over.png"),
+				OpenDownloads);
+		downloads.setBounds((FRAME_WIDTH - 64) / 2, FRAME_HEIGHT - 100, 64, 64);
+		downloads.setVisible(!scheda.loading);
+		this.add(downloads);
+		
 	}
 	
 	public void drawRating()
@@ -171,6 +180,15 @@ public class FilmInfoSchede extends DefaultGui
 		}
 	}
 	
+	Runnable OpenDownloads = new Runnable()
+	{
+		@Override
+		public void run()
+		{
+			MainFrame.getInstance().setInternalPane(new DownloadFilm(guiInstance, film));
+		}
+	};
+	
 	Runnable BackGui = new Runnable()
 	{
 		@Override
@@ -195,6 +213,7 @@ public class FilmInfoSchede extends DefaultGui
 				text.setText("<html><h2>" + scheda.desc + "</html>");
 				scroll.setVisible(true);
 				info.setVisible(true);
+				downloads.setVisible(true);
 				drawRating();
 			}
 		}

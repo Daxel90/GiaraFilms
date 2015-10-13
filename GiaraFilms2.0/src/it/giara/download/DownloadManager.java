@@ -22,6 +22,12 @@ public class DownloadManager
 		sources.requestDownload(new File(file));
 	}
 	
+	public static void downloadFile(String FileName)
+	{
+		FileSources sources = DownloadManager.getFileSources(FileName);
+		sources.requestDownload();
+	}
+	
 	public static FileSources getFileSources(String filename)
 	{
 		final FileSources result = new FileSources(filename);

@@ -66,8 +66,8 @@ public class SearchService
 							list.addFile(s2);
 							if (SQLQuery.existFile(s2))
 							{
-								int IDFile = SQLQuery.getFile(s2);
-								int[] FileInfo = SQLQuery.readFileInfo(IDFile);
+								int IDFile = SQLQuery.getFileId(s2);
+								int[] FileInfo = SQLQuery.readFileInfoWithFileID(IDFile);
 								if (FileInfo[0] == MainType.Film.ID)
 								{
 									PreSchedaFilm film = SQLQuery.readPreSchedaFilm(FileInfo[1]);
@@ -108,7 +108,7 @@ public class SearchService
 														break;
 													}
 													int schedaF = SQLQuery.writePreSchedaFilm(httpF.scheda);
-													
+													httpF.scheda.IdDb = schedaF;
 													list.addPreSchedaFilm(httpF.scheda);
 													
 													SQLQuery.writeCacheSearch(f.title, f.type, schedaF);
@@ -134,7 +134,7 @@ public class SearchService
 														break;
 													}
 													int schedaSTV = SQLQuery.writePreSchedaTvSeries(httpF.scheda);
-													
+													httpF.scheda.IdDb = schedaSTV;
 													SQLQuery.writeCacheSearch(f.title, f.type, schedaSTV);
 													SQLQuery.writeFileInfo(fileID, f.type, schedaSTV);
 													
