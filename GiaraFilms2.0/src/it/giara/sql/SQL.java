@@ -115,4 +115,11 @@ public class SQL
 		return val.replace("'", "\'").replace("\"", " ");
 	}
 	
+	public static String unescape(String val)
+	{
+		if (val == null)
+			return "";
+		return val.replace("\'", "'").replace(" ", "\"");
+	}
+	
 }

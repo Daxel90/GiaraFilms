@@ -2,6 +2,7 @@ package it.giara.sql;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import it.giara.analyze.enums.MainType;
 import it.giara.schede.PreSchedaFilm;
@@ -79,6 +80,7 @@ public class SQLQuery
 		{
 			if (r.next())
 			{
+				scheda.IdDb = r.getInt("ID");
 				scheda.Titolo = r.getString("Titolo");
 				scheda.link = r.getString("Link");
 				scheda.smallImage = r.getString("Image");
@@ -126,6 +128,7 @@ public class SQLQuery
 		{
 			if (r.next())
 			{
+				scheda.IdDb = r.getInt("ID");
 				scheda.Titolo = r.getString("Titolo");
 				scheda.link = r.getString("Link");
 				scheda.smallImage = r.getString("Image");
@@ -205,7 +208,24 @@ public class SQLQuery
 		return false;
 	}
 	
-	public synchronized static int getFile(String fileName)
+	public synchronized static String getFileName(int id)
+	{
+		ResultSet r = SQL.FetchData("SELECT * FROM `File` WHERE `ID` = " + id + ";");
+		try
+		{
+			if (r.next())
+			{
+				return SQL.unescape(r.getString("FileName"));
+			}
+		} catch (SQLException e)
+		{
+			Log.stack(Log.DB, e);
+		}
+		return "";
+		
+	}
+	
+	public synchronized static int getFileId(String fileName)
 	{
 		ResultSet r = SQL.FetchData("SELECT * FROM `File` WHERE `FileName` = \"" + SQL.escape(fileName) + "\";");
 		try
@@ -227,7 +247,24 @@ public class SQLQuery
 				+ fileID + ", " + t.ID + ", " + schedaId + ", " + FunctionsUtils.getTime() + ");");
 	}
 	
-	public synchronized static int[] readFileInfo(int fileID)
+	public synchronized static ArrayList<Integer> readFileInfoList(int fileID, int Type)
+	{
+		ArrayList<Integer> list = new ArrayList<Integer>();
+		ResultSet r = SQL.FetchData("SELECT * FROM `FileInfo` WHERE `IdSection` = " + fileID + " AND `Type` = " + Type + ";");
+		try
+		{
+			while (r.next())
+			{
+				list.add(r.getInt("IDFile"));
+			}
+		} catch (SQLException e)
+		{
+			Log.stack(Log.DB, e);
+		}
+		return list;
+	}
+	
+	public synchronized static int[] readFileInfoWithFileID(int fileID)
 	{
 		int[] result = new int[2];
 		ResultSet r = SQL.FetchData("SELECT * FROM `FileInfo` WHERE `IDFile` = " + fileID + ";");
