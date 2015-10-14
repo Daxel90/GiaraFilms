@@ -9,7 +9,7 @@ import it.giara.utils.DirUtils;
 
 public class Settings
 {
-	private final static int VERSION = 2;
+	public final static int VERSION = 3;
 	private final static int END_PreReleseVersion = Integer.MAX_VALUE;
 	private final static int END_BetaVersion = Integer.MAX_VALUE;
 	private static HashMap<String, String> config = new HashMap<String, String>();
@@ -18,10 +18,12 @@ public class Settings
 	
 	public static void init()
 	{
+		config.put("ProgramVersion", SQLQuerySettings.getCurrentParameter("ProgramVersion", "0"));
 		config.put("DBversion", SQLQuerySettings.getCurrentParameter("DBversion", "" + VERSION));
 		config.put("downloadfolder", SQLQuerySettings.getCurrentParameter("downloadfolder",
 				DirUtils.getDefaultDownloadDir().getAbsolutePath()));
 		config.put("lastdbcheck", SQLQuerySettings.getCurrentParameter("lastdbcheck", "0"));
+		config.put("scanservice", SQLQuerySettings.getCurrentParameter("scanservice", "0"));
 		
 		MainFrame.getInstance().setTitle(getTitle(VERSION));
 	}

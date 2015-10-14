@@ -7,6 +7,7 @@ import javax.swing.JLabel;
 import javax.swing.JProgressBar;
 import javax.swing.Timer;
 
+import it.giara.gui.ChangeLogFrame;
 import it.giara.gui.DefaultGui;
 import it.giara.gui.MainFrame;
 import it.giara.gui.utils.ImageUtils;
@@ -121,7 +122,13 @@ public class LoadScreen extends DefaultGui
 						bar.setValue(4);
 						textProgress.setText("Verifica Completata");
 						bar.setValue(5);
-						ThreadManager.submitCacheTask(new ScanService());
+						if (Settings.getParameter("scanservice").equals("1"))
+							ThreadManager.submitCacheTask(new ScanService());
+						if (Integer.parseInt(Settings.getParameter("ProgramVersion")) < Settings.VERSION)
+						{
+							Settings.setParameter("ProgramVersion", "" + Settings.VERSION);
+							new ChangeLogFrame();
+						}
 						FunctionsUtils.sleep(500);
 						MainFrame.getInstance().setInternalPane(new HomePage());
 					}
