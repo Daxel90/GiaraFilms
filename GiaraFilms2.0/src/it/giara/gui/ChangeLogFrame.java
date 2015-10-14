@@ -52,9 +52,11 @@ public class ChangeLogFrame extends JFrame
 		text.setOpaque(false);
 		text.setContentType("text/html");
 		text.setText("<html>" + "<h2>--------------------" + "<h2>Dev PreRelese 3"
-				+ "<br><h3>\t- Sospesa esecuzione ScanService per ottimizzare download"
+				+ "<br><h3>\t- *Sospesa esecuzione ScanService per ottimizzare download (in vista di una futura implementazione)"
+				+ "<br><h3>\t- *Aggiunto bottone download per le serieTv (nel prossimo update, divisione per stagione)"
 				+ "<br><h3>\t- Risolto problema slavataggio download in lista"
-				+ "<br><h3>\t- Risolto problema nel completamento del download" + "<br><h3>\t- Aggiunto ChangeLog Frame"
+				+ "<br><h3>\t- Risolto problema nel completamento del download" 
+				+ "<br><h3>\t- Aggiunto ChangeLog Frame"
 				+ "</html>");
 		text.setBorder(BorderFactory.createEmptyBorder());
 		text.setBackground(ColorUtils.Back);

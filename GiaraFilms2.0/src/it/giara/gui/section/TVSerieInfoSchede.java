@@ -29,6 +29,7 @@ public class TVSerieInfoSchede extends DefaultGui
 	JLabel cover;
 	JScrollPane scroll;
 	JLabel info;
+	ImageButton downloads;
 	
 	public TVSerieInfoSchede(DefaultGui gui, PreSchedaTVSerie f)
 	{
@@ -124,6 +125,13 @@ public class TVSerieInfoSchede extends DefaultGui
 				+ "<br>" + "Genere: " + serie.getGeneri().replace(",", ", ") + "</html>");
 		info.setVisible(!scheda.loading);
 		this.add(info);
+		
+		downloads = new ImageButton(ImageUtils.getImage("gui/download.png"),
+				ImageUtils.getImage("gui/download_over.png"), ImageUtils.getImage("gui/download_over.png"),
+				OpenDownloads);
+		downloads.setBounds((FRAME_WIDTH - 64) / 2, FRAME_HEIGHT - 100, 64, 64);
+		downloads.setVisible(!scheda.loading);
+		this.add(downloads);
 	}
 	
 	Runnable BackGui = new Runnable()
@@ -149,8 +157,18 @@ public class TVSerieInfoSchede extends DefaultGui
 						ImageUtils.scaleImageOld(scheda.initImage(cover), cover.getWidth(), cover.getHeight())));
 				text.setText("<html><h2>" + scheda.desc + "</html>");
 				scroll.setVisible(true);
+				downloads.setVisible(true);
 				info.setVisible(true);
 			}
+		}
+	};
+	
+	Runnable OpenDownloads = new Runnable()
+	{
+		@Override
+		public void run()
+		{
+			MainFrame.getInstance().setInternalPane(new DownloadTVSerie(guiInstance, serie));
 		}
 	};
 	
