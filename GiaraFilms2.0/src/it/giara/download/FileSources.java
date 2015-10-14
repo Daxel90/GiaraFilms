@@ -55,6 +55,9 @@ public class FileSources
 	
 	public void requestDownload()
 	{
+		if (saveFile == null)
+			saveFile = new File(DirUtils.getDownloadDirectory(), filename);
+		
 		SQLQuerySettings.addDownload(filename, saveFile.getAbsolutePath());
 		while (loadingBotList > 0)
 		{
@@ -126,18 +129,25 @@ public class FileSources
 		
 	}
 	
-	public void startDownloadXDCC()
+	public void startDownloadXDCC(DccFileTransfer transfer)
 	{
 		// for reducing Heap Size
 		sourcesBot.clear();
 		
 		if (saveFile == null)
-			saveFile = new File(DirUtils.getDownloadDirectory(), xdcc.getFile().getName());
+			saveFile = new File(DirUtils.getDownloadDirectory(), transfer.getFile().getName());
 			
 		if (!saveFile.getParentFile().exists())
 			saveFile.getParentFile().mkdir();
 			
-		Log.log(Log.IRC, "INCOMING:\t" + xdcc.getFile().toString() + " " + xdcc.getSize() + " bytes");
+		Log.log(Log.IRC, "INCOMING:\t" + transfer.getFile().toString() + " " + transfer.getSize() + " bytes");
+		
+		if(xdcc != null)
+		{
+			transfer.close();
+			return;
+		}
+		xdcc = transfer;
 		
 		if (saveFile.exists() && (xdcc.getSize() == saveFile.length()))
 		{
@@ -157,6 +167,7 @@ public class FileSources
 		if (ex != null)
 		{
 			requestDownload();
+			xdcc = null;
 			return;
 		}
 		

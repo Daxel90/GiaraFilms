@@ -92,6 +92,9 @@ public class Download extends DefaultGui
 		else if (file.botResponse == 2 && file.xdcc != null)
 			bar.setString("Download in corso: " + FunctionsUtils.arrotondamento(file.xdcc.getProgressPercentage())
 					+ "%  " + file.xdcc.getTransferRate() / 1024 + " kb/s");
+		if (file.fileEnd)
+			bar.setString("Download Completato");
+			
 		if (file.xdcc != null)
 		{
 			bar.setEnabled(true);

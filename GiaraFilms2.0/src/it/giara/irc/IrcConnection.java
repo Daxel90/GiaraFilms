@@ -106,9 +106,8 @@ public class IrcConnection extends PircBot
 		
 		sources.botResponse = 2;
 		sources.downloading = true;
-		sources.xdcc = transfer;
 		
-		sources.startDownloadXDCC();
+		sources.startDownloadXDCC(transfer);
 		
 	}
 	
