@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.image.BufferedImage;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 
@@ -120,13 +121,18 @@ public class DownloadBlock extends JPanel
 	
 	Runnable deleteRun = new Runnable()
 	{
-		
 		@Override
 		public void run()
 		{
-			file.delete();
-			MainFrame.getInstance().internalPane.init(MainFrame.getInstance().FRAME_WIDTH, MainFrame.getInstance().FRAME_HEIGHT);
-			MainFrame.getInstance().internalPane.repaint();
+			int response = JOptionPane.showConfirmDialog(null, "Sei sicuro di voler rimuovere "+file.filename, "Conferma di Eliminazione", JOptionPane.YES_NO_OPTION);
+			
+			if(response  == JOptionPane.YES_OPTION)
+			{
+				file.delete();
+				MainFrame.getInstance().internalPane.init(MainFrame.getInstance().FRAME_WIDTH, MainFrame.getInstance().FRAME_HEIGHT);
+				MainFrame.getInstance().internalPane.repaint();	
+			}
+			
 		}
 		
 	};
