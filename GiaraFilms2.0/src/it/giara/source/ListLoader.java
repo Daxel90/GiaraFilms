@@ -17,7 +17,7 @@ public class ListLoader
 		try
 		{
 			
-			URL url = new URL("http://xdccmule.org/GlobalFindEx/DataBase.db");
+			URL url = new URL("http://giaratest.altervista.org/giarafilms/database.db");
 			BufferedReader input = new BufferedReader(new InputStreamReader(url.openStream()));
 			String server = "";
 			String line;
