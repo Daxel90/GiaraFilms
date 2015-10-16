@@ -51,7 +51,14 @@ public class ChangeLogFrame extends JFrame
 		text.setHighlighter(null);
 		text.setOpaque(false);
 		text.setContentType("text/html");
-		text.setText("<html>" + "<h2>--------------------" + "<h2>Dev PreRelese 3"
+		text.setText("<html>" 
+				+ "<h2>--------------------" + "<h2>Dev PreRelese 4"
+				+ "<br><h3>\t- Sistemato errore di rendering nella sezione Download"
+				+ "<br><h3>\t- Creata visualizzazione gerarchica per le SerieTV"
+				+ "<br><h3>\t- Migliorata gestione delle eccezioni nei download"
+				+ "<br><h3>\t- Aggiunta possibilità di eliminare i download e metterli in pausa" 
+				+ "<br><h3>\t- Aggiunte opzioni, Tra cui la cartella di download!" 
+				+ "<h2>--------------------" + "<h2>Dev PreRelese 3"
 				+ "<br><h3>\t- *Sospesa esecuzione ScanService per ottimizzare download (in vista di una futura implementazione)"
 				+ "<br><h3>\t- *Aggiunto bottone download per le serieTv (nel prossimo update, divisione per stagione)"
 				+ "<br><h3>\t- Risolto problema slavataggio download in lista"
