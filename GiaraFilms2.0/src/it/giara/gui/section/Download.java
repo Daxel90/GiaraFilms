@@ -1,6 +1,6 @@
 package it.giara.gui.section;
 
-import java.awt.Color;
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Map.Entry;
@@ -14,6 +14,7 @@ import it.giara.download.DownloadManager;
 import it.giara.download.FileSources;
 import it.giara.gui.DefaultGui;
 import it.giara.gui.MainFrame;
+import it.giara.gui.components.DownloadBlock;
 import it.giara.gui.components.ImageButton;
 import it.giara.gui.utils.ColorUtils;
 import it.giara.gui.utils.ImageUtils;
@@ -31,7 +32,7 @@ public class Download extends DefaultGui
 	{
 		super();
 		back = gui;
-		timer = new Timer(2000, update);
+		timer = new Timer(1000, update);
 		timer.start();
 	}
 	
@@ -54,18 +55,11 @@ public class Download extends DefaultGui
 			FileSources file = data.getValue();
 			int off = 80 * x;
 			
-			JLabel name = new JLabel();
-			name.setBounds(FRAME_WIDTH / 8, off + 40, FRAME_WIDTH * 3 / 4, 30);
-			name.setText("<html> <h3>" + file.filename + "</html>");
-			name.setHorizontalAlignment(JLabel.CENTER);
-			this.add(name);
+			DownloadBlock downbk = new DownloadBlock(file, this);
 			
-			JProgressBar bar = new JProgressBar();
-			bar.setBounds(FRAME_WIDTH / 4, off + 80, FRAME_WIDTH / 2, 30);
-			bar.setForeground(Color.WHITE);
-			bar.setStringPainted(true);
-			updateBarData(bar, file);
-			this.add(bar);
+			downbk.setBounds(5, off + 45, FRAME_WIDTH - 10, 80);
+			downbk.setBorder(BorderFactory.createEtchedBorder());
+			this.add(downbk);
 			
 		}
 	}
@@ -124,8 +118,14 @@ public class Download extends DefaultGui
 		@Override
 		public void actionPerformed(ActionEvent e)
 		{
-			init(FRAME_WIDTH, FRAME_HEIGHT);
-			repaint();
+			for (Component comp : getComponents())
+			{
+				if (comp instanceof DownloadBlock)
+				{
+					DownloadBlock dw = (DownloadBlock) comp;
+					dw.updateBarData();
+				}
+			}
 		}
 		
 	};
