@@ -38,6 +38,11 @@ public class Download extends DefaultGui
 	
 	public void loadComponent()
 	{
+		JLabel title = new JLabel();
+		title.setBounds(FRAME_WIDTH / 6, 2, FRAME_WIDTH * 2 / 3, 40);
+		title.setText("<html><h1>Download</html>");
+		title.setHorizontalAlignment(JLabel.CENTER);
+		this.add(title); 
 		JLabel sep2 = new JLabel();
 		sep2.setBounds(0, 40, FRAME_WIDTH, 1);
 		sep2.setBorder(BorderFactory.createLineBorder(ColorUtils.Separator));

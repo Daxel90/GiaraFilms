@@ -46,8 +46,9 @@ public class Log
 	
 	public static void writeLog(String text)
 	{
-		if (Settings.prop.getBoolean("Savelog", false))
+		if (!Settings.prop.getBoolean("Savelog", false))
 			return;
+		
 		FileWriter fWriter = null;
 		BufferedWriter writer = null;
 		try
