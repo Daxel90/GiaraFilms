@@ -57,7 +57,7 @@ public class Download extends DefaultGui
 			
 			DownloadBlock downbk = new DownloadBlock(file, this);
 			
-			downbk.setBounds(5, off + 45, FRAME_WIDTH - 10, 80);
+			downbk.setBounds(10, off + 45, FRAME_WIDTH - 30, 80);
 			downbk.setBorder(BorderFactory.createEtchedBorder());
 			this.add(downbk);
 			

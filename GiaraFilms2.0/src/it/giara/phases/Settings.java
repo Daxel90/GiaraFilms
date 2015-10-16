@@ -3,13 +3,14 @@ package it.giara.phases;
 import java.util.HashMap;
 import java.util.prefs.Preferences;
 
+import it.giara.gui.ChangeLogFrame;
 import it.giara.gui.MainFrame;
 import it.giara.sql.SQLQuerySettings;
 import it.giara.utils.DirUtils;
 
 public class Settings
 {
-	public final static int VERSION = 3;
+	public final static int VERSION = 4;
 	private final static int END_PreReleseVersion = Integer.MAX_VALUE;
 	private final static int END_BetaVersion = Integer.MAX_VALUE;
 	private static HashMap<String, String> config = new HashMap<String, String>();
@@ -52,4 +53,19 @@ public class Settings
 			
 		return result;
 	}
+	
+	public static void UpdateFixer()
+	{
+		if (Integer.parseInt(Settings.getParameter("ProgramVersion")) < Settings.VERSION)
+		{
+			Settings.setParameter("ProgramVersion", "" + Settings.VERSION);
+			new ChangeLogFrame();
+		}
+		if(Integer.parseInt(Settings.getParameter("DBversion")) < 4)
+		{
+			SQLQuerySettings.TableFix1();
+			setParameter("DBversion","4");
+		}
+	}
+	
 }

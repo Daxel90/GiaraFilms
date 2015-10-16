@@ -21,6 +21,12 @@ public class SQLQuerySettings
 		SQL.ExecuteQuerySettings(query);
 	}
 	
+	public static void TableFix1()
+	{
+		String query = "ALTER TABLE `Downloads` ADD `status` INT NOT NULL DEFAULT 0";
+		SQL.ExecuteQuerySettings(query);
+	}
+	
 	public synchronized static void addDownload(String filename, String directory)
 	{
 		SQL.ExecuteQuerySettings("INSERT OR IGNORE INTO `Downloads`(`FileName`, `FileDirectory`) VALUES (\""
@@ -32,6 +38,28 @@ public class SQLQuerySettings
 		SQL.ExecuteQuerySettings("DELETE FROM `Downloads` WHERE `FileName` = \"" + filename + "\";");
 	}
 	
+	public synchronized static void setStatus(String filename, int status)
+	{
+		SQL.ExecuteQuerySettings(
+				"UPDATE `Downloads` SET `status` = " + status + " WHERE `FileName` = \"" + filename + "\";");
+	}
+	
+	public synchronized static int getStatus(String filename)
+	{
+		ResultSet r = SQL.FetchDataSettings("SELECT * FROM `Downloads` WHERE `FileName` = \"" + filename + "\"");
+		try
+		{
+			if (r.next())
+			{
+				return r.getInt("status");
+			}
+		} catch (SQLException e)
+		{
+			Log.stack(Log.DB, e);
+		}
+		return 0;
+	}
+	
 	public synchronized static List<String[]> getCurrentDownloads()
 	{
 		List<String[]> download = new ArrayList<String[]>();
@@ -41,7 +69,8 @@ public class SQLQuerySettings
 		{
 			while (r.next())
 			{
-				download.add(new String[] { r.getString("FileName"), r.getString("FileDirectory") });
+				download.add(new String[] { r.getString("FileName"), r.getString("FileDirectory"),
+						"" + r.getInt("status") });
 			}
 		} catch (SQLException e)
 		{

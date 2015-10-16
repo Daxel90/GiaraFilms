@@ -1,6 +1,7 @@
 package it.giara.gui.components;
 
 import java.awt.Color;
+import java.awt.image.BufferedImage;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -8,15 +9,31 @@ import javax.swing.JProgressBar;
 
 import it.giara.download.FileSources;
 import it.giara.gui.DefaultGui;
+import it.giara.gui.MainFrame;
 import it.giara.gui.utils.ColorUtils;
+import it.giara.gui.utils.ImageUtils;
 import it.giara.utils.FunctionsUtils;
 
 public class DownloadBlock extends JPanel
 {
 	private static final long serialVersionUID = 1L;
 	
+	public static BufferedImage stop, stop_over, start, start_over, delete, delete_over;
+	
+	static
+	{
+		stop = ImageUtils.getImage("gui/stop.png");
+		stop_over = ImageUtils.getImage("gui/stop_over.png");
+		start = ImageUtils.getImage("gui/start.png");
+		start_over = ImageUtils.getImage("gui/start_over.png");
+		delete = ImageUtils.getImage("gui/delete.png");
+		delete_over = ImageUtils.getImage("gui/delete_over.png");
+	}
+	
 	FileSources file;
 	JProgressBar bar;
+	ImageButton startBt;
+	ImageButton stopBt;
 	JLabel name;
 	int progress = 0;
 	
@@ -37,10 +54,26 @@ public class DownloadBlock extends JPanel
 		bar.setBounds(g.FRAME_WIDTH / 4, 45, g.FRAME_WIDTH / 2, 30);
 		bar.setForeground(Color.WHITE);
 		bar.setStringPainted(true);
-		updateBarData();
 		this.add(bar);
+		
+		startBt = new ImageButton(start, start_over, start_over, startRun);
+		startBt.setBounds(g.FRAME_WIDTH * 3 / 4 + 10, 44, 32, 32);
+		this.add(startBt);
+		
+		stopBt = new ImageButton(stop, stop_over, stop_over, stopRun);
+		stopBt.setBounds(g.FRAME_WIDTH * 3 / 4 + 10, 44, 32, 32);
+		this.add(stopBt);
+		
+		startBt.setVisible(file.paused);
+		stopBt.setVisible(!file.paused);
+		
+		ImageButton deleteBt = new ImageButton(delete, delete_over, delete_over, deleteRun);
+		deleteBt.setBounds(g.FRAME_WIDTH * 3 / 4 + 52, 44, 32, 32);
+		
+		this.add(deleteBt);
+		
+		updateBarData();
 	}
-	
 	
 	public void updateBarData()
 	{
@@ -67,6 +100,9 @@ public class DownloadBlock extends JPanel
 		if (file.fileEnd)
 			bar.setString("Download Completato");
 			
+		if (file.paused)
+			bar.setString("Download In Pausa");
+			
 		if (file.xdcc != null)
 		{
 			bar.setEnabled(true);
@@ -78,6 +114,44 @@ public class DownloadBlock extends JPanel
 			bar.setEnabled(false);
 		}
 		
+		startBt.setVisible(file.paused);
+		stopBt.setVisible(!file.paused);
 	}
+	
+	Runnable deleteRun = new Runnable()
+	{
+		
+		@Override
+		public void run()
+		{
+			file.delete();
+			MainFrame.getInstance().internalPane.init(MainFrame.getInstance().FRAME_WIDTH, MainFrame.getInstance().FRAME_HEIGHT);
+			MainFrame.getInstance().internalPane.repaint();
+		}
+		
+	};
+	
+	Runnable stopRun = new Runnable()
+	{
+		@Override
+		public void run()
+		{
+			file.stop();
+			updateBarData();
+		}
+		
+	};
+	
+	Runnable startRun = new Runnable()
+	{
+		
+		@Override
+		public void run()
+		{
+			file.restart();
+			updateBarData();
+		}
+		
+	};
 	
 }

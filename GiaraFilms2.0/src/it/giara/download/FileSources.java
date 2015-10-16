@@ -8,25 +8,30 @@ import java.util.Map.Entry;
 
 import org.jibble.pircbot.DccFileTransfer;
 
+import it.giara.http.HTTPFileSources;
 import it.giara.irc.IrcConnection;
+import it.giara.source.ListLoader;
 import it.giara.source.SourceChan;
 import it.giara.sql.SQLQuerySettings;
 import it.giara.utils.DirUtils;
 import it.giara.utils.ErrorHandler;
 import it.giara.utils.FunctionsUtils;
 import it.giara.utils.Log;
+import it.giara.utils.ThreadManager;
 
 public class FileSources
 {
 	public String filename;
 	public int totalBot = 0;
-	public int loadingBotList = 1;
+	public int loadingBotList = 0;
 	
 	public short botResponse = -1; // -1 wait 0 fail 1 connected 2 file transfer
 	public boolean downloading = false;
 	public DccFileTransfer xdcc;
 	File saveFile = null;
 	public boolean fileEnd = false;
+	
+	public boolean paused = false;
 	
 	HashMap<SourceChan, ArrayList<BotPackage>> sourcesBot = new HashMap<SourceChan, ArrayList<BotPackage>>();
 	
@@ -47,6 +52,41 @@ public class FileSources
 		sourcesBot.get(chan).add(bot);
 	}
 	
+	public void loadList()
+	{
+		loadingBotList = ListLoader.sources.size();
+		for (int x = 0; x < ListLoader.sources.size(); x++)
+		{
+			final int K = x;
+			Runnable run = new Runnable()
+			{
+				@Override
+				public void run()
+				{
+					try
+					{
+						SourceChan chan = ListLoader.sources.get(K);
+						new HTTPFileSources(chan, getInstance());
+					} finally
+					{
+						loadingBotList--;
+					}
+				}
+			};
+			
+			ThreadManager.submitCacheTask(run);
+		}
+	}
+	
+	public void waitUntilAllBotListAreLoaded()
+	{
+		while (loadingBotList > 0)
+		{
+			Log.log(Log.DEBUG, totalBot);
+			FunctionsUtils.sleep(1000);
+		}
+	}
+	
 	public void requestDownload(File file)
 	{
 		saveFile = file;
@@ -55,15 +95,15 @@ public class FileSources
 	
 	public void requestDownload()
 	{
+		if (paused)
+			return;
+			
 		if (saveFile == null)
 			saveFile = new File(DirUtils.getDownloadDirectory(), filename);
-		
+			
 		SQLQuerySettings.addDownload(filename, saveFile.getAbsolutePath());
-		while (loadingBotList > 0)
-		{
-			Log.log(Log.DEBUG, totalBot);
-			FunctionsUtils.sleep(1000);
-		}
+		
+		waitUntilAllBotListAreLoaded();
 		
 		if (totalBot <= 0)
 		{
@@ -142,7 +182,7 @@ public class FileSources
 			
 		Log.log(Log.IRC, "INCOMING:\t" + transfer.getFile().toString() + " " + transfer.getSize() + " bytes");
 		
-		if(xdcc != null)
+		if (xdcc != null)
 		{
 			transfer.close();
 			return;
@@ -178,4 +218,49 @@ public class FileSources
 		Log.log(Log.IRC, "Trasferimento Completato: " + transfer.getFile().getName());
 	}
 	
+	public void stop()
+	{
+		paused = true;
+		if (xdcc != null)
+		{
+			xdcc.close();
+			xdcc = null;
+		}
+		
+		totalBot = 0;
+		loadingBotList = 0;
+		botResponse = -1;
+		downloading = false;
+		sourcesBot.clear();
+		SQLQuerySettings.setStatus(filename, 1);
+	}
+	
+	public void restart()
+	{
+		paused = false;
+		loadList();
+		Runnable run = new Runnable()
+		{
+			
+			@Override
+			public void run()
+			{
+				requestDownload();
+			}
+		};
+		ThreadManager.submitCacheTask(run);
+		SQLQuerySettings.setStatus(filename, 0);
+	}
+	
+	public void delete()
+	{
+		stop();
+		DownloadManager.AllFile.remove(filename);
+		SQLQuerySettings.removeDownload(filename);
+	}
+	
+	public FileSources getInstance()
+	{
+		return this;
+	}
 }

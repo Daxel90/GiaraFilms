@@ -20,7 +20,7 @@ public class RecoverDownload
 			{
 				for (String[] s : list)
 				{
-					DownloadManager.downloadFile(s[0], s[1]);
+					DownloadManager.downloadFile(s[0], s[1], Integer.parseInt(s[2]) == 1);
 				}
 				
 			}
