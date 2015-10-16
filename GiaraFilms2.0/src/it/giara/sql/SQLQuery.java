@@ -3,6 +3,7 @@ package it.giara.sql;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import it.giara.analyze.enums.MainType;
 import it.giara.schede.PreSchedaFilm;
@@ -250,7 +251,8 @@ public class SQLQuery
 	public synchronized static ArrayList<Integer> readFileInfoList(int fileID, int Type)
 	{
 		ArrayList<Integer> list = new ArrayList<Integer>();
-		ResultSet r = SQL.FetchData("SELECT * FROM `FileInfo` WHERE `IdSection` = " + fileID + " AND `Type` = " + Type + ";");
+		ResultSet r = SQL
+				.FetchData("SELECT * FROM `FileInfo` WHERE `IdSection` = " + fileID + " AND `Type` = " + Type + ";");
 		try
 		{
 			while (r.next())
@@ -262,6 +264,31 @@ public class SQLQuery
 			Log.stack(Log.DB, e);
 		}
 		return list;
+	}
+	
+	public synchronized static HashMap<Integer,HashMap<Integer,ArrayList<Integer>>> readEpisodeInfoList(int serieID)
+	{
+		HashMap<Integer,HashMap<Integer,ArrayList<Integer>>> result = new HashMap<Integer,HashMap<Integer,ArrayList<Integer>>>();
+		ResultSet r = SQL.FetchData("SELECT * FROM `EpisodeInfo` WHERE `IdSerie` = " + serieID + ";");
+		try
+		{
+			while (r.next())
+			{
+				int serie = r.getInt("Serie");
+				int episode = r.getInt("Episode");
+				int file = r.getInt("IdFile");
+				
+				if(!result.containsKey(serie))
+					result.put(serie, new HashMap<Integer,ArrayList<Integer>>());
+				if(!result.get(serie).containsKey(episode))
+					result.get(serie).put(episode, new ArrayList<Integer>());
+				result.get(serie).get(episode).add(file);
+			}
+		} catch (SQLException e)
+		{
+			Log.stack(Log.DB, e);
+		}
+		return result;
 	}
 	
 	public synchronized static int[] readFileInfoWithFileID(int fileID)

@@ -1,6 +1,8 @@
 package it.giara.gui.section;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map.Entry;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
@@ -20,7 +22,7 @@ public class DownloadTVSerie extends DefaultGui
 	
 	DefaultGui back;
 	PreSchedaTVSerie scheda;
-	ArrayList<String> lista = new ArrayList<String>();
+	HashMap<Integer, HashMap<Integer, ArrayList<String>>> lista = new HashMap<Integer, HashMap<Integer, ArrayList<String>>>();
 	DownloadList panel;
 	
 	public DownloadTVSerie(DefaultGui gui, PreSchedaTVSerie s)
@@ -28,10 +30,25 @@ public class DownloadTVSerie extends DefaultGui
 		super();
 		back = gui;
 		scheda = s;
-		for (int x : SQLQuery.readFileInfoList(scheda.IdDb, 2))
+		
+		for (Entry<Integer, HashMap<Integer, ArrayList<Integer>>> serie : SQLQuery.readEpisodeInfoList(scheda.IdDb)
+				.entrySet())
 		{
-			lista.add(SQLQuery.getFileName(x));
+			int serieN = serie.getKey();
+			for (Entry<Integer, ArrayList<Integer>> episode : serie.getValue().entrySet())
+			{
+				int episodeN = episode.getKey();
+				for (int file : episode.getValue())
+				{
+					if (!lista.containsKey(serieN))
+						lista.put(serieN, new HashMap<Integer, ArrayList<String>>());
+					if (!lista.get(serieN).containsKey(episodeN))
+						lista.get(serieN).put(episodeN, new ArrayList<String>());
+					lista.get(serieN).get(episodeN).add(SQLQuery.getFileName(file));
+				}
+			}
 		}
+		
 		panel = new DownloadList(lista, this);
 		
 	}
