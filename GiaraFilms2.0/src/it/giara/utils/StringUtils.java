@@ -116,4 +116,12 @@ public class StringUtils
 		return false;
 	}
 	
+	public static String humanReadableByteCount(long bytes, int decimal) {
+	    int unit = 1000;
+	    if (bytes < unit) return bytes + " B";
+	    int exp = (int) (Math.log(bytes) / Math.log(unit));
+	    String pre = ("kMGTPE").charAt(exp-1)+"";
+	    return String.format("%."+decimal+"f %sB", bytes / Math.pow(unit, exp), pre);
+	}
+	
 }
