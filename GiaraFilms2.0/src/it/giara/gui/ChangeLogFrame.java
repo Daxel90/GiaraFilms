@@ -52,6 +52,10 @@ public class ChangeLogFrame extends JFrame
 		text.setOpaque(false);
 		text.setContentType("text/html");
 		text.setText("<html>" 
+				+ "<h2>--------------------" + "<h2>Dev PreRelese 5"
+				+ "<br><h3>\t- Effettuati alcuni Fix sul Completamento del Download"
+				+ "<br><h3>\t- Ridotto tempo di attesa per l'avvio del download"
+				+ "<br><h3>\t- Aggiunta dimensione dei file in download"
 				+ "<h2>--------------------" + "<h2>Dev PreRelese 4"
 				+ "<br><h3>\t- Sistemato errore di rendering nella sezione Download"
 				+ "<br><h3>\t- Creata visualizzazione gerarchica per le SerieTV"

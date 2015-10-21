@@ -58,22 +58,26 @@ public class IrcConnection extends PircBot
 	{
 		if (notice.contains("per richiedere questo pack, devi essere un un chan in cui ci sia anche io"))
 		{
-			DownloadManager.BotRequest.get(sourceNick).botResponse = 0;
+			if (DownloadManager.BotRequest.containsKey(sourceNick))
+				DownloadManager.BotRequest.get(sourceNick).botResponse = 0;
 			Log.log(Log.IRC, "NON SEI NEL CANALE DEL BOT" + sourceNick);
 		}
 		else if (notice.contains("pack errato"))
 		{
-			DownloadManager.BotRequest.get(sourceNick).botResponse = 0;
+			if (DownloadManager.BotRequest.containsKey(sourceNick))
+				DownloadManager.BotRequest.get(sourceNick).botResponse = 0;
 			Log.log(Log.IRC, "Numero del pack Errato" + sourceNick);
 		}
 		else if (notice.contains("Tutti gli slots sono occupati"))
 		{
-			DownloadManager.BotRequest.get(sourceNick).botResponse = 0;
+			if (DownloadManager.BotRequest.containsKey(sourceNick))
+				DownloadManager.BotRequest.get(sourceNick).botResponse = 0;
 			Log.log(Log.IRC, "Il Bot ti ha messo in lista" + sourceNick);
 		}
 		else if (notice.contains("Ti sto inviando il pack"))
 		{
-			DownloadManager.BotRequest.get(sourceNick).botResponse = 1;
+			if (DownloadManager.BotRequest.containsKey(sourceNick))
+				DownloadManager.BotRequest.get(sourceNick).botResponse = 1;
 		}
 	}
 	
@@ -114,8 +118,11 @@ public class IrcConnection extends PircBot
 	@Override
 	protected void onFileTransferFinished(DccFileTransfer transfer, Exception ex)
 	{
-		FileSources sources = DownloadManager.BotRequest.get(transfer.getNick());
-		sources.endXDCCTransfer(transfer, ex);
+		if (DownloadManager.BotRequest.containsKey(transfer.getNick()))
+		{
+			FileSources sources = DownloadManager.BotRequest.get(transfer.getNick());
+			sources.endXDCCTransfer(transfer, ex);
+		}
 	}
 	
 }

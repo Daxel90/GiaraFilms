@@ -2,9 +2,9 @@ package it.giara.download;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.jibble.pircbot.DccFileTransfer;
 
@@ -33,7 +33,7 @@ public class FileSources
 	
 	public boolean paused = false;
 	
-	HashMap<SourceChan, ArrayList<BotPackage>> sourcesBot = new HashMap<SourceChan, ArrayList<BotPackage>>();
+	ConcurrentHashMap<SourceChan, ArrayList<BotPackage>> sourcesBot = new ConcurrentHashMap<SourceChan, ArrayList<BotPackage>>();
 	
 	public FileSources(String name)
 	{
@@ -110,62 +110,69 @@ public class FileSources
 			ErrorHandler.fileNotAvailable(filename);
 			return;
 		}
-		Iterator<Entry<SourceChan, ArrayList<BotPackage>>> it = sourcesBot.entrySet().iterator();
-		
-		while (it.hasNext())
+		int LastloadingBotList;
+		do
 		{
-			botResponse = -1;
-			Entry<SourceChan, ArrayList<BotPackage>> data = it.next();
+			LastloadingBotList = loadingBotList;
 			
-			SourceChan chan = data.getKey();
-			ArrayList<BotPackage> bots = data.getValue();
+			Iterator<Entry<SourceChan, ArrayList<BotPackage>>> it = sourcesBot.entrySet().iterator();
 			
-			if (!DownloadManager.servers.containsKey(chan.server))
-			{
-				IrcConnection conn = new IrcConnection(chan.server);
-				DownloadManager.servers.put(chan.server, conn);
-			}
-			else if (DownloadManager.servers.containsKey(chan.server)
-					&& !DownloadManager.servers.get(chan.server).isConnected())
-			{
-				try
-				{
-					DownloadManager.servers.get(chan.server).reconnect();
-				} catch (Exception e)
-				{
-					Log.stack(Log.IRC, e);
-				}
-			}
-			
-			DownloadManager.servers.get(chan.server).joinChannelAndSayHello(chan.chan);
-			
-			FunctionsUtils.sleep(1000);
-			
-			for (BotPackage bot : bots)
+			while (it.hasNext())
 			{
 				botResponse = -1;
-				DownloadManager.BotRequest.put(bot.bot, this);
-				DownloadManager.servers.get(chan.server).sendMessage(bot.bot, "xdcc send #" + bot.packetID);
-				int retry = 0;
-				while (botResponse == -1)
+				Entry<SourceChan, ArrayList<BotPackage>> data = it.next();
+				
+				SourceChan chan = data.getKey();
+				ArrayList<BotPackage> bots = data.getValue();
+				
+				if (!DownloadManager.servers.containsKey(chan.server))
 				{
-					FunctionsUtils.sleep(2000);
-					retry++;
-					if (retry > 4)
-						break;
+					IrcConnection conn = new IrcConnection(chan.server);
+					DownloadManager.servers.put(chan.server, conn);
+				}
+				else if (DownloadManager.servers.containsKey(chan.server)
+						&& !DownloadManager.servers.get(chan.server).isConnected())
+				{
+					try
+					{
+						DownloadManager.servers.get(chan.server).reconnect();
+					} catch (Exception e)
+					{
+						Log.stack(Log.IRC, e);
+					}
 				}
 				
-				if (botResponse == 1)
-				{
-					FunctionsUtils.sleep(10000);
-				}
+				DownloadManager.servers.get(chan.server).joinChannelAndSayHello(chan.chan);
 				
-				if (botResponse == 2)
-					return;
-				else
-					DownloadManager.BotRequest.remove(bot.bot);
+				FunctionsUtils.sleep(1000);
+				
+				for (BotPackage bot : bots)
+				{
+					botResponse = -1;
+					DownloadManager.BotRequest.put(bot.bot, this);
+					DownloadManager.servers.get(chan.server).sendMessage(bot.bot, "xdcc send #" + bot.packetID);
+					int retry = 0;
+					while (botResponse == -1)
+					{
+						FunctionsUtils.sleep(2000);
+						retry++;
+						if (retry > 4)
+							break;
+					}
+					
+					if (botResponse == 1)
+					{
+						FunctionsUtils.sleep(10000);
+					}
+					
+					if (botResponse == 2)
+						return;
+					else
+						DownloadManager.BotRequest.remove(bot.bot);
+				}
 			}
-		}
+			
+		} while (LastloadingBotList != loadingBotList || loadingBotList > 0);
 		
 	}
 	
@@ -173,6 +180,7 @@ public class FileSources
 	{
 		// for reducing Heap Size
 		sourcesBot.clear();
+		totalBot = 0;
 		
 		if (saveFile == null)
 			saveFile = new File(DirUtils.getDownloadDirectory(), transfer.getFile().getName());
@@ -193,6 +201,7 @@ public class FileSources
 		{
 			Log.log(Log.IRC, "EXISTS:\t try to close connection");
 			xdcc.close();
+			endXDCCTransfer(transfer, null);
 			
 		}
 		else
@@ -206,8 +215,9 @@ public class FileSources
 	{
 		if (ex != null)
 		{
-			requestDownload();
 			xdcc = null;
+			FunctionsUtils.sleep(4000);
+			restart();
 			return;
 		}
 		
@@ -232,6 +242,7 @@ public class FileSources
 		botResponse = -1;
 		downloading = false;
 		sourcesBot.clear();
+		totalBot = 0;
 		SQLQuerySettings.setStatus(filename, 1);
 	}
 	
