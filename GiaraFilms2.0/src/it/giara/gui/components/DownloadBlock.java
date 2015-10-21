@@ -14,6 +14,7 @@ import it.giara.gui.MainFrame;
 import it.giara.gui.utils.ColorUtils;
 import it.giara.gui.utils.ImageUtils;
 import it.giara.utils.FunctionsUtils;
+import it.giara.utils.StringUtils;
 
 public class DownloadBlock extends JPanel
 {
@@ -36,6 +37,7 @@ public class DownloadBlock extends JPanel
 	ImageButton startBt;
 	ImageButton stopBt;
 	JLabel name;
+	JLabel size;
 	int progress = 0;
 	
 	public DownloadBlock(FileSources fs, DefaultGui g)
@@ -56,6 +58,12 @@ public class DownloadBlock extends JPanel
 		bar.setForeground(Color.WHITE);
 		bar.setStringPainted(true);
 		this.add(bar);
+		
+		size = new JLabel();
+		size.setBounds(0, 45, g.FRAME_WIDTH / 4, 30);
+		size.setHorizontalAlignment(JLabel.CENTER);
+		size.setVisible(false);
+		this.add(size);
 		
 		startBt = new ImageButton(start, start_over, start_over, startRun);
 		startBt.setBounds(g.FRAME_WIDTH * 3 / 4 + 10, 44, 32, 32);
@@ -89,7 +97,7 @@ public class DownloadBlock extends JPanel
 			loading += ".";
 		}
 		
-		if (file.loadingBotList > 0)
+		if (file.loadingBotList > 0 && file.totalBot == 0)
 			bar.setString("Scansione Sorgenti In Corso " + file.loadingBotList + " rimanenti");
 		else if (file.botResponse < 1)
 			bar.setString("In attesa di connessione" + loading);
@@ -97,7 +105,7 @@ public class DownloadBlock extends JPanel
 			bar.setString("Connessione in corso" + loading);
 		else if (file.botResponse == 2 && file.xdcc != null)
 			bar.setString("Download in corso: " + FunctionsUtils.arrotondamento(file.xdcc.getProgressPercentage())
-					+ "%  " + file.xdcc.getTransferRate() / 1024 + " kb/s");
+					+ "%  " + StringUtils.humanReadableByteCount(file.xdcc.getTransferRate(), 1) + "/s");
 		if (file.fileEnd)
 			bar.setString("Download Completato");
 			
@@ -109,9 +117,13 @@ public class DownloadBlock extends JPanel
 			bar.setEnabled(true);
 			bar.setMaximum((int) file.xdcc.getSize() / 1000);
 			bar.setValue((int) file.xdcc.getProgress() / 1000);
+			size.setVisible(true);
+			size.setText("<html> <h4>" + StringUtils.humanReadableByteCount(file.xdcc.getProgress(), 2) + " / "
+					+ StringUtils.humanReadableByteCount(file.xdcc.getSize(), 2) + "</html>");
 		}
 		else
 		{
+			size.setVisible(false);
 			bar.setEnabled(false);
 		}
 		
@@ -124,13 +136,15 @@ public class DownloadBlock extends JPanel
 		@Override
 		public void run()
 		{
-			int response = JOptionPane.showConfirmDialog(null, "Sei sicuro di voler rimuovere "+file.filename, "Conferma di Eliminazione", JOptionPane.YES_NO_OPTION);
-			
-			if(response  == JOptionPane.YES_OPTION)
+			int response = JOptionPane.showConfirmDialog(null, "Sei sicuro di voler rimuovere " + file.filename,
+					"Conferma di Eliminazione", JOptionPane.YES_NO_OPTION);
+					
+			if (response == JOptionPane.YES_OPTION)
 			{
 				file.delete();
-				MainFrame.getInstance().internalPane.init(MainFrame.getInstance().FRAME_WIDTH, MainFrame.getInstance().FRAME_HEIGHT);
-				MainFrame.getInstance().internalPane.repaint();	
+				MainFrame.getInstance().internalPane.init(MainFrame.getInstance().FRAME_WIDTH,
+						MainFrame.getInstance().FRAME_HEIGHT);
+				MainFrame.getInstance().internalPane.repaint();
 			}
 			
 		}
