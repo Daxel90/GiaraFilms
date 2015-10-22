@@ -22,7 +22,7 @@ public class DownloadTVSerie extends DefaultGui
 	
 	DefaultGui back;
 	PreSchedaTVSerie scheda;
-	HashMap<Integer, HashMap<Integer, ArrayList<String>>> lista = new HashMap<Integer, HashMap<Integer, ArrayList<String>>>();
+	HashMap<Integer, HashMap<Integer, ArrayList<String[]>>> lista = new HashMap<Integer, HashMap<Integer, ArrayList<String[]>>>();
 	DownloadList panel;
 	
 	public DownloadTVSerie(DefaultGui gui, PreSchedaTVSerie s)
@@ -41,9 +41,9 @@ public class DownloadTVSerie extends DefaultGui
 				for (int file : episode.getValue())
 				{
 					if (!lista.containsKey(serieN))
-						lista.put(serieN, new HashMap<Integer, ArrayList<String>>());
+						lista.put(serieN, new HashMap<Integer, ArrayList<String[]>>());
 					if (!lista.get(serieN).containsKey(episodeN))
-						lista.get(serieN).put(episodeN, new ArrayList<String>());
+						lista.get(serieN).put(episodeN, new ArrayList<String[]>());
 					lista.get(serieN).get(episodeN).add(SQLQuery.getFileName(file));
 				}
 			}

@@ -44,8 +44,10 @@ public class ScanService implements Runnable
 			LSize = search.file.size();
 			LStatus = 0;
 			HaveList = true;
-			for (final String s2 : search.file)
+			for (int k = 0; k < search.file.size(); k++)
 			{
+				final String s2 = search.file.get(k);
+				final String size = search.sizeList.get(k);
 				LStatus++;
 				if (!SQLQuery.existFile(s2))
 				{
@@ -55,7 +57,7 @@ public class ScanService implements Runnable
 						@Override
 						public void run()
 						{
-							int fileID = SQLQuery.writeFile(s2);
+							int fileID = SQLQuery.writeFile(s2,size);
 							FileInfo f = new FileInfo(s2);
 							
 							switch (f.type)

@@ -17,6 +17,7 @@ public class HTTPList
 	}
 	
 	public ArrayList<String> file = new ArrayList<String>();
+	public ArrayList<String> sizeList = new ArrayList<String>();
 	
 	public HTTPList(String site, String search)
 	{
@@ -48,6 +49,7 @@ public class HTTPList
 				if (info.length < 4)
 					continue;
 				String name = info[3];
+				String size = info[2].trim();
 				
 				if (info.length > 4) // correction for file name containing space
 					for (int j = 4; j < info.length; j++)
@@ -71,6 +73,7 @@ public class HTTPList
 				if (!file.contains(name))
 				{
 					file.add(name);
+					sizeList.add(size);
 					Log.log(Log.NET, name);
 					Log.log(Log.NET, file.size());
 				}

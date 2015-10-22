@@ -5,6 +5,7 @@ import java.util.prefs.Preferences;
 
 import it.giara.gui.ChangeLogFrame;
 import it.giara.gui.MainFrame;
+import it.giara.sql.SQLQuery;
 import it.giara.sql.SQLQuerySettings;
 import it.giara.utils.DirUtils;
 
@@ -65,6 +66,11 @@ public class Settings
 		{
 			SQLQuerySettings.TableFix1();
 			setParameter("DBversion","4");
+		}
+		if(Integer.parseInt(Settings.getParameter("DBversion")) < 6)
+		{
+			SQLQuery.DbFix1();
+			setParameter("DBversion","6");
 		}
 	}
 	

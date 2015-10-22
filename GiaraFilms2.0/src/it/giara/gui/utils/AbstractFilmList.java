@@ -14,7 +14,7 @@ public class AbstractFilmList
 	public boolean loading = false;
 	public ArrayList<PreSchedaFilm> films = new ArrayList<PreSchedaFilm>();
 	public ArrayList<PreSchedaTVSerie> series = new ArrayList<PreSchedaTVSerie>();
-	public ArrayList<String> allFile = new ArrayList<String>();
+	public ArrayList<String[]> allFile = new ArrayList<String[]>();
 	private JPanel panel;
 	
 	public void setJPanel(JPanel pane)
@@ -58,14 +58,14 @@ public class AbstractFilmList
 		notifyChange(MainType.SerieTV);
 	}
 	
-	public void addFile(String p)
+	public void addFile(String[] p)
 	{
 		if (p == null)
 			return;
 		if (p.equals(""))
 			return;
 			
-		if (allFile.contains(p))
+		if (contains(p[0], allFile))
 			return;
 			
 		allFile.add(p);
@@ -78,6 +78,16 @@ public class AbstractFilmList
 			((FilmListPanel) panel).updateFromList(type);
 		else
 			panel.repaint();
+	}
+	
+	private boolean contains(String data, ArrayList<String[]> list)
+	{
+		for (String[] s : list)
+		{
+			if (s[0].equals(data))
+				return true;
+		}
+		return false;
 	}
 	
 	// remove a lot of memory

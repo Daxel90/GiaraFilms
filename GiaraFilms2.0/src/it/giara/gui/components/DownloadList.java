@@ -21,8 +21,8 @@ public class DownloadList extends JScrollPane
 {
 	private static final long serialVersionUID = 1L;
 	
-	ArrayList<String> fileList;
-	HashMap<Integer, HashMap<Integer, ArrayList<String>>> SerieList;
+	ArrayList<String[]> fileList;
+	HashMap<Integer, HashMap<Integer, ArrayList<String[]>>> SerieList;
 	// HashMap<Integer,[boolean,HashMap<Integer, boolean>]>
 	HashMap<Integer, Object[]> SerieTree = new HashMap<Integer, Object[]>();
 	int offset = 0;
@@ -31,14 +31,14 @@ public class DownloadList extends JScrollPane
 	private DefaultGui gui;
 	boolean serie = false;
 	
-	public DownloadList(HashMap<Integer, HashMap<Integer, ArrayList<String>>> list, DefaultGui g)
+	public DownloadList(HashMap<Integer, HashMap<Integer, ArrayList<String[]>>> list, DefaultGui g)
 	{
 		this(g);
 		SerieList = list;
 		serie = true;
 	}
 	
-	public DownloadList(ArrayList<String> list, DefaultGui g)
+	public DownloadList(ArrayList<String[]> list, DefaultGui g)
 	{
 		this(g);
 		fileList = list;
@@ -75,7 +75,8 @@ public class DownloadList extends JScrollPane
 		{
 			for (int l = 0; l < fileList.size(); l++)
 			{
-				final String file = fileList.get(l);
+				final String file = fileList.get(l)[0];
+				final String size = fileList.get(l)[1];
 				if (n < offset || 10 + (n - offset) * 40 > this.getHeight())
 				{
 					n++;
@@ -83,7 +84,7 @@ public class DownloadList extends JScrollPane
 				}
 				
 				JLabel name = new JLabel();
-				name.setText("<html><h3>" + file + "</html>");
+				name.setText("<html><h3>" + size +"&nbsp;&nbsp;&nbsp;&nbsp;"+file + "</html>");
 				name.setBounds(10, 10 + (n - offset) * 40, this.getWidth() - 50, 30);
 				name.setBorder(BorderFactory.createEtchedBorder());
 				this.add(name);
@@ -111,7 +112,7 @@ public class DownloadList extends JScrollPane
 		}
 		else
 		{
-			for (Entry<Integer, HashMap<Integer, ArrayList<String>>> serie : SerieList.entrySet())
+			for (Entry<Integer, HashMap<Integer, ArrayList<String[]>>> serie : SerieList.entrySet())
 			{
 				final int serieN = serie.getKey();
 				
@@ -161,7 +162,7 @@ public class DownloadList extends JScrollPane
 					continue;
 				}
 				
-				for (Entry<Integer, ArrayList<String>> episode : serie.getValue().entrySet())
+				for (Entry<Integer, ArrayList<String[]>> episode : serie.getValue().entrySet())
 				{
 					final int episodeN = episode.getKey();
 					
@@ -217,9 +218,10 @@ public class DownloadList extends JScrollPane
 					
 					
 					
-					for (final String file : episode.getValue())
+					for (String[] Arrfile : episode.getValue())
 					{
-						
+						final String file = Arrfile[0];
+						final String size = Arrfile[1];
 						if (n < offset || 10 + (n - offset) * 40 > this.getHeight())
 						{
 							n++;
@@ -227,7 +229,7 @@ public class DownloadList extends JScrollPane
 						}
 						
 						JLabel name = new JLabel();
-						name.setText("<html><h3>" + file + "</html>");
+						name.setText("<html><h3>" +  size +"&nbsp;&nbsp;&nbsp;&nbsp;"+file  + "</html>");
 						name.setBounds(50, 10 + (n - offset) * 40, this.getWidth() - 90, 30);
 						name.setBorder(BorderFactory.createEtchedBorder());
 						this.add(name);
@@ -264,12 +266,6 @@ public class DownloadList extends JScrollPane
 		ArrowDown.setVisible(n > (this.getHeight() - 10) / 40 + offset);
 		this.add(ArrowDown);
 		
-	}
-	
-	public void addFile(String s)
-	{
-		fileList.add(s);
-		init();
 	}
 	
 	Runnable RunUp = new Runnable()

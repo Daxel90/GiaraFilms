@@ -20,7 +20,9 @@ public class SQLQuery
 	{
 		String query = "CREATE TABLE IF NOT EXISTS `File` ("
 				+ "`ID`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE," + "`FileName`	TEXT NOT NULL UNIQUE,"
-				+ "`LastUpdate`	INTEGER NOT NULL" + ");";
+				+ "`Size` TEXT," 
+				+ "`LastUpdate`	INTEGER NOT NULL" 
+				+ ");";
 		SQL.ExecuteQuery(query);
 		
 		String query2 = "CREATE TABLE IF NOT EXISTS `SchedaFilm` ("
@@ -173,10 +175,10 @@ public class SQLQuery
 		return -1;
 	}
 	
-	public synchronized static int writeFile(String fileName)
+	public synchronized static int writeFile(String fileName, String size)
 	{
-		SQL.ExecuteQuery("INSERT OR IGNORE INTO `File`(`FileName`, `LastUpdate`) VALUES (\"" + SQL.escape(fileName)
-				+ "\", " + FunctionsUtils.getTime() + ");");
+		SQL.ExecuteQuery("INSERT OR IGNORE INTO `File`(`FileName`, `Size`, `LastUpdate`) VALUES (\"" + SQL.escape(fileName)
+				+ "\", \""+SQL.escape(size)+"\", " + FunctionsUtils.getTime() + ");");
 				
 		ResultSet r = SQL.FetchData("SELECT * FROM `File` WHERE `FileName` = \"" + SQL.escape(fileName) + "\";");
 		try
@@ -209,20 +211,27 @@ public class SQLQuery
 		return false;
 	}
 	
-	public synchronized static String getFileName(int id)
+	public synchronized static String[] getFileName(int id)
 	{
+		String[] result = new String[2];
+		
 		ResultSet r = SQL.FetchData("SELECT * FROM `File` WHERE `ID` = " + id + ";");
 		try
 		{
 			if (r.next())
 			{
-				return SQL.unescape(r.getString("FileName"));
+				result[0] = SQL.unescape(r.getString("FileName"));
+				result[1] = SQL.unescape(r.getString("Size"));
+				return result;
 			}
 		} catch (SQLException e)
 		{
 			Log.stack(Log.DB, e);
 		}
-		return "";
+		
+		result[0] = "";
+		result[1] = "";
+		return result;
 		
 	}
 	
@@ -366,6 +375,18 @@ public class SQLQuery
 			Log.stack(Log.DB, e);
 		}
 		return -1;
+	}
+	
+	
+	public synchronized static void DbFix1()
+	{
+		SQL.ExecuteQuery("DROP TABLE `File`");
+		SQL.ExecuteQuery("DROP TABLE `SchedaFilm`");
+		SQL.ExecuteQuery("DROP TABLE `FileInfo`");
+		SQL.ExecuteQuery("DROP TABLE `SchedaTelefilm`");
+		SQL.ExecuteQuery("DROP TABLE `CacheSearch`");
+		SQL.ExecuteQuery("DROP TABLE `EpisodeInfo`");
+		initTable();
 	}
 	
 }

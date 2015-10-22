@@ -59,11 +59,14 @@ public class SearchService
 							return;
 						HTTPList search = new HTTPList(s.link, searchString);
 						
-						for (final String s2 : search.file)
+						for (int k = 0; k < search.file.size(); k++)
 						{
+							final String s2 = search.file.get(k);
+							final String size = search.sizeList.get(k);
 							if (!run)
 								return;
-							list.addFile(s2);
+								
+							list.addFile(new String[] { s2, size });
 							if (SQLQuery.existFile(s2))
 							{
 								int IDFile = SQLQuery.getFileId(s2);
@@ -88,7 +91,7 @@ public class SearchService
 									@Override
 									public void run()
 									{
-										int fileID = SQLQuery.writeFile(s2);
+										int fileID = SQLQuery.writeFile(s2, size);
 										FileInfo f = new FileInfo(s2);
 										
 										switch (f.type)

@@ -20,7 +20,7 @@ public class DownloadFilm extends DefaultGui
 	
 	DefaultGui back;
 	PreSchedaFilm scheda;
-	ArrayList<String> lista = new ArrayList<String>();
+	ArrayList<String[]> lista = new ArrayList<String[]>();
 	DownloadList panel;
 	
 	public DownloadFilm(DefaultGui gui, PreSchedaFilm s)
