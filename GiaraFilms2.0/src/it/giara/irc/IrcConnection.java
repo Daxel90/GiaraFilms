@@ -14,7 +14,7 @@ public class IrcConnection extends PircBot
 	public IrcConnection(String server)
 	{
 		super();
-		
+		Log.log(Log.IRC, "Mi connetto a: " + server);
 		IrcNick nickProvider = new IrcNick();
 		this.setLogin(nickProvider.generateRandomNick());
 		this.setName(nickProvider.generateRandomNick());

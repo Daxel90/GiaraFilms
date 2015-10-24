@@ -87,6 +87,15 @@ public class FileSources
 		}
 	}
 	
+	public void waitUntilthereAreAtLeastOneBot()
+	{
+		while (totalBot <= 0)
+		{
+			Log.log(Log.DEBUG, totalBot);
+			FunctionsUtils.sleep(1000);
+		}
+	}
+	
 	public void requestDownload(File file)
 	{
 		saveFile = file;
@@ -103,7 +112,7 @@ public class FileSources
 			
 		SQLQuerySettings.addDownload(filename, saveFile.getAbsolutePath());
 		
-		waitUntilAllBotListAreLoaded();
+		waitUntilthereAreAtLeastOneBot();
 		
 		if (totalBot <= 0)
 		{
@@ -182,6 +191,9 @@ public class FileSources
 		sourcesBot.clear();
 		totalBot = 0;
 		
+		if (paused)
+			transfer.close();
+			
 		if (saveFile == null)
 			saveFile = new File(DirUtils.getDownloadDirectory(), transfer.getFile().getName());
 			
