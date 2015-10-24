@@ -52,6 +52,10 @@ public class ChangeLogFrame extends JFrame
 		text.setOpaque(false);
 		text.setContentType("text/html");
 		text.setText("<html>" 
+				+ "<h2>--------------------" + "<h2>Dev PreRelese 6"
+				+ "<br><h3>\t- Aggiunta dimensione dei file nelle liste"
+				+ "<br><h3>\t- Fix sulla riduzione del tempo di attesa (Dev5)"
+				+ "<br><h3>\t- Fix Pausa Download"
 				+ "<h2>--------------------" + "<h2>Dev PreRelese 5"
 				+ "<br><h3>\t- Effettuati alcuni Fix sul Completamento del Download"
 				+ "<br><h3>\t- Ridotto tempo di attesa per l'avvio del download"
