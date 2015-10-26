@@ -106,7 +106,7 @@ public class StringUtils
 					if ((strdata.length - 1) > index - 1 && (index - 1) >= 0)
 						pre = strdata[index - 1];
 						
-					if (!Character.isLetter(pre) && !Character.isLetter(post))
+					if (!Character.isLetter(pre) && !Character.isDigit(pre) && !Character.isLetter(post) && !Character.isDigit(post))
 					{
 						return true;
 					}

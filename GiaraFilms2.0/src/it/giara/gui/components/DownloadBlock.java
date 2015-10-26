@@ -97,7 +97,7 @@ public class DownloadBlock extends JPanel
 			loading += ".";
 		}
 		
-		if (file.loadingBotList > 0 && file.totalBot == 0)
+		if (file.loadingBotList > 0 && file.totalBot == 0 && !file.downloading)
 			bar.setString("Scansione Sorgenti In Corso " + file.loadingBotList + " rimanenti");
 		else if (file.botResponse < 1)
 			bar.setString("In attesa di connessione" + loading);

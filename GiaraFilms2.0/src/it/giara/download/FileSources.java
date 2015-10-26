@@ -229,7 +229,8 @@ public class FileSources
 		{
 			xdcc = null;
 			FunctionsUtils.sleep(4000);
-			restart();
+			if (!paused)
+				restart();
 			return;
 		}
 		
