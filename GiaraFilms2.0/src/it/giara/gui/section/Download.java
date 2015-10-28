@@ -25,6 +25,8 @@ public class Download extends DefaultGui
 	DefaultGui back;
 	Timer timer;
 	int progress = 0;
+	private ImageButton ArrowUp, ArrowDown;
+	int offset = 0;
 	
 	public Download(DefaultGui gui)
 	{
@@ -32,10 +34,16 @@ public class Download extends DefaultGui
 		back = gui;
 		timer = new Timer(1000, update);
 		timer.start();
+		ArrowUp = new ImageButton(ImageUtils.getImage("gui/arrow_up.png"), ImageUtils.getImage("gui/arrow_up_over.png"),
+				ImageUtils.getImage("gui/arrow_up_over.png"), RunUp);
+		ArrowDown = new ImageButton(ImageUtils.getImage("gui/arrow_down.png"),
+				ImageUtils.getImage("gui/arrow_down_over.png"), ImageUtils.getImage("gui/arrow_down_over.png"),
+				RunDown);
 	}
 	
 	public void loadComponent()
 	{
+		this.removeAll();
 		JLabel title = new JLabel();
 		title.setBounds(FRAME_WIDTH / 6, 2, FRAME_WIDTH * 2 / 3, 40);
 		title.setText("<html><h1>Download</html>");
@@ -55,15 +63,27 @@ public class Download extends DefaultGui
 		for (Entry<String, FileSources> data : DownloadManager.AllFile.entrySet())
 		{
 			x++;
+			if (x < offset)
+			{
+				continue;
+			}
 			FileSources file = data.getValue();
-			int off = 80 * x;
+			int off = 80 * (x - offset);
 			
 			DownloadBlock downbk = new DownloadBlock(file, this);
 			
-			downbk.setBounds(10, off + 45, FRAME_WIDTH - 30, 80);
+			downbk.setBounds(10, off + 45, FRAME_WIDTH - 70, 80);
 			downbk.setBorder(BorderFactory.createEtchedBorder());
 			this.add(downbk);
 		}
+		
+		ArrowUp.setBounds(this.getWidth() - 57, 45, 32, 32);
+		ArrowUp.setVisible(offset > 0);
+		this.add(ArrowUp);
+		
+		ArrowDown.setBounds(this.getWidth() - 57, this.getHeight() - 42, 32, 32);
+		ArrowDown.setVisible((x + 1 - offset) > ((this.getHeight() - 40) / 80));
+		this.add(ArrowDown);
 	}
 	
 	Runnable BackGui = new Runnable()
@@ -78,7 +98,6 @@ public class Download extends DefaultGui
 	
 	ActionListener update = new ActionListener()
 	{
-		
 		@Override
 		public void actionPerformed(ActionEvent e)
 		{
@@ -91,6 +110,29 @@ public class Download extends DefaultGui
 				}
 			}
 		}
-		
+	};
+	
+	Runnable RunUp = new Runnable()
+	{
+		@Override
+		public void run()
+		{
+			offset -= 2;
+			if (offset < 0)
+				offset = 0;
+			loadComponent();
+			repaint();
+		}
+	};
+	
+	Runnable RunDown = new Runnable()
+	{
+		@Override
+		public void run()
+		{
+			offset += 2;
+			loadComponent();
+			repaint();
+		}
 	};
 }

@@ -105,7 +105,7 @@ public class DownloadBlock extends JPanel
 			bar.setString("Connessione in corso" + loading);
 		else if (file.botResponse == 2 && file.xdcc != null)
 			bar.setString("Download in corso: " + FunctionsUtils.arrotondamento(file.xdcc.getProgressPercentage())
-					+ "%  " + StringUtils.humanReadableByteCount(file.xdcc.getTransferRate(), 1) + "/s");
+					+ "%  " + StringUtils.humanReadableByteCount(file.xdcc.getTransferRate(), 1) + "/s  "+StringUtils.humanReadableSecondLeft((int) ((file.xdcc.getSize()-file.xdcc.getProgress())/(file.xdcc.getTransferRate()+1))));
 		if (file.fileEnd)
 			bar.setString("Download Completato");
 			
@@ -145,10 +145,8 @@ public class DownloadBlock extends JPanel
 				MainFrame.getInstance().internalPane.init(MainFrame.getInstance().FRAME_WIDTH,
 						MainFrame.getInstance().FRAME_HEIGHT);
 				MainFrame.getInstance().internalPane.repaint();
-			}
-			
+			}	
 		}
-		
 	};
 	
 	Runnable stopRun = new Runnable()
