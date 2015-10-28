@@ -146,9 +146,9 @@ public class FilmInfoSchede extends DefaultGui
 			{
 				JLabel star = new JLabel();
 				if ((int) ((FRAME_WIDTH / 4) * 1.49) < FRAME_HEIGHT / 2)
-					star.setBounds(20 + FRAME_WIDTH / 8 - 50 + (20 * x), (int) ((FRAME_WIDTH / 4) * 1.49) + 85, 20, 20);
+					star.setBounds(20 + FRAME_WIDTH / 8 - 50 + (20 * x), (int) ((FRAME_WIDTH / 4) * 1.49) + 95, 20, 20);
 				else
-					star.setBounds(20 + (int) ((FRAME_HEIGHT / 2) * 0.67) / 2 - 50 + (20 * x), FRAME_HEIGHT / 2 + 85,
+					star.setBounds(20 + (int) ((FRAME_HEIGHT / 2) * 0.67) / 2 - 50 + (20 * x), FRAME_HEIGHT / 2 + 95,
 							20, 20);
 				star.setIcon(ImageUtils.getIcon("star_full.png"));
 				this.add(star);
@@ -157,9 +157,9 @@ public class FilmInfoSchede extends DefaultGui
 			{
 				JLabel star = new JLabel();
 				if ((int) ((FRAME_WIDTH / 4) * 1.49) < FRAME_HEIGHT / 2)
-					star.setBounds(20 + FRAME_WIDTH / 8 - 50 + (20 * x), (int) ((FRAME_WIDTH / 4) * 1.49) + 85, 20, 20);
+					star.setBounds(20 + FRAME_WIDTH / 8 - 50 + (20 * x), (int) ((FRAME_WIDTH / 4) * 1.49) + 95, 20, 20);
 				else
-					star.setBounds(20 + (int) ((FRAME_HEIGHT / 2) * 0.67) / 2 - 50 + (20 * x), FRAME_HEIGHT / 2 + 85,
+					star.setBounds(20 + (int) ((FRAME_HEIGHT / 2) * 0.67) / 2 - 50 + (20 * x), FRAME_HEIGHT / 2 + 95,
 							20, 20);
 				star.setIcon(ImageUtils.getIcon("star_half.png"));
 				this.add(star);
@@ -169,9 +169,9 @@ public class FilmInfoSchede extends DefaultGui
 			{
 				JLabel star = new JLabel();
 				if ((int) ((FRAME_WIDTH / 4) * 1.49) < FRAME_HEIGHT / 2)
-					star.setBounds(20 + FRAME_WIDTH / 8 - 50 + (20 * x), (int) ((FRAME_WIDTH / 4) * 1.49) + 85, 20, 20);
+					star.setBounds(20 + FRAME_WIDTH / 8 - 50 + (20 * x), (int) ((FRAME_WIDTH / 4) * 1.49) + 95, 20, 20);
 				else
-					star.setBounds(20 + (int) ((FRAME_HEIGHT / 2) * 0.67) / 2 - 50 + (20 * x), FRAME_HEIGHT / 2 + 85,
+					star.setBounds(20 + (int) ((FRAME_HEIGHT / 2) * 0.67) / 2 - 50 + (20 * x), FRAME_HEIGHT / 2 + 95,
 							20, 20);
 				star.setIcon(ImageUtils.getIcon("star_empty.png"));
 				this.add(star);
