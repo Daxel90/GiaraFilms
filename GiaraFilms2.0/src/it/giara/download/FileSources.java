@@ -82,7 +82,7 @@ public class FileSources
 	{
 		while (loadingBotList > 0)
 		{
-			Log.log(Log.DEBUG, totalBot);
+			Log.log(Log.DEBUG, "Bot: " + totalBot + "  " + filename);
 			FunctionsUtils.sleep(1000);
 		}
 	}
@@ -91,8 +91,10 @@ public class FileSources
 	{
 		while (totalBot <= 0)
 		{
-			Log.log(Log.DEBUG, totalBot);
+			Log.log(Log.DEBUG, "Bot: " + totalBot + "  " + filename);
 			FunctionsUtils.sleep(1000);
+			if (paused)
+				return;
 		}
 	}
 	
@@ -114,6 +116,9 @@ public class FileSources
 		
 		waitUntilthereAreAtLeastOneBot();
 		
+		if (paused)
+			return;
+			
 		if (totalBot <= 0)
 		{
 			ErrorHandler.fileNotAvailable(filename);
@@ -192,8 +197,12 @@ public class FileSources
 		totalBot = 0;
 		
 		if (paused)
+		{
+			Log.log(Log.IRC, "IN PAUSA:\t" + transfer.getFile().toString() + " " + transfer.getSize() + " bytes");
 			transfer.close();
-			
+			return;
+		}
+		
 		if (saveFile == null)
 			saveFile = new File(DirUtils.getDownloadDirectory(), transfer.getFile().getName());
 			
