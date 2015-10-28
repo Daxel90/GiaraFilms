@@ -30,23 +30,23 @@ public class SQLQuerySettings
 	public synchronized static void addDownload(String filename, String directory)
 	{
 		SQL.ExecuteQuerySettings("INSERT OR IGNORE INTO `Downloads`(`FileName`, `FileDirectory`) VALUES (\""
-				+ SQL.escape(filename) + "\", \"" + directory + "\");");
+				+ SQL.escape(filename) + "\", \"" + SQL.escape(directory) + "\");");
 	}
 	
 	public synchronized static void removeDownload(String filename)
 	{
-		SQL.ExecuteQuerySettings("DELETE FROM `Downloads` WHERE `FileName` = \"" + filename + "\";");
+		SQL.ExecuteQuerySettings("DELETE FROM `Downloads` WHERE `FileName` = \"" + SQL.escape(filename) + "\";");
 	}
 	
 	public synchronized static void setStatus(String filename, int status)
 	{
 		SQL.ExecuteQuerySettings(
-				"UPDATE `Downloads` SET `status` = " + status + " WHERE `FileName` = \"" + filename + "\";");
+				"UPDATE `Downloads` SET `status` = " + status + " WHERE `FileName` = \"" + SQL.escape(filename) + "\";");
 	}
 	
 	public synchronized static int getStatus(String filename)
 	{
-		ResultSet r = SQL.FetchDataSettings("SELECT * FROM `Downloads` WHERE `FileName` = \"" + filename + "\"");
+		ResultSet r = SQL.FetchDataSettings("SELECT * FROM `Downloads` WHERE `FileName` = \"" + SQL.escape(filename) + "\"");
 		try
 		{
 			if (r.next())
@@ -69,7 +69,7 @@ public class SQLQuerySettings
 		{
 			while (r.next())
 			{
-				download.add(new String[] { r.getString("FileName"), r.getString("FileDirectory"),
+				download.add(new String[] { SQL.unescape(r.getString("FileName")), SQL.unescape(r.getString("FileDirectory")),
 						"" + r.getInt("status") });
 			}
 		} catch (SQLException e)
@@ -83,7 +83,7 @@ public class SQLQuerySettings
 	public synchronized static void addParameters(String key, String Value)
 	{
 		SQL.ExecuteQuerySettings(
-				"INSERT OR IGNORE INTO `Parameters`(`Key`, `Value`) VALUES (\"" + key + "\", \"" + Value + "\");");
+				"INSERT OR IGNORE INTO `Parameters`(`Key`, `Value`) VALUES (\"" + key + "\", \"" + SQL.escape(Value) + "\");");
 	}
 	
 	public synchronized static String getCurrentParameter(String key, String defaultVal)
@@ -94,7 +94,7 @@ public class SQLQuerySettings
 		{
 			if (r.next())
 			{
-				return r.getString("Value");
+				return SQL.unescape(r.getString("Value"));
 			}
 		} catch (SQLException e)
 		{
