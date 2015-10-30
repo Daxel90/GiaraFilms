@@ -51,7 +51,9 @@ public class ChangeLogFrame extends JFrame
 		text.setHighlighter(null);
 		text.setOpaque(false);
 		text.setContentType("text/html");
-		text.setText("<html>" 
+		text.setText("<html>"
+				+ "<h2>--------------------" + "<h2>Dev PreRelese 8"
+				+ "<br><h3>\t- Fix Importante Salvataggio file in directory con spazi"
 				+ "<h2>--------------------" + "<h2>Dev PreRelese 7"
 				+ "<br><h3>\t- Fix del Fix Pausa Download (Dev6)"
 				+ "<br><h3>\t- Apportate piccole modifice alle gui"
