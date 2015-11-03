@@ -52,6 +52,8 @@ public class ChangeLogFrame extends JFrame
 		text.setOpaque(false);
 		text.setContentType("text/html");
 		text.setText("<html>"
+				+ "<h2>--------------------" + "<h2>Dev PreRelese 9"
+				+ "<br><h3>\t- Fix per Aggiornamento sito Cooming Soon"
 				+ "<h2>--------------------" + "<h2>Dev PreRelese 8"
 				+ "<br><h3>\t- Fix Importante Salvataggio file in directory con spazi"
 				+ "<h2>--------------------" + "<h2>Dev PreRelese 7"

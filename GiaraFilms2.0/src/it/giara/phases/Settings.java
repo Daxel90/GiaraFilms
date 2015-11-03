@@ -11,7 +11,7 @@ import it.giara.utils.DirUtils;
 
 public class Settings
 {
-	public final static int VERSION = 8;
+	public final static int VERSION = 9;
 	private final static int END_PreReleseVersion = Integer.MAX_VALUE;
 	private final static int END_BetaVersion = Integer.MAX_VALUE;
 	private static HashMap<String, String> config = new HashMap<String, String>();
@@ -71,6 +71,11 @@ public class Settings
 		{
 			SQLQuery.DbFix1();
 			setParameter("DBversion","6");
+		}
+		if(Integer.parseInt(Settings.getParameter("DBversion")) < 8)
+		{
+			SQLQuery.DbFix1();
+			setParameter("DBversion","8");
 		}
 	}
 	
