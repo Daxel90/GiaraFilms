@@ -33,7 +33,7 @@ public class HTTPTVSerieInfo
 			while ((line = rd.readLine()) != null)
 			{
 				String trimmed = line.trim();
-				if (trimmed.startsWith("<div class=\"product-profile-box-toprow-text\">"))
+				if (trimmed.startsWith("<!-- Paragrafo -->"))
 				{
 					descr = true;
 					continue;
@@ -49,9 +49,9 @@ public class HTTPTVSerieInfo
 					serie.desc += trimmed.replace("<p>", "").replace("</p>", "") + " ";
 				}
 				
-				if (trimmed.startsWith("<img id=\"product-profile-box-image-poster\" src=\""))
+				if (trimmed.startsWith("<img itemprop=\"image\" src=\""))
 				{
-					String k = trimmed.replace("<img id=\"product-profile-box-image-poster\" src=\"", "")
+					String k = trimmed.replace("<img itemprop=\"image\" src=\"", "")
 							.split("\"")[0];
 					serie.BigImage = k;
 					continue;

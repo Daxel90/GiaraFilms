@@ -33,29 +33,30 @@ public class HTTPFilmInfo
 			while ((line = rd.readLine()) != null)
 			{
 				String trimmed = line.trim();
-				if (trimmed.startsWith("<p style=\"margin-bottom: 20px;\">"))
+				
+				if (trimmed.startsWith("<!-- Paragrafo -->"))
 				{
 					descr = true;
 					continue;
 				}
 				if (descr)
 				{
-					if (trimmed.startsWith("</p>"))
+					film.desc += trimmed.replace("<p>", "").replace("</p>", "") + " ";
+					if (trimmed.contains("</p>"))
 					{
 						descr = false;
 						continue;
 					}
-					film.desc += trimmed+" ";
 				}
-				if(trimmed.startsWith("<span itemprop='ratingValue'>"))
+				if(trimmed.startsWith("<div id=\"voto-pubblico\" class=\"voto voto-pubblico col-xs-12 col-sm-4 h6\" data-rating=\""))
 				{
-					String  k = trimmed.replace("<span itemprop='ratingValue'>", "").split("<")[0];
+					String  k = trimmed.replace("<div id=\"voto-pubblico\" class=\"voto voto-pubblico col-xs-12 col-sm-4 h6\" data-rating=\"", "").split("\">")[0];
 					film.vote = Float.parseFloat(k);
 					continue;
 				}
-				if(trimmed.startsWith("<img itemprop=\"image\" id=\"product-profile-box-image-poster\" src=\""))
+				if(trimmed.startsWith("<img itemprop=\"image\" src=\""))
 				{
-					String  k = trimmed.replace("<img itemprop=\"image\" id=\"product-profile-box-image-poster\" src=\"", "").split("\"")[0];
+					String  k = trimmed.replace("<img itemprop=\"image\" src=\"", "").split("\"")[0];
 					film.BigImage = k;
 					continue;
 				}

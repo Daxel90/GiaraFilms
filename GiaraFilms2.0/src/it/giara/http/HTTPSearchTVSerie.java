@@ -55,11 +55,11 @@ public class HTTPSearchTVSerie
 		while ((line = rd.readLine()) != null)
 		{
 			l++;
-			if (line.contains("<!-- /Component SectionContentsbox: MOVIE list -->"))
+			if (line.contains("<div class=\"box-lista-cinema\">"))
 			{
 				find = l;
 			}
-			if (find != -1 && l == find + 6)
+			if (find != -1 && l == find + 1)
 			{
 				if (!line.contains("<a href="))
 				{
@@ -67,32 +67,32 @@ public class HTTPSearchTVSerie
 						getFileInfoAdvanced(title);
 					return;
 				}
-				scheda.link = "http://www.comingsoon.it" + line.trim().split("'")[1]; // link
+				scheda.link = "http://www.comingsoon.it" + line.trim().split("\"")[1]; // link
 				Log.log(Log.FILMINFO, scheda.link);
 			}
-			if (find != -1 && l == find + 7)
+			if (find != -1 && l == find + 3)
 			{
-				scheda.smallImage = line.trim().split("'")[3];
+				scheda.smallImage = line.trim().split("\"")[1];
 				Log.log(Log.FILMINFO, scheda.smallImage); // small image
 			}
-			if (find != -1 && l == find + 10)
+			if (find != -1 && l == find + 6)
 			{
-				scheda.Titolo = StringEscapeUtils.unescapeHtml4(line.trim().replace("<h3>", "").replace("</h3>", ""));
+				scheda.Titolo = StringEscapeUtils.unescapeHtml4(line.trim().replace("<div class=\"h5 titolo cat-hover-color anim25\">", "").replace("</div>", ""));
 				Log.log(Log.FILMINFO, scheda.Titolo); // Titolo
 			}
-			if (find != -1 && l == find + 13)
+			if (find != -1 && l == find + 10)
 			{
 				scheda.Generi = line.trim().replace("<li><span>GENERE</span>:", "").replace("</li>", "").trim()
 						.split(", ");
 				Log.log(Log.FILMINFO, scheda.Generi[0]); // Genere
 			}
-			if (find != -1 && l == find + 14)
+			if (find != -1 && l == find + 11)
 			{
 				scheda.anno = Integer
 						.parseInt(line.trim().replace("<li><span>ANNO</span>:", "").replace("</li>", "").trim());
 				Log.log(Log.FILMINFO, scheda.anno); // Anno
 			}
-			if (find != -1 && l == find + 15)
+			if (find != -1 && l == find + 12)
 			{
 				scheda.nazionalita = StringEscapeUtils.unescapeHtml4(
 						line.trim().replace("<li><span>NAZIONALITA'</span>:", "").replace("</li>", "").trim());
