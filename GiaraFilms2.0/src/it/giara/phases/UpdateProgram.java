@@ -73,7 +73,7 @@ public class UpdateProgram
 			final ArrayList<String> command = new ArrayList<String>();
 			command.add(javaBin);
 			command.add("-jar");
-			command.add(newF.getPath());
+			command.add(newF.getAbsolutePath());
 			
 			final ProcessBuilder builder = new ProcessBuilder(command);
 			builder.start();
