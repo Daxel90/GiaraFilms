@@ -21,6 +21,7 @@ public class Log
 	public static LogType IRC = LogType.IRC;
 	public static LogType DOWNLOAD = LogType.DOWNLOAD;
 	public static LogType SCANSERVICE = LogType.SCANSERVICE;
+	public static LogType TMDB = LogType.TMDB;
 	
 	public static void log(LogType l, Object o)
 	{
@@ -71,5 +72,5 @@ public class Log
 
 enum LogType
 {
-	NETWORK, DEBUG, INFO, CONFIG, FILEINFO, FILMINFO, DB, GUI, ERROR, IMAGE, IRC, DOWNLOAD, SCANSERVICE
+	NETWORK, DEBUG, INFO, CONFIG, FILEINFO, FILMINFO, DB, GUI, ERROR, IMAGE, IRC, DOWNLOAD, SCANSERVICE, TMDB
 }
