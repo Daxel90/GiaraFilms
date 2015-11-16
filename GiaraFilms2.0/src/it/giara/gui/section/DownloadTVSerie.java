@@ -44,7 +44,7 @@ public class DownloadTVSerie extends DefaultGui
 						lista.put(serieN, new HashMap<Integer, ArrayList<String[]>>());
 					if (!lista.get(serieN).containsKey(episodeN))
 						lista.get(serieN).put(episodeN, new ArrayList<String[]>());
-					lista.get(serieN).get(episodeN).add(SQLQuery.getFileName(file));
+					lista.get(serieN).get(episodeN).add(SQLQuery.getFileNameAndSize(file));
 				}
 			}
 		}

@@ -13,6 +13,7 @@ import org.apache.commons.lang3.StringEscapeUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+@Deprecated
 public class HTTPSearchTVSerie
 {
 	// http://www.animeclick.it/

@@ -7,7 +7,7 @@ import java.net.URLConnection;
 
 import it.giara.schede.SchedaFilm;
 import it.giara.utils.Log;
-
+@Deprecated
 public class HTTPFilmInfo
 {
 	public SchedaFilm film;

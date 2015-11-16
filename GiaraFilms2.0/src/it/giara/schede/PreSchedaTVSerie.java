@@ -11,7 +11,7 @@ import it.giara.utils.DirUtils;
 import it.giara.utils.Log;
 import it.giara.utils.MD5;
 import it.giara.utils.ThreadManager;
-
+@Deprecated
 public class PreSchedaTVSerie
 {
 	public int IdDb = -1;

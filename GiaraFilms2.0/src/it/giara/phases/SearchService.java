@@ -4,13 +4,12 @@ import it.giara.analyze.FileInfo;
 import it.giara.analyze.enums.MainType;
 import it.giara.gui.utils.AbstractFilmList;
 import it.giara.http.HTTPList;
-import it.giara.http.HTTPSearchFilm;
-import it.giara.http.HTTPSearchTVSerie;
-import it.giara.schede.PreSchedaFilm;
-import it.giara.schede.PreSchedaTVSerie;
 import it.giara.source.ListLoader;
 import it.giara.source.SourceChan;
 import it.giara.sql.SQLQuery;
+import it.giara.tmdb.http.TMDBSearchFilm;
+import it.giara.tmdb.http.TMDBSearchTVSerie;
+import it.giara.tmdb.schede.TMDBScheda;
 import it.giara.utils.FunctionsUtils;
 import it.giara.utils.Log;
 import it.giara.utils.ThreadManager;
@@ -69,20 +68,24 @@ public class SearchService
 							list.addFile(new String[] { s2, size });
 							if (SQLQuery.existFile(s2))
 							{
-								int IDFile = SQLQuery.getFileId(s2);
-								int[] FileInfo = SQLQuery.readFileInfoWithFileID(IDFile);
-								if (FileInfo[0] == MainType.Film.ID)
-								{
-									PreSchedaFilm film = SQLQuery.readPreSchedaFilm(FileInfo[1]);
-									if (film != null)
-										list.addPreSchedaFilm(film);
-								}
-								else if (FileInfo[0] == MainType.SerieTV.ID)
-								{
-									PreSchedaTVSerie tvserie = SQLQuery.readPreSchedaTVSerie(FileInfo[1]);
-									if (tvserie != null)
-										list.addPreSchedaTVSerie(tvserie);
-								}
+								int IDScheda = SQLQuery.getSchedaId(s2);
+								if (IDScheda == -1)
+									continue;
+									
+								TMDBScheda scheda = SQLQuery.readScheda(IDScheda, MainType.getMainTypeByID(SQLQuery.getFileType(s2)));
+								
+								if (scheda != null)
+									switch (scheda.type)
+									{
+										case Film:
+											list.addPreSchedaFilm(scheda);
+											break;
+										case SerieTV:
+											list.addPreSchedaTVSerie(scheda);
+											break;
+										default:
+											break;
+									}
 							}
 							else
 							{
@@ -91,7 +94,6 @@ public class SearchService
 									@Override
 									public void run()
 									{
-										int fileID = SQLQuery.writeFile(s2, size);
 										FileInfo f = new FileInfo(s2);
 										
 										switch (f.type)
@@ -104,22 +106,22 @@ public class SearchService
 													
 												if (cache == -1)
 												{
-													HTTPSearchFilm httpF = new HTTPSearchFilm(f.title);
+													TMDBSearchFilm httpF = new TMDBSearchFilm(f.title);
 													if (httpF.scheda == null)
 													{
 														SQLQuery.writeCacheSearch(f.title, f.type, -1);
 														break;
 													}
-													int schedaF = SQLQuery.writePreSchedaFilm(httpF.scheda);
-													httpF.scheda.IdDb = schedaF;
+													int schedaID = SQLQuery.writeScheda(httpF.scheda);
+													
 													list.addPreSchedaFilm(httpF.scheda);
 													
-													SQLQuery.writeCacheSearch(f.title, f.type, schedaF);
-													SQLQuery.writeFileInfo(fileID, f.type, schedaF);
+													SQLQuery.writeCacheSearch(f.title, f.type, schedaID);
+													SQLQuery.writeFile(s2, size, schedaID, f.type);
 												}
 												else
 												{
-													SQLQuery.writeFileInfo(fileID, f.type, cache);
+													SQLQuery.writeFile(s2, size, cache, f.type);
 												}
 												break;
 											case SerieTV:
@@ -130,25 +132,25 @@ public class SearchService
 													
 												if (cache2 == -1)
 												{
-													HTTPSearchTVSerie httpF = new HTTPSearchTVSerie(f.title);
+													TMDBSearchTVSerie httpF = new TMDBSearchTVSerie(f.title);
 													if (httpF.scheda == null)
 													{
 														SQLQuery.writeCacheSearch(f.title, f.type, -1);
 														break;
 													}
-													int schedaSTV = SQLQuery.writePreSchedaTvSeries(httpF.scheda);
-													httpF.scheda.IdDb = schedaSTV;
+													int schedaSTV = SQLQuery.writeScheda(httpF.scheda);
+													
 													SQLQuery.writeCacheSearch(f.title, f.type, schedaSTV);
-													SQLQuery.writeFileInfo(fileID, f.type, schedaSTV);
+													int FileId = SQLQuery.writeFile(s2, size, schedaSTV, f.type);
 													
 													list.addPreSchedaTVSerie(httpF.scheda);
 													
-													SQLQuery.writeEpisodeInfo(fileID, schedaSTV, f.episode, f.series);
+													SQLQuery.writeEpisodeInfo(FileId, schedaSTV, f.episode, f.series);
 												}
 												else
 												{
-													SQLQuery.writeFileInfo(fileID, f.type, cache2);
-													SQLQuery.writeEpisodeInfo(fileID, cache2, f.episode, f.series);
+													int FileId = SQLQuery.writeFile(s2, size, cache2, f.type);
+													SQLQuery.writeEpisodeInfo(FileId, cache2, f.episode, f.series);
 												}
 												
 												break;

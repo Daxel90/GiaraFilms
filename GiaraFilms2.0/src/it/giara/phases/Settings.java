@@ -1,5 +1,6 @@
 package it.giara.phases;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.prefs.Preferences;
 
@@ -20,7 +21,7 @@ public class Settings
 	
 	public static void init()
 	{
-		config.put("ProgramVersion", SQLQuerySettings.getCurrentParameter("ProgramVersion", "0"));
+		config.put("ProgramVersion", SQLQuerySettings.getCurrentParameter("ProgramVersion", ""+VERSION));
 		config.put("DBversion", SQLQuerySettings.getCurrentParameter("DBversion", "" + VERSION));
 		config.put("downloadfolder", SQLQuerySettings.getCurrentParameter("downloadfolder",
 				DirUtils.getDefaultDownloadDir().getAbsolutePath()));
@@ -67,16 +68,21 @@ public class Settings
 			SQLQuerySettings.TableFix1();
 			setParameter("DBversion","4");
 		}
-		if(Integer.parseInt(Settings.getParameter("DBversion")) < 6)
-		{
-			SQLQuery.DbFix1();
-			setParameter("DBversion","6");
-		}
-		if(Integer.parseInt(Settings.getParameter("DBversion")) < 8)
-		{
-			SQLQuery.DbFix1();
-			setParameter("DBversion","8");
-		}
+//		if(Integer.parseInt(Settings.getParameter("DBversion")) < 6)
+//		{
+//			SQLQuery.DbFix1();
+//			setParameter("DBversion","6");
+//		}
+//		if(Integer.parseInt(Settings.getParameter("DBversion")) < 8)
+//		{
+//			SQLQuery.DbFix1();
+//			setParameter("DBversion","8");
+//		}
+		
+//		if(Integer.parseInt(Settings.getParameter("DBversion")) < 10)
+//		{
+//			new File(DirUtils.getWorkingDirectory(), "FileDatabase.db").delete();
+//		}
 	}
 	
 }

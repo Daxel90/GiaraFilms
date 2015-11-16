@@ -15,28 +15,28 @@ import javax.swing.border.EtchedBorder;
 
 import it.giara.gui.MainFrame;
 import it.giara.gui.section.FilmInfoSchede;
-import it.giara.schede.PreSchedaFilm;
+import it.giara.tmdb.schede.TMDBScheda;
 
 public class FilmButton extends JLabel implements MouseListener
 {
 	private static final long serialVersionUID = 4695042759651824794L;
 	public BufferedImage Cover;
 	public boolean isOver = false;
-	PreSchedaFilm film;
+	TMDBScheda film;
 	JLabel text = new JLabel();
 	FilmListPanel panel;
 	
-	public FilmButton(PreSchedaFilm f, int x, int y, FilmListPanel pa)
+	public FilmButton(TMDBScheda f, int x, int y, FilmListPanel pa)
 	{
 		super();
 		panel = pa;
 		film = f;
 		if (film == null)
 			return;
-		if (film.img == null)
-			Cover = film.initImage(panel);
+		if (film.poster_w140 == null)
+			Cover = film.initPoster_w140(panel);
 		else
-			Cover = film.img;
+			Cover = film.poster_w140;
 			
 		this.addMouseListener(this);
 		this.setOpaque(false);
@@ -44,17 +44,17 @@ public class FilmButton extends JLabel implements MouseListener
 		this.setBounds(x, y, 140, 240);
 		this.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
 		
-		String Stext = "<html><h3>" + film.Titolo + "</html>";
+		String Stext = "<html><h3>" + film.title + "</html>";
 		
-		if (film.Titolo.length() > 8)
-			Stext = "<html><h4>" + film.Titolo + "</html>";
+		if (film.title.length() > 8)
+			Stext = "<html><h4>" + film.title + "</html>";
 			
-		if (film.Titolo.length() > 16)
-			Stext = "<html><h5>" + film.Titolo + "</html>";
+		if (film.title.length() > 16)
+			Stext = "<html><h5>" + film.title + "</html>";
 			
-		if (film.Titolo.length() > 24)
+		if (film.title.length() > 24)
 		{
-			String[] p = film.Titolo.split(" ");
+			String[] p = film.title.split(" ");
 			String newTitle = "";
 			for (int j = 0; j < p.length; j++)
 			{

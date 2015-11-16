@@ -14,6 +14,8 @@ import it.giara.gui.utils.ImageUtils;
 import it.giara.http.HTTPFilmInfo;
 import it.giara.schede.PreSchedaFilm;
 import it.giara.schede.SchedaFilm;
+import it.giara.tmdb.schede.TMDBScheda;
+import it.giara.utils.FunctionsUtils;
 import it.giara.utils.ThreadManager;
 
 public class FilmInfoSchede extends DefaultGui
@@ -21,9 +23,7 @@ public class FilmInfoSchede extends DefaultGui
 	private static final long serialVersionUID = -1;
 	
 	private DefaultGui back;
-	private PreSchedaFilm film;
-	private SchedaFilm scheda;
-	private AnimatedImageButton loading;
+	private TMDBScheda scheda;
 	
 	JEditorPane text;
 	JLabel cover;
@@ -31,22 +31,11 @@ public class FilmInfoSchede extends DefaultGui
 	JLabel info;
 	ImageButton downloads;
 	
-	public FilmInfoSchede(DefaultGui gui, PreSchedaFilm f)
+	public FilmInfoSchede(DefaultGui gui, TMDBScheda f)
 	{
 		super();
 		back = gui;
-		film = f;
-		final HTTPFilmInfo getInfo = new HTTPFilmInfo(film.link);
-		scheda = getInfo.film;
-		Runnable run = new Runnable()
-		{
-			@Override
-			public void run()
-			{
-				getInfo.getInfo();
-			}
-		};
-		ThreadManager.submitCacheTask(run);
+		scheda = f;
 	}
 	
 	public void loadComponent()
@@ -59,7 +48,7 @@ public class FilmInfoSchede extends DefaultGui
 		
 		JLabel title = new JLabel();
 		title.setBounds(FRAME_WIDTH / 8, 0, FRAME_WIDTH * 3 / 4, 40);
-		title.setText("<html><h1>" + film.Titolo + "</html>");
+		title.setText("<html><h1>" + scheda.title + "</html>");
 		title.setHorizontalAlignment(JLabel.CENTER);
 		this.add(title);
 		
@@ -69,23 +58,18 @@ public class FilmInfoSchede extends DefaultGui
 		back.setBounds(5, 5, 32, 32);
 		this.add(back);
 		
-		if (scheda.loading)
-		{
-			loading = new AnimatedImageButton("SyncBig(n)", 5, null, UpdateStatus);
-			loading.setBounds((FRAME_WIDTH - 128) / 2, (FRAME_HEIGHT - 128) / 2, 128, 128);
-			add(loading);
-		}
 		if (cover == null)
 			cover = new JLabel();
+			
 		if ((int) ((FRAME_WIDTH / 4) * 1.49) < FRAME_HEIGHT / 2)
 			cover.setBounds(20, 80, FRAME_WIDTH / 4, (int) ((FRAME_WIDTH / 4) * 1.5));
 		else
 			cover.setBounds(20, 80, (int) ((FRAME_HEIGHT / 2) * 0.67), FRAME_HEIGHT / 2);
+			
 		cover.setBorder(BorderFactory.createEtchedBorder());
-		if (scheda.img != null)
-			cover.setIcon(ImageUtils
-					.getIcon(ImageUtils.scaleImageOld(scheda.initImage(cover), cover.getWidth(), cover.getHeight())));
-		cover.setVisible(!scheda.loading);
+		cover.setIcon(ImageUtils.getIcon(
+				ImageUtils.scaleImageOld(scheda.initPoster_original(cover), cover.getWidth(), cover.getHeight())));
+				
 		add(cover);
 		
 		text = new JEditorPane();
@@ -98,7 +82,7 @@ public class FilmInfoSchede extends DefaultGui
 		text.setBackground(ColorUtils.Back);
 		
 		scroll = new JScrollPane(text);
-		scroll.setFocusable(false);
+		scroll.setFocusable(true);
 		scroll.setBorder(BorderFactory.createEmptyBorder());
 		scroll.setBackground(ColorUtils.Back);
 		
@@ -109,9 +93,10 @@ public class FilmInfoSchede extends DefaultGui
 			scroll.setBounds((int) ((FRAME_HEIGHT / 2) * 0.67) + 60, 80,
 					FRAME_WIDTH - ((int) ((FRAME_HEIGHT / 2) * 0.67) + 80), FRAME_HEIGHT / 2 - 35);
 					
-		scroll.setVisible(!scheda.loading);
-		scroll.setOpaque(false);
+		scroll.setOpaque(true);
+		scroll.setVisible(false);
 		this.add(scroll);
+		ThreadManager.submitCacheTask(UpdateText);
 		
 		info = new JLabel();
 		if ((int) ((FRAME_WIDTH / 4) * 1.49) < FRAME_HEIGHT / 2)
@@ -120,72 +105,82 @@ public class FilmInfoSchede extends DefaultGui
 		else
 			info.setBounds((int) ((FRAME_HEIGHT / 2) * 0.67) + 60, FRAME_HEIGHT / 2 + 50,
 					FRAME_WIDTH - ((int) ((FRAME_HEIGHT / 2) * 0.67) + 80), 30);
-		info.setText("<html><h4> " + "Anno: " + film.anno
-				+ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + "Paese: " + film.nazionalita
-				+ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + "Regia: " + film.regia + "<br>"
-				+ "Genere: " + film.getGeneri().replace(",", ", ") + "</html>");
-		info.setVisible(!scheda.loading);
+					
+		// info.setText("<html><h4> " + "Anno: " + film.anno
+		// + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" +
+		// "Paese: " + film.nazionalita
+		// + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" +
+		// "Regia: " + film.regia + "<br>"
+		// + "Genere: " + film.getGeneri().replace(",", ", ") + "</html>");
+		// info.setVisible(true);
 		this.add(info);
-		drawRating();
+		// drawRating();
 		
 		downloads = new ImageButton(ImageUtils.getImage("gui/download.png"),
 				ImageUtils.getImage("gui/download_over.png"), ImageUtils.getImage("gui/download_over.png"),
 				OpenDownloads);
 		downloads.setBounds((FRAME_WIDTH - 64) / 2, FRAME_HEIGHT - 100, 64, 64);
-		downloads.setVisible(!scheda.loading);
+		downloads.setVisible(true);
 		this.add(downloads);
 		
 	}
 	
-	public void drawRating()
-	{
-		if (!scheda.loading)
-		{
-			int x = 0;
-			for (x = 0; x < scheda.vote - 1; x++)
-			{
-				JLabel star = new JLabel();
-				if ((int) ((FRAME_WIDTH / 4) * 1.49) < FRAME_HEIGHT / 2)
-					star.setBounds(20 + FRAME_WIDTH / 8 - 50 + (20 * x), (int) ((FRAME_WIDTH / 4) * 1.49) + 95, 20, 20);
-				else
-					star.setBounds(20 + (int) ((FRAME_HEIGHT / 2) * 0.67) / 2 - 50 + (20 * x), FRAME_HEIGHT / 2 + 95,
-							20, 20);
-				star.setIcon(ImageUtils.getIcon("star_full.png"));
-				this.add(star);
-			}
-			if (x + 0.5f >= scheda.vote)
-			{
-				JLabel star = new JLabel();
-				if ((int) ((FRAME_WIDTH / 4) * 1.49) < FRAME_HEIGHT / 2)
-					star.setBounds(20 + FRAME_WIDTH / 8 - 50 + (20 * x), (int) ((FRAME_WIDTH / 4) * 1.49) + 95, 20, 20);
-				else
-					star.setBounds(20 + (int) ((FRAME_HEIGHT / 2) * 0.67) / 2 - 50 + (20 * x), FRAME_HEIGHT / 2 + 95,
-							20, 20);
-				star.setIcon(ImageUtils.getIcon("star_half.png"));
-				this.add(star);
-				x++;
-			}
-			for (; x < 5; x++)
-			{
-				JLabel star = new JLabel();
-				if ((int) ((FRAME_WIDTH / 4) * 1.49) < FRAME_HEIGHT / 2)
-					star.setBounds(20 + FRAME_WIDTH / 8 - 50 + (20 * x), (int) ((FRAME_WIDTH / 4) * 1.49) + 95, 20, 20);
-				else
-					star.setBounds(20 + (int) ((FRAME_HEIGHT / 2) * 0.67) / 2 - 50 + (20 * x), FRAME_HEIGHT / 2 + 95,
-							20, 20);
-				star.setIcon(ImageUtils.getIcon("star_empty.png"));
-				this.add(star);
-			}
-			this.repaint();
-		}
-	}
+	// public void drawRating()
+	// {
+	// if (!scheda.loading)
+	// {
+	// int x = 0;
+	// for (x = 0; x < scheda.vote - 1; x++)
+	// {
+	// JLabel star = new JLabel();
+	// if ((int) ((FRAME_WIDTH / 4) * 1.49) < FRAME_HEIGHT / 2)
+	// star.setBounds(20 + FRAME_WIDTH / 8 - 50 + (20 * x), (int) ((FRAME_WIDTH
+	// / 4) * 1.49) + 95, 20, 20);
+	// else
+	// star.setBounds(20 + (int) ((FRAME_HEIGHT / 2) * 0.67) / 2 - 50 + (20 *
+	// x), FRAME_HEIGHT / 2 + 95,
+	// 20, 20);
+	// star.setIcon(ImageUtils.getIcon("star_full.png"));
+	// this.add(star);
+	// }
+	// if (x + 0.5f >= scheda.vote)
+	// {
+	// JLabel star = new JLabel();
+	// if ((int) ((FRAME_WIDTH / 4) * 1.49) < FRAME_HEIGHT / 2)
+	// star.setBounds(20 + FRAME_WIDTH / 8 - 50 + (20 * x), (int) ((FRAME_WIDTH
+	// / 4) * 1.49) + 95, 20, 20);
+	// else
+	// star.setBounds(20 + (int) ((FRAME_HEIGHT / 2) * 0.67) / 2 - 50 + (20 *
+	// x), FRAME_HEIGHT / 2 + 95,
+	// 20, 20);
+	// star.setIcon(ImageUtils.getIcon("star_half.png"));
+	// this.add(star);
+	// x++;
+	// }
+	// for (; x < 5; x++)
+	// {
+	// JLabel star = new JLabel();
+	// if ((int) ((FRAME_WIDTH / 4) * 1.49) < FRAME_HEIGHT / 2)
+	// star.setBounds(20 + FRAME_WIDTH / 8 - 50 + (20 * x), (int) ((FRAME_WIDTH
+	// / 4) * 1.49) + 95, 20, 20);
+	// else
+	// star.setBounds(20 + (int) ((FRAME_HEIGHT / 2) * 0.67) / 2 - 50 + (20 *
+	// x), FRAME_HEIGHT / 2 + 95,
+	// 20, 20);
+	// star.setIcon(ImageUtils.getIcon("star_empty.png"));
+	// this.add(star);
+	// }
+	// this.repaint();
+	// }
+	// }
 	
 	Runnable OpenDownloads = new Runnable()
 	{
 		@Override
 		public void run()
 		{
-			MainFrame.getInstance().setInternalPane(new DownloadFilm(guiInstance, film));
+			// MainFrame.getInstance().setInternalPane(new
+			// DownloadFilm(guiInstance, scheda));
 		}
 	};
 	
@@ -198,24 +193,14 @@ public class FilmInfoSchede extends DefaultGui
 		}
 	};
 	
-	Runnable UpdateStatus = new Runnable()
+	Runnable UpdateText = new Runnable()
 	{
 		@Override
 		public void run()
 		{
-			if (!scheda.loading)
-			{
-				loading.setVisible(false);
-				
-				cover.setVisible(true);
-				cover.setIcon(ImageUtils.getIcon(
-						ImageUtils.scaleImageOld(scheda.initImage(cover), cover.getWidth(), cover.getHeight())));
-				text.setText("<html><h2>" + scheda.desc + "</html>");
-				scroll.setVisible(true);
-				info.setVisible(true);
-				downloads.setVisible(true);
-				drawRating();
-			}
+			FunctionsUtils.sleep(10);
+			text.setText("<html><h2>" + scheda.desc + "</html>");
+			scroll.setVisible(true);
 		}
 	};
 	

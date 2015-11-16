@@ -13,7 +13,7 @@ public class SQL
 {
 	static Connection c = null;
 	static Statement stmt = null;
-	static File db = new File(DirUtils.getWorkingDirectory(), "FileDatabase.db");
+	static File db = new File(DirUtils.getWorkingDirectory(), "DatabaseFile.db");
 	
 	static Connection cSett = null;
 	static Statement stmtSett = null;
@@ -112,14 +112,14 @@ public class SQL
 	{
 		if (val == null)
 			return "";
-		return val.replace("'", "\'").replace("\"", "\\\"");
+		return val.replace("'", "''");
 	}
 	
 	public static String unescape(String val)
 	{
 		if (val == null)
 			return "";
-		return val.replace("\'", "'").replace("\\\"", "\"");
+		return val.replace("''", "'");
 	}
 	
 }

@@ -6,14 +6,13 @@ import javax.swing.JPanel;
 
 import it.giara.analyze.enums.MainType;
 import it.giara.gui.components.FilmListPanel;
-import it.giara.schede.PreSchedaFilm;
-import it.giara.schede.PreSchedaTVSerie;
+import it.giara.tmdb.schede.TMDBScheda;
 
 public class AbstractFilmList
 {
 	public boolean loading = false;
-	public ArrayList<PreSchedaFilm> films = new ArrayList<PreSchedaFilm>();
-	public ArrayList<PreSchedaTVSerie> series = new ArrayList<PreSchedaTVSerie>();
+	public ArrayList<TMDBScheda> films = new ArrayList<TMDBScheda>();
+	public ArrayList<TMDBScheda> series = new ArrayList<TMDBScheda>();
 	public ArrayList<String[]> allFile = new ArrayList<String[]>();
 	private JPanel panel;
 	
@@ -22,17 +21,17 @@ public class AbstractFilmList
 		panel = pane;
 	}
 	
-	public void addPreSchedaFilm(PreSchedaFilm p)
+	public void addPreSchedaFilm(TMDBScheda p)
 	{
 		if (p == null)
 			return;
-		if (p.Titolo == null)
+		if (p.title == null)
 			return;
-		if (p.Titolo.equals(""))
+		if (p.title.equals(""))
 			return;
 		for (int k = 0; k < films.size(); k++)
 		{
-			if (p.Titolo.equals(films.get(k).Titolo))
+			if (p.title.equals(films.get(k).title))
 				return;
 		}
 		
@@ -40,17 +39,17 @@ public class AbstractFilmList
 		notifyChange(MainType.Film);
 	}
 	
-	public void addPreSchedaTVSerie(PreSchedaTVSerie p)
+	public void addPreSchedaTVSerie(TMDBScheda p)
 	{
 		if (p == null)
 			return;
-		if (p.Titolo == null)
+		if (p.title == null)
 			return;
-		if (p.Titolo.equals(""))
+		if (p.title.equals(""))
 			return;
 		for (int k = 0; k < series.size(); k++)
 		{
-			if (p.Titolo.equals(series.get(k).Titolo))
+			if (p.title.equals(series.get(k).title))
 				return;
 		}
 		

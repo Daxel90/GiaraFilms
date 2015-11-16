@@ -11,6 +11,7 @@ import java.util.Iterator;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import it.giara.analyze.enums.MainType;
 import it.giara.tmdb.schede.TMDBScheda;
 import it.giara.utils.Log;
 
@@ -87,6 +88,7 @@ public class TMDBSearchTVSerie
 					scheda.genre_ids[i] = iterator.next().intValue();
 				}
 				scheda.vote = film.optDouble("vote_average");
+				scheda.type = MainType.SerieTV;
 				break;
 			}
 		}

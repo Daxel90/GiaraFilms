@@ -7,7 +7,7 @@ import java.net.URLConnection;
 
 import it.giara.schede.SchedaTVSerie;
 import it.giara.utils.Log;
-
+@Deprecated
 public class HTTPTVSerieInfo
 {
 	public SchedaTVSerie serie;

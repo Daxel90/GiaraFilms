@@ -2,11 +2,11 @@ package it.giara.phases;
 
 import it.giara.analyze.FileInfo;
 import it.giara.http.HTTPList;
-import it.giara.http.HTTPSearchFilm;
-import it.giara.http.HTTPSearchTVSerie;
 import it.giara.source.ListLoader;
 import it.giara.source.SourceChan;
 import it.giara.sql.SQLQuery;
+import it.giara.tmdb.http.TMDBSearchFilm;
+import it.giara.tmdb.http.TMDBSearchTVSerie;
 import it.giara.utils.FunctionsUtils;
 import it.giara.utils.Log;
 import it.giara.utils.ThreadManager;
@@ -57,7 +57,6 @@ public class ScanService implements Runnable
 						@Override
 						public void run()
 						{
-							int fileID = SQLQuery.writeFile(s2,size);
 							FileInfo f = new FileInfo(s2);
 							
 							switch (f.type)
@@ -70,21 +69,21 @@ public class ScanService implements Runnable
 										
 									if (cache == -1)
 									{
-										HTTPSearchFilm httpF = new HTTPSearchFilm(f.title);
+										TMDBSearchFilm httpF = new TMDBSearchFilm(f.title);
 										if (httpF.scheda == null)
 										{
 											SQLQuery.writeCacheSearch(f.title, f.type, -1);
 											break;
 										}
-										int schedaF = SQLQuery.writePreSchedaFilm(httpF.scheda);
+										int schedaID = SQLQuery.writeScheda(httpF.scheda);
 										
-										SQLQuery.writeCacheSearch(f.title, f.type, schedaF);
-										SQLQuery.writeFileInfo(fileID, f.type, schedaF);
+										SQLQuery.writeCacheSearch(f.title, f.type, schedaID);
+										SQLQuery.writeFile(s2,size, schedaID, f.type);
 										Nfilm++;
 									}
 									else
 									{
-										SQLQuery.writeFileInfo(fileID, f.type, cache);
+										SQLQuery.writeFile(s2,size, cache, f.type);
 									}
 									break;
 								case SerieTV:
@@ -95,27 +94,26 @@ public class ScanService implements Runnable
 										
 									if (cache2 == -1)
 									{
-										HTTPSearchTVSerie httpF = new HTTPSearchTVSerie(f.title);
+										TMDBSearchTVSerie httpF = new TMDBSearchTVSerie(f.title);
 										if (httpF.scheda == null)
 										{
 											SQLQuery.writeCacheSearch(f.title, f.type, -1);
 											break;
 										}
-										int schedaSTV = SQLQuery.writePreSchedaTvSeries(httpF.scheda);
+										int schedaSTV = SQLQuery.writeScheda(httpF.scheda);
 										
 										SQLQuery.writeCacheSearch(f.title, f.type, schedaSTV);
-										SQLQuery.writeFileInfo(fileID, f.type, schedaSTV);
+										int FileId = SQLQuery.writeFile(s2,size, schedaSTV, f.type);
 										
-										SQLQuery.writeEpisodeInfo(fileID, schedaSTV, f.episode, f.series);
+										SQLQuery.writeEpisodeInfo(FileId, schedaSTV, f.episode, f.series);
 										NEpisode++;
 									}
 									else
 									{
-										SQLQuery.writeFileInfo(fileID, f.type, cache2);
-										SQLQuery.writeEpisodeInfo(fileID, cache2, f.episode, f.series);
+										int FileId = SQLQuery.writeFile(s2,size, cache2, f.type);
+										SQLQuery.writeEpisodeInfo(FileId, cache2, f.episode, f.series);
 										NEpisode++;
 									}
-									
 									break;
 								default:
 									break;

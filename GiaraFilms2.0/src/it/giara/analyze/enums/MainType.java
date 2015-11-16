@@ -10,4 +10,24 @@ public enum MainType
 	{
 		ID = a;
 	}
+	
+	public static MainType getMainTypeByID(int ID)
+	{
+		switch (ID)
+		{
+			case -1:
+				return NULL;
+			case 1:
+				return Film;
+			case 2:
+				return SerieTV;
+			case 3:
+				return Cartoni;
+			case 4:
+				return Musica;
+			case 5:
+				return Altro;
+		}
+		return NULL;
+	}
 }

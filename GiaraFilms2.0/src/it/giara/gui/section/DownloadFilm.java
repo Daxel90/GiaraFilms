@@ -13,24 +13,25 @@ import it.giara.gui.utils.ColorUtils;
 import it.giara.gui.utils.ImageUtils;
 import it.giara.schede.PreSchedaFilm;
 import it.giara.sql.SQLQuery;
+import it.giara.tmdb.schede.TMDBScheda;
 
 public class DownloadFilm extends DefaultGui
 {
 	private static final long serialVersionUID = -1;
 	
 	DefaultGui back;
-	PreSchedaFilm scheda;
+	TMDBScheda scheda;
 	ArrayList<String[]> lista = new ArrayList<String[]>();
 	DownloadList panel;
 	
-	public DownloadFilm(DefaultGui gui, PreSchedaFilm s)
+	public DownloadFilm(DefaultGui gui, TMDBScheda s)
 	{
 		super();
 		back = gui;
 		scheda = s;
 		for (int x : SQLQuery.readFileInfoList(scheda.IdDb, 1))
 		{
-			lista.add(SQLQuery.getFileName(x));
+			lista.add(SQLQuery.getFileNameAndSize(x));
 		}
 		panel = new DownloadList(lista,this);
 		
