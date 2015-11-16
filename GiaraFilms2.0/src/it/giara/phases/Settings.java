@@ -6,13 +6,12 @@ import java.util.prefs.Preferences;
 
 import it.giara.gui.ChangeLogFrame;
 import it.giara.gui.MainFrame;
-import it.giara.sql.SQLQuery;
 import it.giara.sql.SQLQuerySettings;
 import it.giara.utils.DirUtils;
 
 public class Settings
 {
-	public final static int VERSION = 9;
+	public final static int VERSION = 10;
 	private final static int END_PreReleseVersion = Integer.MAX_VALUE;
 	private final static int END_BetaVersion = Integer.MAX_VALUE;
 	private static HashMap<String, String> config = new HashMap<String, String>();
@@ -21,7 +20,7 @@ public class Settings
 	
 	public static void init()
 	{
-		config.put("ProgramVersion", SQLQuerySettings.getCurrentParameter("ProgramVersion", ""+VERSION));
+		config.put("ProgramVersion", SQLQuerySettings.getCurrentParameter("ProgramVersion", "" + VERSION));
 		config.put("DBversion", SQLQuerySettings.getCurrentParameter("DBversion", "" + VERSION));
 		config.put("downloadfolder", SQLQuerySettings.getCurrentParameter("downloadfolder",
 				DirUtils.getDefaultDownloadDir().getAbsolutePath()));
@@ -63,26 +62,17 @@ public class Settings
 			Settings.setParameter("ProgramVersion", "" + Settings.VERSION);
 			new ChangeLogFrame();
 		}
-		if(Integer.parseInt(Settings.getParameter("DBversion")) < 4)
+		if (Integer.parseInt(Settings.getParameter("DBversion")) < 4)
 		{
 			SQLQuerySettings.TableFix1();
-			setParameter("DBversion","4");
+			setParameter("DBversion", "4");
 		}
-//		if(Integer.parseInt(Settings.getParameter("DBversion")) < 6)
-//		{
-//			SQLQuery.DbFix1();
-//			setParameter("DBversion","6");
-//		}
-//		if(Integer.parseInt(Settings.getParameter("DBversion")) < 8)
-//		{
-//			SQLQuery.DbFix1();
-//			setParameter("DBversion","8");
-//		}
 		
-//		if(Integer.parseInt(Settings.getParameter("DBversion")) < 10)
-//		{
-//			new File(DirUtils.getWorkingDirectory(), "FileDatabase.db").delete();
-//		}
+		if (Integer.parseInt(Settings.getParameter("DBversion")) < 10)
+		{
+			new File(DirUtils.getWorkingDirectory(), "FileDatabase.db").delete();
+			setParameter("DBversion", "10");
+		}
 	}
 	
 }

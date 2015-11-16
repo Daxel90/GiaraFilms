@@ -109,6 +109,24 @@ public class Options extends DefaultGui
 		
 		this.add(log);
 		
+		final JCheckBox scanService = new JCheckBox();
+		scanService.setText("ScanService (sperimentale) richiede riavvio");
+		scanService.setSelected(Settings.getParameter("scanservice").equals("1"));
+		scanService.setBounds(50, 170, FRAME_WIDTH / 2, 30);
+		scanService.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				if(scanService.isSelected())
+					Settings.setParameter("scanservice", "1");
+				else
+					Settings.setParameter("scanservice", "0");
+			}
+		});
+		
+		this.add(scanService);
+		
 	}
 	
 	Runnable BackGui = new Runnable()
