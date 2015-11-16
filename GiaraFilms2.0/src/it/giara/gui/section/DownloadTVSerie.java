@@ -13,25 +13,25 @@ import it.giara.gui.components.DownloadList;
 import it.giara.gui.components.ImageButton;
 import it.giara.gui.utils.ColorUtils;
 import it.giara.gui.utils.ImageUtils;
-import it.giara.schede.PreSchedaTVSerie;
 import it.giara.sql.SQLQuery;
+import it.giara.tmdb.schede.TMDBScheda;
 
 public class DownloadTVSerie extends DefaultGui
 {
 	private static final long serialVersionUID = -1;
 	
 	DefaultGui back;
-	PreSchedaTVSerie scheda;
+	TMDBScheda scheda;
 	HashMap<Integer, HashMap<Integer, ArrayList<String[]>>> lista = new HashMap<Integer, HashMap<Integer, ArrayList<String[]>>>();
 	DownloadList panel;
 	
-	public DownloadTVSerie(DefaultGui gui, PreSchedaTVSerie s)
+	public DownloadTVSerie(DefaultGui gui, TMDBScheda scheda2)
 	{
 		super();
 		back = gui;
-		scheda = s;
+		scheda = scheda2;
 		
-		for (Entry<Integer, HashMap<Integer, ArrayList<Integer>>> serie : SQLQuery.readEpisodeInfoList(scheda.IdDb)
+		for (Entry<Integer, HashMap<Integer, ArrayList<Integer>>> serie : SQLQuery.readEpisodeInfoList(scheda.ID)
 				.entrySet())
 		{
 			int serieN = serie.getKey();

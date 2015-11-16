@@ -15,7 +15,6 @@ import javax.swing.border.EtchedBorder;
 
 import it.giara.gui.MainFrame;
 import it.giara.gui.section.TVSerieInfoSchede;
-import it.giara.schede.PreSchedaTVSerie;
 import it.giara.tmdb.schede.TMDBScheda;
 
 public class TvSerieButton extends JLabel implements MouseListener
