@@ -62,15 +62,11 @@ public class Settings
 			Settings.setParameter("ProgramVersion", "" + Settings.VERSION);
 			new ChangeLogFrame();
 		}
-		if (Integer.parseInt(Settings.getParameter("DBversion")) < 4)
-		{
-			SQLQuerySettings.TableFix1();
-			setParameter("DBversion", "4");
-		}
 		
 		if (Integer.parseInt(Settings.getParameter("DBversion")) < 10)
 		{
 			new File(DirUtils.getWorkingDirectory(), "FileDatabase.db").delete();
+			SQLQuerySettings.TableFix1();
 			setParameter("DBversion", "10");
 		}
 	}

@@ -12,8 +12,11 @@ public class SQLQuerySettings
 	
 	public static void initTable()
 	{
-		String query = "CREATE TABLE IF NOT EXISTS `Downloads` (" + " `FileName` TEXT NOT NULL UNIQUE, "
-				+ "`FileDirectory` TEXT NOT NULL UNIQUE " + ");";
+		String query = "CREATE TABLE IF NOT EXISTS `Downloads` (" 
+	+ " `FileName` TEXT NOT NULL UNIQUE, "
+	+ "`FileDirectory` TEXT NOT NULL UNIQUE, "
+	+ "`status` INT NOT NULL DEFAULT 0 "
+	+ ");";
 		SQL.ExecuteQuerySettings(query);
 		
 		query = "CREATE TABLE IF NOT EXISTS `Parameters` (" + "`Key`	TEXT NOT NULL UNIQUE,"
