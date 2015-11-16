@@ -39,61 +39,104 @@ public class TMDBSearchFilm
 	
 	private void getFileInfo(String title) throws IOException, JSONException
 	{
-		String result = "{\"films\":";
-		URL url = new URL("https://www.themoviedb.org/search/remote/multi?query=" + title.replace(" ", "%20") + "&language=it");
-		final URLConnection conn = url.openConnection();
-		conn.connect();
-		BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF8"));
-		String line;
-		while ((line = rd.readLine()) != null)
 		{
-			result += line;
-		}
-		rd.close();
-		result = result.trim();
-		result += "}";
-		Log.log(Log.TMDB, result);
-		
-		JSONObject json = new JSONObject(result);
-		
-		if (json.getJSONArray("films").length() < 1)
-		{
-			scheda = null;
-			return;
-		}
-		
-		for (int k = 0; k < json.getJSONArray("films").length(); k++)
-		{
-			JSONObject film = json.getJSONArray("films").getJSONObject(k);
-			
-			if (film.getString("media_type").equals("movie"))
+			String result = "{\"films\":";
+			URL url = new URL("https://www.themoviedb.org/search/remote/multi?query=" + title.replace(" ", "%20")
+					+ "&language=it");
+			final URLConnection conn = url.openConnection();
+			conn.connect();
+			BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF8"));
+			String line;
+			while ((line = rd.readLine()) != null)
 			{
-				scheda.ID = film.getInt("id");
-				scheda.title = film.optString("name");
-				scheda.relese = film.optString("release_date");
-				scheda.poster = film.optString("poster_path");
-				scheda.back = film.optString("backdrop_path");
-				scheda.desc = film.optString("overview");
-				ArrayList<Integer> gens = new ArrayList<Integer>();
+				result += line;
+			}
+			rd.close();
+			result = result.trim();
+			result += "}";
+			Log.log(Log.TMDB, result);
+			
+			JSONObject json = new JSONObject(result);
+			
+			if (json.getJSONArray("films").length() < 1)
+			{
+				scheda = null;
+				return;
+			}
+			
+			for (int k = 0; k < json.getJSONArray("films").length(); k++)
+			{
+				JSONObject film = json.getJSONArray("films").getJSONObject(k);
 				
-				for (int l = 0; l < film.getJSONArray("genre_ids").length(); l++)
+				if (film.getString("media_type").equals("movie"))
 				{
-					gens.add(film.getJSONArray("genre_ids").getInt(l));
+					scheda.ID = film.getInt("id");
+					scheda.title = film.optString("name");
+					scheda.relese = film.optString("release_date");
+					scheda.poster = film.optString("poster_path");
+					scheda.back = film.optString("backdrop_path");
+					scheda.desc = film.optString("overview");
+					ArrayList<Integer> gens = new ArrayList<Integer>();
+					
+					for (int l = 0; l < film.getJSONArray("genre_ids").length(); l++)
+					{
+						gens.add(film.getJSONArray("genre_ids").getInt(l));
+					}
+					scheda.genre_ids = new int[gens.size()];
+					Iterator<Integer> iterator = gens.iterator();
+					for (int i = 0; i < scheda.genre_ids.length; i++)
+					{
+						scheda.genre_ids[i] = iterator.next().intValue();
+					}
+					scheda.vote = film.optDouble("vote_average");
+					scheda.type = MainType.Film;
+					break;
 				}
-				scheda.genre_ids = new int[gens.size()];
-				Iterator<Integer> iterator = gens.iterator();
-				for (int i = 0; i < scheda.genre_ids.length; i++)
-				{
-					scheda.genre_ids[i] = iterator.next().intValue();
-				}
-				scheda.vote = film.optDouble("vote_average");
-				scheda.type = MainType.Film;
-				break;
 			}
 		}
-		
+		if (scheda.desc.trim().equals(""))
+		{
+			String result = "{\"films\":";
+			URL url = new URL("https://www.themoviedb.org/search/remote/multi?query=" + title.replace(" ", "%20")
+					+ "&language=en");
+			final URLConnection conn = url.openConnection();
+			conn.connect();
+			BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF8"));
+			String line;
+			while ((line = rd.readLine()) != null)
+			{
+				result += line;
+			}
+			rd.close();
+			result = result.trim();
+			result += "}";
+			Log.log(Log.TMDB, result);
+			
+			JSONObject json = new JSONObject(result);
+			
+			if (json.getJSONArray("films").length() < 1)
+			{
+				scheda = null;
+				return;
+			}
+			
+			for (int k = 0; k < json.getJSONArray("films").length(); k++)
+			{
+				JSONObject film = json.getJSONArray("films").getJSONObject(k);
+				
+				if (film.getString("media_type").equals("movie"))
+				{
+					if (scheda.ID == film.getInt("id"))
+					{
+						scheda.desc = film.optString("overview");
+					}
+					break;
+				}
+			}
+			
+		}
 		Log.log(Log.TMDB, scheda);
-
+		
 	}
 	
 }

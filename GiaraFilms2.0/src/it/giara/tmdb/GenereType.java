@@ -8,7 +8,8 @@ public enum GenereType
 	Crime(80, "Crime"), Documentary(99, "Documentario"), Drama(18, "Drammatico"), Family(10751, "Famiglia"),
 	Science_Fiction(878, "Fantascienza"), Fantasy(14, "Fantasy"), Foreign(10769, "Foreign"), War(10752, "Guerra"),
 	Horror(27, "Horror"), Mystery(9648, "Mistero"), Musical(10402, "Musica"), Romance(10749, "Romance"),
-	History(36, "Storico"), Western(37, "Western"), Thriller(53, "Thriller"), TV_Movie(10770, "TV Movie");
+	History(36, "Storico"), Western(37, "Western"), Thriller(53, "Thriller"), TV_Movie(10770, "TV Movie"),
+	Action_Adventure(10759,"Action & Adventure"), SciFi_Fantasy(10765,"Sci-Fi & Fantasy");
 	
 	private GenereType(int id, String name)
 	{
