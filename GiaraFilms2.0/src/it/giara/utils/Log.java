@@ -25,7 +25,7 @@ public class Log
 	
 	public static void log(LogType l, Object o)
 	{
-		if (!l.equals(NET) && !l.equals(FILEINFO) && !l.equals(DOWNLOAD) && !l.equals(SCANSERVICE)
+		if (!l.equals(TMDB) && !l.equals(NET) && !l.equals(FILEINFO) && !l.equals(DOWNLOAD) && !l.equals(SCANSERVICE)
 				&& !l.equals(FILMINFO))
 		{
 			System.out.println(o);

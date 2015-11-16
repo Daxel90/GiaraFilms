@@ -5,13 +5,13 @@ import java.util.ArrayList;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 
+import it.giara.analyze.enums.MainType;
 import it.giara.gui.DefaultGui;
 import it.giara.gui.MainFrame;
 import it.giara.gui.components.DownloadList;
 import it.giara.gui.components.ImageButton;
 import it.giara.gui.utils.ColorUtils;
 import it.giara.gui.utils.ImageUtils;
-import it.giara.schede.PreSchedaFilm;
 import it.giara.sql.SQLQuery;
 import it.giara.tmdb.schede.TMDBScheda;
 
@@ -29,11 +29,11 @@ public class DownloadFilm extends DefaultGui
 		super();
 		back = gui;
 		scheda = s;
-		for (int x : SQLQuery.readFileInfoList(scheda.IdDb, 1))
+		for (int x : SQLQuery.readFileListBySchedeId(scheda.ID, MainType.Film))
 		{
 			lista.add(SQLQuery.getFileNameAndSize(x));
 		}
-		panel = new DownloadList(lista,this);
+		panel = new DownloadList(lista, this);
 		
 	}
 	

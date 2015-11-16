@@ -169,6 +169,24 @@ public class SQLQuery
 		return -1;
 	}
 	
+	public synchronized static ArrayList<Integer> readFileListBySchedeId(int schedaID, MainType Type)
+	{
+		ArrayList<Integer> list = new ArrayList<Integer>();
+		ResultSet r = SQL
+				.FetchData("SELECT * FROM `Files` WHERE `IdScheda` = " + schedaID + " AND `Type` = " + Type.ID + ";");
+		try
+		{
+			while (r.next())
+			{
+				list.add(r.getInt("ID"));
+			}
+		} catch (SQLException e)
+		{
+			Log.stack(Log.DB, e);
+		}
+		return list;
+	}
+	
 	//-------------------
 	
 	// Schede Table
@@ -184,7 +202,7 @@ public class SQLQuery
 						+ " '" + SQL.escape(i.poster) + "', "
 						+ " '" + SQL.escape(i.back) + "', "
 						+ " '" + SQL.escape(i.desc) + "', "
-						+ " '" + SQL.escape(i.getGeneri()) + "', "
+						+ " '" + SQL.escape(i.getGeneriIDs()) + "', "
 						+ i.vote + ", "
 						+ i.type.ID + ", "
 						+ FunctionsUtils.getTime() + ");");
@@ -206,7 +224,7 @@ public class SQLQuery
 				scheda.poster = SQL.unescape(r.getString("Poster"));
 				scheda.back = SQL.unescape(r.getString("Back"));
 				scheda.desc = SQL.unescape(r.getString("Desc"));
-				scheda.setGeneri(SQL.unescape(r.getString("GenID")));
+				scheda.setGeneriIDs(SQL.unescape(r.getString("GenID")));
 				scheda.vote = r.getDouble("Vote");
 				scheda.type = MainType.getMainTypeByID(r.getInt("Type"));
 			}

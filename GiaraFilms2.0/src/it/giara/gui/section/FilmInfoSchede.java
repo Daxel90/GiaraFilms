@@ -7,13 +7,9 @@ import javax.swing.JScrollPane;
 
 import it.giara.gui.DefaultGui;
 import it.giara.gui.MainFrame;
-import it.giara.gui.components.AnimatedImageButton;
 import it.giara.gui.components.ImageButton;
 import it.giara.gui.utils.ColorUtils;
 import it.giara.gui.utils.ImageUtils;
-import it.giara.http.HTTPFilmInfo;
-import it.giara.schede.PreSchedaFilm;
-import it.giara.schede.SchedaFilm;
 import it.giara.tmdb.schede.TMDBScheda;
 import it.giara.utils.FunctionsUtils;
 import it.giara.utils.ThreadManager;
@@ -106,15 +102,11 @@ public class FilmInfoSchede extends DefaultGui
 			info.setBounds((int) ((FRAME_HEIGHT / 2) * 0.67) + 60, FRAME_HEIGHT / 2 + 50,
 					FRAME_WIDTH - ((int) ((FRAME_HEIGHT / 2) * 0.67) + 80), 30);
 					
-		// info.setText("<html><h4> " + "Anno: " + film.anno
-		// + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" +
-		// "Paese: " + film.nazionalita
-		// + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" +
-		// "Regia: " + film.regia + "<br>"
-		// + "Genere: " + film.getGeneri().replace(",", ", ") + "</html>");
-		// info.setVisible(true);
+		info.setText("<html><h4> " + "Data di Uscita: " + scheda.relese + "<br>" + "Generi: " + scheda.getGeneri()
+				+ "</html>");
+		info.setVisible(true);
 		this.add(info);
-		// drawRating();
+		drawRating();
 		
 		downloads = new ImageButton(ImageUtils.getImage("gui/download.png"),
 				ImageUtils.getImage("gui/download_over.png"), ImageUtils.getImage("gui/download_over.png"),
@@ -125,62 +117,50 @@ public class FilmInfoSchede extends DefaultGui
 		
 	}
 	
-	// public void drawRating()
-	// {
-	// if (!scheda.loading)
-	// {
-	// int x = 0;
-	// for (x = 0; x < scheda.vote - 1; x++)
-	// {
-	// JLabel star = new JLabel();
-	// if ((int) ((FRAME_WIDTH / 4) * 1.49) < FRAME_HEIGHT / 2)
-	// star.setBounds(20 + FRAME_WIDTH / 8 - 50 + (20 * x), (int) ((FRAME_WIDTH
-	// / 4) * 1.49) + 95, 20, 20);
-	// else
-	// star.setBounds(20 + (int) ((FRAME_HEIGHT / 2) * 0.67) / 2 - 50 + (20 *
-	// x), FRAME_HEIGHT / 2 + 95,
-	// 20, 20);
-	// star.setIcon(ImageUtils.getIcon("star_full.png"));
-	// this.add(star);
-	// }
-	// if (x + 0.5f >= scheda.vote)
-	// {
-	// JLabel star = new JLabel();
-	// if ((int) ((FRAME_WIDTH / 4) * 1.49) < FRAME_HEIGHT / 2)
-	// star.setBounds(20 + FRAME_WIDTH / 8 - 50 + (20 * x), (int) ((FRAME_WIDTH
-	// / 4) * 1.49) + 95, 20, 20);
-	// else
-	// star.setBounds(20 + (int) ((FRAME_HEIGHT / 2) * 0.67) / 2 - 50 + (20 *
-	// x), FRAME_HEIGHT / 2 + 95,
-	// 20, 20);
-	// star.setIcon(ImageUtils.getIcon("star_half.png"));
-	// this.add(star);
-	// x++;
-	// }
-	// for (; x < 5; x++)
-	// {
-	// JLabel star = new JLabel();
-	// if ((int) ((FRAME_WIDTH / 4) * 1.49) < FRAME_HEIGHT / 2)
-	// star.setBounds(20 + FRAME_WIDTH / 8 - 50 + (20 * x), (int) ((FRAME_WIDTH
-	// / 4) * 1.49) + 95, 20, 20);
-	// else
-	// star.setBounds(20 + (int) ((FRAME_HEIGHT / 2) * 0.67) / 2 - 50 + (20 *
-	// x), FRAME_HEIGHT / 2 + 95,
-	// 20, 20);
-	// star.setIcon(ImageUtils.getIcon("star_empty.png"));
-	// this.add(star);
-	// }
-	// this.repaint();
-	// }
-	// }
+	public void drawRating()
+	{
+		int x = 0;
+		for (x = 0; x < scheda.vote - 1; x++)
+		{
+			JLabel star = new JLabel();
+			if ((int) ((FRAME_WIDTH / 4) * 1.49) < FRAME_HEIGHT / 2)
+				star.setBounds(20 + (20 * x), (int) ((FRAME_WIDTH / 4) * 1.49) + 95, 20, 20);
+			else
+				star.setBounds(20 + (20 * x), FRAME_HEIGHT / 2 + 95, 20, 20);
+				
+			star.setIcon(ImageUtils.getIcon("star_full.png"));
+			this.add(star);
+		}
+		if (x + 0.5f >= scheda.vote)
+		{
+			JLabel star = new JLabel();
+			if ((int) ((FRAME_WIDTH / 4) * 1.49) < FRAME_HEIGHT / 2)
+				star.setBounds(20 + (20 * x), (int) ((FRAME_WIDTH / 4) * 1.49) + 95, 20, 20);
+			else
+				star.setBounds(20 + (20 * x), FRAME_HEIGHT / 2 + 95, 20, 20);
+			star.setIcon(ImageUtils.getIcon("star_half.png"));
+			this.add(star);
+			x++;
+		}
+		for (; x < 10; x++)
+		{
+			JLabel star = new JLabel();
+			if ((int) ((FRAME_WIDTH / 4) * 1.49) < FRAME_HEIGHT / 2)
+				star.setBounds(20 + (20 * x), (int) ((FRAME_WIDTH / 4) * 1.49) + 95, 20, 20);
+			else
+				star.setBounds(20 + (20 * x), FRAME_HEIGHT / 2 + 95, 20, 20);
+			star.setIcon(ImageUtils.getIcon("star_empty.png"));
+			this.add(star);
+		}
+		this.repaint();
+	}
 	
 	Runnable OpenDownloads = new Runnable()
 	{
 		@Override
 		public void run()
 		{
-			// MainFrame.getInstance().setInternalPane(new
-			// DownloadFilm(guiInstance, scheda));
+			MainFrame.getInstance().setInternalPane(new DownloadFilm(guiInstance, scheda));
 		}
 	};
 	

@@ -9,6 +9,7 @@ import javax.swing.JLabel;
 import it.giara.analyze.enums.MainType;
 import it.giara.gui.components.FilmListPanel;
 import it.giara.gui.utils.ImageUtils;
+import it.giara.tmdb.GenereType;
 import it.giara.utils.DirUtils;
 import it.giara.utils.Log;
 import it.giara.utils.MD5;
@@ -139,7 +140,7 @@ public class TMDBScheda
 		return poster_original;
 	}
 	
-	public String getGeneri()
+	public String getGeneriIDs()
 	{
 		String res = "";
 		boolean first = true;
@@ -154,7 +155,7 @@ public class TMDBScheda
 		return res;
 	}
 	
-	public void setGeneri(String d)
+	public void setGeneriIDs(String d)
 	{
 		String[] Generi = d.split(", ");
 		genre_ids = new int[Generi.length];
@@ -162,6 +163,21 @@ public class TMDBScheda
 		{
 			genre_ids[x] = Integer.parseInt(Generi[x]);
 		}
+	}
+	
+	public String getGeneri()
+	{
+		String res = "";
+		boolean first = true;
+		for(int s : genre_ids)
+		{
+			if(!first)
+				res +=", ";
+			else
+				first = false;
+			res += GenereType.getGenereByID(s);
+		}
+		return res;
 	}
 	
 	
