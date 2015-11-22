@@ -65,7 +65,10 @@ public class ScanService implements Runnable
 									int cache = SQLQuery.getCacheSearch(f.title, f.type);
 									
 									if (cache == -2)
+									{
+										SQLQuery.writeFile(s2,size, -1, f.type);
 										return;
+									}
 										
 									if (cache == -1)
 									{
@@ -73,6 +76,7 @@ public class ScanService implements Runnable
 										if (httpF.scheda == null)
 										{
 											SQLQuery.writeCacheSearch(f.title, f.type, -1);
+											SQLQuery.writeFile(s2,size, -1, f.type);
 											break;
 										}
 										int schedaID = SQLQuery.writeScheda(httpF.scheda);
@@ -90,13 +94,17 @@ public class ScanService implements Runnable
 									int cache2 = SQLQuery.getCacheSearch(f.title, f.type);
 									
 									if (cache2 == -2)
+									{
+										SQLQuery.writeFile(s2,size, -1, f.type);
 										return;
+									}
 										
 									if (cache2 == -1)
 									{
 										TMDBSearchTVSerie httpF = new TMDBSearchTVSerie(f.title);
 										if (httpF.scheda == null)
 										{
+											SQLQuery.writeFile(s2,size, -1, f.type);
 											SQLQuery.writeCacheSearch(f.title, f.type, -1);
 											break;
 										}
@@ -116,6 +124,7 @@ public class ScanService implements Runnable
 									}
 									break;
 								default:
+									SQLQuery.writeFile(s2,size, -1, f.type);
 									break;
 							}
 						}

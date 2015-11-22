@@ -95,7 +95,7 @@ public class TMDBSearchTVSerie
 			}
 		}
 		
-		if (scheda.desc.trim().equals(""))
+		if (scheda.desc != null && scheda.desc.trim().equals(""))
 		{
 			String result = "{\"films\":";
 			URL url = new URL("https://www.themoviedb.org/search/remote/multi?query=" + title.replace(" ", "%20")
