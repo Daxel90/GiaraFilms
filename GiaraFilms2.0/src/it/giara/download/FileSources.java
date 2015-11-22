@@ -30,8 +30,12 @@ public class FileSources
 	public DccFileTransfer xdcc;
 	File saveFile = null;
 	public boolean fileEnd = false;
-	
 	public boolean paused = false;
+	
+	public boolean onWaitingList = false;
+	public ArrayList<String> waitingList = new ArrayList<String>();
+	public boolean endAskFile = false;
+	
 	
 	ConcurrentHashMap<SourceChan, ArrayList<BotPackage>> sourcesBot = new ConcurrentHashMap<SourceChan, ArrayList<BotPackage>>();
 	
@@ -89,7 +93,7 @@ public class FileSources
 	
 	public void waitUntilthereAreAtLeastOneBot()
 	{
-		while (totalBot <= 0)
+		while (totalBot <= 0 && loadingBotList > 0)
 		{
 			Log.log(Log.DEBUG, "Bot: " + totalBot + "  " + filename);
 			FunctionsUtils.sleep(1000);
@@ -170,7 +174,7 @@ public class FileSources
 					{
 						FunctionsUtils.sleep(2000);
 						retry++;
-						if (retry > 4)
+						if (retry > 3)
 							break;
 					}
 					
@@ -180,15 +184,27 @@ public class FileSources
 					}
 					
 					if (botResponse == 2)
+					{
+						RemoveFileFromWaitingList();
 						return;
-					else
-						DownloadManager.BotRequest.remove(bot.bot);
+					}
 				}
 			}
 			
 		} while (LastloadingBotList != loadingBotList || loadingBotList > 0);
-		
+		endAskFile = true;
 	}
+	
+	public void RemoveFileFromWaitingList()
+	{
+		onWaitingList = false;
+		for(String s : waitingList)
+		{
+			DownloadManager.BotRequest.remove(s);
+		}
+		waitingList.clear();
+	}
+	
 	
 	public void startDownloadXDCC(DccFileTransfer transfer)
 	{
@@ -218,12 +234,11 @@ public class FileSources
 		}
 		xdcc = transfer;
 		
-		if (saveFile.exists() && (xdcc.getSize() == saveFile.length()))
+		if (saveFile.exists() && (xdcc.getSize() <= saveFile.length()))
 		{
 			Log.log(Log.IRC, "EXISTS:\t try to close connection");
 			xdcc.close();
 			endXDCCTransfer(transfer, null);
-			
 		}
 		else
 		{
@@ -265,6 +280,9 @@ public class FileSources
 		downloading = false;
 		sourcesBot.clear();
 		totalBot = 0;
+		onWaitingList = false;
+		waitingList.clear();
+		endAskFile = false;
 		SQLQuerySettings.setStatus(filename, 1);
 	}
 	

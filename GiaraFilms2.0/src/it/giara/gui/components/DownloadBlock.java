@@ -99,6 +99,10 @@ public class DownloadBlock extends JPanel
 		
 		if (file.loadingBotList > 0 && file.totalBot == 0 && !file.downloading)
 			bar.setString("Scansione Sorgenti In Corso " + file.loadingBotList + " rimanenti");
+		else if (file.botResponse < 1 && file.endAskFile && file.onWaitingList)
+			bar.setString("Sei in Lista d'attesa per il download");
+		else if (file.botResponse < 1 && file.endAskFile)
+			bar.setString("File non disponibile, ritento tra 2min");
 		else if (file.botResponse < 1)
 			bar.setString("In attesa di connessione" + loading);
 		else if (file.botResponse == 1)

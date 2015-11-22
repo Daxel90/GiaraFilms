@@ -1,5 +1,8 @@
 package it.giara.irc;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.jibble.pircbot.DccFileTransfer;
 import org.jibble.pircbot.PircBot;
 
@@ -10,6 +13,7 @@ import it.giara.utils.Log;
 
 public class IrcConnection extends PircBot
 {
+	List<String> channleJoined = new ArrayList<String>();
 	
 	public IrcConnection(String server)
 	{
@@ -49,14 +53,19 @@ public class IrcConnection extends PircBot
 	
 	public void joinChannelAndSayHello(String channel)
 	{
-		this.sendRawLine("JOIN " + channel);
-		this.sendMessage(channel, "Ciao a tutti :D");
+		if(!channleJoined.contains(channel))
+		{
+			this.joinChannel(channel);
+			this.sendMessage(channel, "Ciao a tutti :D");
+			channleJoined.add(channel);
+		}
 	}
 	
 	@Override
 	public void onNotice(String sourceNick, String sourceLogin, String sourceHostname, String target, String notice)
 	{
-		if (notice.contains("per richiedere questo pack, devi essere un un chan in cui ci sia anche io"))
+		if (notice.contains("per richiedere questo pack, devi essere un un chan in cui ci sia anche io")
+				|| notice.contains("you must be on a known channel to request a pack"))
 		{
 			if (DownloadManager.BotRequest.containsKey(sourceNick))
 				DownloadManager.BotRequest.get(sourceNick).botResponse = 0;
@@ -68,10 +77,15 @@ public class IrcConnection extends PircBot
 				DownloadManager.BotRequest.get(sourceNick).botResponse = 0;
 			Log.log(Log.IRC, "Numero del pack Errato" + sourceNick);
 		}
-		else if (notice.contains("Tutti gli slots sono occupati"))
+		else if (notice.contains("Tutti gli slots sono occupati") || notice.contains("Sei già in coda per questo pack"))
 		{
 			if (DownloadManager.BotRequest.containsKey(sourceNick))
+			{
 				DownloadManager.BotRequest.get(sourceNick).botResponse = 0;
+				DownloadManager.BotRequest.get(sourceNick).onWaitingList = true;
+				if (!DownloadManager.BotRequest.get(sourceNick).waitingList.contains(sourceNick))
+					DownloadManager.BotRequest.get(sourceNick).waitingList.add(sourceNick);
+			}
 			Log.log(Log.IRC, "Il Bot ti ha messo in lista" + sourceNick);
 		}
 		else if (notice.contains("Ti sto inviando il pack"))
