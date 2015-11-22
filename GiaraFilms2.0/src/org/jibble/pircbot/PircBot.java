@@ -281,7 +281,7 @@ public abstract class PircBot implements ReplyConstants
 	 * @throws NickAlreadyInUseException
 	 *             if our nick is already in use on the server.
 	 */
-	public final synchronized void reconnect() throws IOException, IrcException, NickAlreadyInUseException
+	public synchronized void reconnect() throws IOException, IrcException, NickAlreadyInUseException
 	{
 		if (getServer() == null)
 		{

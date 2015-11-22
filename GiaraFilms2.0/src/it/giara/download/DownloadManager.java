@@ -1,15 +1,15 @@
 package it.giara.download;
 
 import java.io.File;
-import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 import it.giara.irc.IrcConnection;
 
 public class DownloadManager
 {
-	public static HashMap<String, IrcConnection> servers = new HashMap<String, IrcConnection>();
-	public static HashMap<String, FileSources> BotRequest = new HashMap<String, FileSources>();
-	public static HashMap<String, FileSources> AllFile = new HashMap<String, FileSources>();
+	public static ConcurrentHashMap<String, IrcConnection> servers = new ConcurrentHashMap<String, IrcConnection>();
+	public static ConcurrentHashMap<String, FileSources> BotRequest = new ConcurrentHashMap<String, FileSources>();
+	public static ConcurrentHashMap<String, FileSources> AllFile = new ConcurrentHashMap<String, FileSources>();
 	
 	public static void downloadFile(String FileName, String file, boolean paused)
 	{

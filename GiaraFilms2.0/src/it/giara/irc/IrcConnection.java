@@ -1,9 +1,12 @@
 package it.giara.irc;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.jibble.pircbot.DccFileTransfer;
+import org.jibble.pircbot.IrcException;
+import org.jibble.pircbot.NickAlreadyInUseException;
 import org.jibble.pircbot.PircBot;
 
 import it.giara.download.DownloadManager;
@@ -18,6 +21,7 @@ public class IrcConnection extends PircBot
 	public IrcConnection(String server)
 	{
 		super();
+		channleJoined.clear();
 		Log.log(Log.IRC, "Mi connetto a: " + server);
 		IrcNick nickProvider = new IrcNick();
 		this.setLogin(nickProvider.generateRandomNick());
@@ -51,6 +55,13 @@ public class IrcConnection extends PircBot
 		}
 	}
 	
+	@Override
+	public synchronized void reconnect() throws NickAlreadyInUseException, IOException, IrcException
+	{
+		channleJoined.clear();
+		super.reconnect();
+	}
+	
 	public void joinChannelAndSayHello(String channel)
 	{
 		if(!channleJoined.contains(channel))
@@ -59,6 +70,12 @@ public class IrcConnection extends PircBot
 			this.sendMessage(channel, "Ciao a tutti :D");
 			channleJoined.add(channel);
 		}
+	}
+	
+	public void requestFile(String bot, int packetID)
+	{
+		Log.log(Log.IRC, "Richiedo "+bot+" #"+packetID);
+		sendMessage(bot, "xdcc send #" + packetID);
 	}
 	
 	@Override
@@ -83,8 +100,6 @@ public class IrcConnection extends PircBot
 			{
 				DownloadManager.BotRequest.get(sourceNick).botResponse = 0;
 				DownloadManager.BotRequest.get(sourceNick).onWaitingList = true;
-				if (!DownloadManager.BotRequest.get(sourceNick).waitingList.contains(sourceNick))
-					DownloadManager.BotRequest.get(sourceNick).waitingList.add(sourceNick);
 			}
 			Log.log(Log.IRC, "Il Bot ti ha messo in lista" + sourceNick);
 		}
@@ -108,7 +123,7 @@ public class IrcConnection extends PircBot
 			transfer.close();
 			return;
 		}
-		else if (!sources.filename.trim().equals(transfer.getFile().getName().trim()))
+		else if (!sources.filename.trim().contains(transfer.getFile().getName().trim()))
 		{
 			ErrorHandler.BotSendWrongFile(sources.filename.trim(), transfer.getFile().getName().trim());
 			transfer.close();

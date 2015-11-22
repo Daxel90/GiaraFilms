@@ -2,7 +2,8 @@ package it.giara.utils;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 public class ThreadManager
 {
 	public static ExecutorService CachedExecutor;
@@ -10,6 +11,8 @@ public class ThreadManager
 	
 	public static ExecutorService PoolExecutorSearch; // this pool is for Loading List File
 	public static ExecutorService PoolExecutorSearchIndicizer; //this pool run file indicizer
+	
+	public static ScheduledExecutorService  ScheduledExecutorService ; //scheduleThreadPool
 	
 	public static int poolWait = 0;
 	public static int poolSearchWait = 0;
@@ -22,6 +25,8 @@ public class ThreadManager
 		
 		PoolExecutorSearch = Executors.newFixedThreadPool(poolSize /2);
 		PoolExecutorSearchIndicizer = Executors.newFixedThreadPool(poolSize * 2);
+		
+		ScheduledExecutorService = Executors.newScheduledThreadPool(2);
 	}
 	
 	// Very Height priority, execute instant task
@@ -88,6 +93,12 @@ public class ThreadManager
 	public static void submitSearchTask(Runnable task)
 	{
 		PoolExecutorSearch.submit(task);
+	}
+	
+	// ScheduleTask
+	public static void submitScheduleTask(Runnable task, int second)
+	{
+		ScheduledExecutorService.schedule(task, second, TimeUnit.SECONDS);
 	}
 	
 	public static void resetThreadSearch()

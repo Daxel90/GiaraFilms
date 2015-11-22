@@ -33,9 +33,11 @@ public class FileSources
 	public boolean paused = false;
 	
 	public boolean onWaitingList = false;
-	public ArrayList<String> waitingList = new ArrayList<String>();
 	public boolean endAskFile = false;
 	
+	public boolean AtLeastOneBotOccupated = false;
+	
+	public ArrayList<SourceChan> alreadyAskChannel = new ArrayList<SourceChan>();
 	
 	ConcurrentHashMap<SourceChan, ArrayList<BotPackage>> sourcesBot = new ConcurrentHashMap<SourceChan, ArrayList<BotPackage>>();
 	
@@ -114,8 +116,9 @@ public class FileSources
 			return;
 			
 		if (saveFile == null)
-			saveFile = new File(DirUtils.getDownloadDirectory(), filename);
-			
+			saveFile = new File(DirUtils.getDownloadDirectory(),
+					filename.replace(":", " ").replace("*", "").replace("?", "").replace("<", "").replace(">", ""));
+					
 		SQLQuerySettings.addDownload(filename, saveFile.getAbsolutePath());
 		
 		waitUntilthereAreAtLeastOneBot();
@@ -126,6 +129,11 @@ public class FileSources
 		if (totalBot <= 0)
 		{
 			ErrorHandler.fileNotAvailable(filename);
+			endAskFile = true;
+			if (botResponse < 1 && endAskFile && !downloading && xdcc == null)
+			{
+				ThreadManager.submitScheduleTask(restartDownload, 120);
+			}
 			return;
 		}
 		int LastloadingBotList;
@@ -142,6 +150,15 @@ public class FileSources
 				
 				SourceChan chan = data.getKey();
 				ArrayList<BotPackage> bots = data.getValue();
+				
+				if (!alreadyAskChannel.contains(chan))
+				{
+					alreadyAskChannel.add(chan);
+				}
+				else
+				{
+					continue;
+				}
 				
 				if (!DownloadManager.servers.containsKey(chan.server))
 				{
@@ -167,8 +184,14 @@ public class FileSources
 				for (BotPackage bot : bots)
 				{
 					botResponse = -1;
+					if (DownloadManager.BotRequest.containsKey(bot.bot)
+							&& !DownloadManager.BotRequest.get(bot.bot).filename.equals(this.filename))
+					{
+						AtLeastOneBotOccupated = true;
+						continue;
+					}
 					DownloadManager.BotRequest.put(bot.bot, this);
-					DownloadManager.servers.get(chan.server).sendMessage(bot.bot, "xdcc send #" + bot.packetID);
+					DownloadManager.servers.get(chan.server).requestFile(bot.bot, bot.packetID);
 					int retry = 0;
 					while (botResponse == -1)
 					{
@@ -193,24 +216,34 @@ public class FileSources
 			
 		} while (LastloadingBotList != loadingBotList || loadingBotList > 0);
 		endAskFile = true;
+		
+		if (botResponse < 1 && endAskFile && !downloading && xdcc == null)
+		{
+			ThreadManager.submitScheduleTask(restartDownload, 120);
+		}
 	}
 	
 	public void RemoveFileFromWaitingList()
 	{
 		onWaitingList = false;
-		for(String s : waitingList)
-		{
-			DownloadManager.BotRequest.remove(s);
-		}
-		waitingList.clear();
+		Iterator<Entry<String, FileSources>> it = DownloadManager.BotRequest.entrySet().iterator();
+		 while(it.hasNext())
+		 {
+			 Entry<String, FileSources> entry = it.next();
+			 FileSources s = entry.getValue();
+			 if(s.filename.equals(filename))
+			 {
+				 DownloadManager.BotRequest.remove(entry.getKey());
+			 }
+		 }
 	}
-	
 	
 	public void startDownloadXDCC(DccFileTransfer transfer)
 	{
 		// for reducing Heap Size
 		sourcesBot.clear();
 		totalBot = 0;
+		RemoveFileFromWaitingList();
 		
 		if (paused)
 		{
@@ -252,6 +285,7 @@ public class FileSources
 		if (ex != null)
 		{
 			xdcc = null;
+			downloading = false;
 			FunctionsUtils.sleep(4000);
 			if (!paused)
 				restart();
@@ -265,34 +299,42 @@ public class FileSources
 		Log.log(Log.IRC, "Trasferimento Completato: " + transfer.getFile().getName());
 	}
 	
-	public void stop()
+	public void resetData()
 	{
-		paused = true;
+		totalBot = 0;
+		loadingBotList = 0;
+		botResponse = -1;
+		downloading = false;
 		if (xdcc != null)
 		{
 			xdcc.close();
 			xdcc = null;
 		}
-		
-		totalBot = 0;
-		loadingBotList = 0;
-		botResponse = -1;
-		downloading = false;
+		fileEnd = false;
 		sourcesBot.clear();
 		totalBot = 0;
 		onWaitingList = false;
-		waitingList.clear();
+		RemoveFileFromWaitingList();
 		endAskFile = false;
+		AtLeastOneBotOccupated = false;
+		alreadyAskChannel.clear();
+		sourcesBot.clear();
+	}
+	
+	public void stop()
+	{
+		paused = true;
+		resetData();
 		SQLQuerySettings.setStatus(filename, 1);
 	}
 	
 	public void restart()
 	{
 		paused = false;
+		resetData();
 		loadList();
 		Runnable run = new Runnable()
 		{
-			
 			@Override
 			public void run()
 			{
@@ -309,6 +351,20 @@ public class FileSources
 		DownloadManager.AllFile.remove(filename);
 		SQLQuerySettings.removeDownload(filename);
 	}
+	
+	public Runnable restartDownload = new Runnable()
+	{
+		public void run()
+		{
+			if (paused)
+				return;
+			if (downloading)
+				return;
+			if (xdcc != null)
+				return;
+			restart();	
+		}
+	};
 	
 	public FileSources getInstance()
 	{
