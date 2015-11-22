@@ -64,7 +64,7 @@ public class IrcConnection extends PircBot
 	
 	public void joinChannelAndSayHello(String channel)
 	{
-		if(!channleJoined.contains(channel))
+		if (!channleJoined.contains(channel))
 		{
 			this.joinChannel(channel);
 			this.sendMessage(channel, "Ciao a tutti :D");
@@ -74,7 +74,7 @@ public class IrcConnection extends PircBot
 	
 	public void requestFile(String bot, int packetID)
 	{
-		Log.log(Log.IRC, "Richiedo "+bot+" #"+packetID);
+		Log.log(Log.IRC, "Richiedo " + bot + " #" + packetID);
 		sendMessage(bot, "xdcc send #" + packetID);
 	}
 	
@@ -94,7 +94,8 @@ public class IrcConnection extends PircBot
 				DownloadManager.BotRequest.get(sourceNick).botResponse = 0;
 			Log.log(Log.IRC, "Numero del pack Errato" + sourceNick);
 		}
-		else if (notice.contains("Tutti gli slots sono occupati") || notice.contains("Sei già in coda per questo pack"))
+		else if (notice.contains("Tutti gli slots sono occupati") || notice.contains("Sei già in coda per questo pack")
+				|| notice.contains("Aggiunto alla coda principale per il pack"))
 		{
 			if (DownloadManager.BotRequest.containsKey(sourceNick))
 			{

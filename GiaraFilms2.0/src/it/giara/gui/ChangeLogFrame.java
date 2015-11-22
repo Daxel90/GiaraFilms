@@ -52,6 +52,10 @@ public class ChangeLogFrame extends JFrame
 		text.setOpaque(false);
 		text.setContentType("text/html");
 		text.setText("<html>"
+				+ "<h2>--------------------" + "<h2>Dev PreRelese 12"
+				+ "<br><h3>\t- Vari Fix nei download"
+				+ "<br><h3>\t- Auto riconnessione per file in attesa"
+				+ "<br><h3>\t- Migliorato algoritmo di connessione"
 				+ "<h2>--------------------" + "<h2>Dev PreRelese 11"
 				+ "<br><h3>\t- Settato descrizioine di FallBack in Inglese"
 				+ "<br><h3>\t- Fix visualizzazione Generi"

@@ -282,7 +282,7 @@ public class FileSources
 	
 	public void endXDCCTransfer(DccFileTransfer transfer, Exception ex)
 	{
-		if (ex != null)
+		if (ex != null && (xdcc.getSize() > saveFile.length()))
 		{
 			xdcc = null;
 			downloading = false;
