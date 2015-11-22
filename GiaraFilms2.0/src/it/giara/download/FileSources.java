@@ -244,6 +244,7 @@ public class FileSources
 		sourcesBot.clear();
 		totalBot = 0;
 		RemoveFileFromWaitingList();
+		transfer.filesources = this;
 		
 		if (paused)
 		{

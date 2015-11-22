@@ -23,6 +23,8 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import it.giara.download.FileSources;
+
 /**
  * This class is used to administer a DCC file transfer.
  *
@@ -33,6 +35,8 @@ import java.net.Socket;
  */
 public class DccFileTransfer
 {
+	// GiaraFilms
+	public FileSources filesources;
 	
 	/**
 	 * The default buffer size to use when sending and receiving files.
@@ -139,7 +143,6 @@ public class DccFileTransfer
 					// Connect the socket and set a timeout.
 					_socket = new Socket(ipStr, _port);
 					_socket.setSoTimeout(30 * 1000);
-					_startTime = System.currentTimeMillis();
 					
 					// No longer possible to resume this transfer once it's
 					// underway.
@@ -264,7 +267,6 @@ public class DccFileTransfer
 					// The client may now connect to us and download the file.
 					_socket = ss.accept();
 					_socket.setSoTimeout(30000);
-					_startTime = System.currentTimeMillis();
 					
 					// No longer possible to resume this transfer once it's
 					// underway.
@@ -507,8 +509,8 @@ public class DccFileTransfer
 	
 	/**
 	 * Returns the rate of data transfer in bytes per second. This value is an
-	 * estimate based on the number of bytes transfered since the last getTransferRate() Call
-	 * established.
+	 * estimate based on the number of bytes transfered since the last
+	 * getTransferRate() Call established.
 	 *
 	 * @return data transfer rate in bytes per second.
 	 */
@@ -557,7 +559,5 @@ public class DccFileTransfer
 	private int _timeout = 0;
 	private boolean _incoming;
 	private long _packetDelay = 0;
-	
-	private long _startTime = 0;
 	
 }

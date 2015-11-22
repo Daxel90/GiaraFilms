@@ -52,6 +52,8 @@ public class ChangeLogFrame extends JFrame
 		text.setOpaque(false);
 		text.setContentType("text/html");
 		text.setText("<html>"
+				+ "<h2>--------------------" + "<h2>Dev PreRelese 13"
+				+ "<br><h3>\t- Fix download 100% non risulta completato (Da testare)"
 				+ "<h2>--------------------" + "<h2>Dev PreRelese 12"
 				+ "<br><h3>\t- Vari Fix nei download"
 				+ "<br><h3>\t- Auto riconnessione per file in attesa"
