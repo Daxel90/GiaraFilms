@@ -6,6 +6,8 @@ import java.io.File;
 import javax.imageio.ImageIO;
 import javax.swing.JLabel;
 
+import org.json.JSONObject;
+
 import it.giara.analyze.enums.MainType;
 import it.giara.gui.components.FilmListPanel;
 import it.giara.gui.utils.ImageUtils;
@@ -36,7 +38,7 @@ public class TMDBScheda
 		if (poster_w140 == null)
 		{
 			final File f = new File(DirUtils.getCacheDir() + File.separator + "image",
-					MD5.generatemd5(link+poster) + ".jpg");
+					MD5.generatemd5(link + poster) + ".jpg");
 					
 			if (f.exists())
 			{
@@ -51,7 +53,7 @@ public class TMDBScheda
 					{
 						try
 						{
-							poster_w140 = ImageUtils.getHttpBufferedImage(link+poster);
+							poster_w140 = ImageUtils.getHttpBufferedImage(link + poster);
 							
 							if (poster_w140 != null)
 							{
@@ -92,7 +94,7 @@ public class TMDBScheda
 		if (poster_original == null)
 		{
 			final File f = new File(DirUtils.getCacheDir() + File.separator + "image",
-					MD5.generatemd5(link+poster) + ".jpg");
+					MD5.generatemd5(link + poster) + ".jpg");
 					
 			if (f.exists())
 			{
@@ -107,7 +109,7 @@ public class TMDBScheda
 					{
 						try
 						{
-							poster_original = ImageUtils.getHttpBufferedImage(link+poster);
+							poster_original = ImageUtils.getHttpBufferedImage(link + poster);
 							
 							if (poster_original != null)
 							{
@@ -128,7 +130,8 @@ public class TMDBScheda
 							}
 						} finally
 						{
-							label.setIcon(ImageUtils.getIcon(ImageUtils.scaleImageOld(poster_original, label.getWidth(), label.getHeight())));
+							label.setIcon(ImageUtils.getIcon(
+									ImageUtils.scaleImageOld(poster_original, label.getWidth(), label.getHeight())));
 						}
 					}
 				};
@@ -144,10 +147,10 @@ public class TMDBScheda
 	{
 		String res = "";
 		boolean first = true;
-		for(int s : genre_ids)
+		for (int s : genre_ids)
 		{
-			if(!first)
-				res +=", ";
+			if (!first)
+				res += ", ";
 			else
 				first = false;
 			res += s;
@@ -159,7 +162,7 @@ public class TMDBScheda
 	{
 		String[] Generi = d.split(", ");
 		genre_ids = new int[Generi.length];
-		for(int x = 0; x< genre_ids.length;x++)
+		for (int x = 0; x < genre_ids.length; x++)
 		{
 			genre_ids[x] = Integer.parseInt(Generi[x]);
 		}
@@ -169,10 +172,10 @@ public class TMDBScheda
 	{
 		String res = "";
 		boolean first = true;
-		for(int s : genre_ids)
+		for (int s : genre_ids)
 		{
-			if(!first)
-				res +=", ";
+			if (!first)
+				res += ", ";
 			else
 				first = false;
 			res += GenereType.getGenereByID(s);
@@ -180,16 +183,57 @@ public class TMDBScheda
 		return res;
 	}
 	
+	public JSONObject getJson()
+	{
+		JSONObject json = new JSONObject();
+		try
+		{
+			json.put("id", ID);
+			json.put("title", title);
+			json.put("relese", relese);
+			json.put("poster", poster);
+			json.put("back", back);
+			json.put("desc", desc);
+			json.put("genre_ids", getGeneriIDs());
+			json.put("vote", vote);
+			json.put("type", type.ID);
+		} catch (Exception e)
+		{
+			Log.stack(Log.BACKEND, e);
+		}
+		return json;
+		
+	}
+	
+	public void setJson(JSONObject json)
+	{
+		try
+		{
+			ID = json.getInt("id");
+			title = json.getString("title");
+			relese = json.getString("relese");
+			poster = json.getString("poster");
+			back = json.getString("back");
+			desc = json.getString("desc");
+			this.setGeneriIDs(json.getString("genre_ids"));
+			vote = json.getDouble("vote");
+			type = MainType.getMainTypeByID(json.getInt("type"));
+		} catch (Exception e)
+		{
+			Log.stack(Log.BACKEND, e);
+		}
+		
+	}
 	
 	@Override
 	public String toString()
 	{
 		String result = "ID: " + ID + " title: " + title + " relese: " + relese + " poster: " + poster + " back: "
-				+ back +" desc: "+desc+ " vote: "+vote+" genre_ids: ";
+				+ back + " desc: " + desc + " vote: " + vote + " genre_ids: ";
 				
-		for(int a : genre_ids)
+		for (int a : genre_ids)
 		{
-			result+= a+",";
+			result += a + ",";
 		}
 		return result;
 	}

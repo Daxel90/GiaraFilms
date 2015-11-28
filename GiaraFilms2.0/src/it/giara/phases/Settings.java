@@ -26,6 +26,9 @@ public class Settings
 				DirUtils.getDefaultDownloadDir().getAbsolutePath()));
 		config.put("lastdbcheck", SQLQuerySettings.getCurrentParameter("lastdbcheck", "0"));
 		config.put("scanservice", SQLQuerySettings.getCurrentParameter("scanservice", "0"));
+		config.put("serversync", SQLQuerySettings.getCurrentParameter("serversync", "0"));
+		config.put("lastserversync", SQLQuerySettings.getCurrentParameter("lastserversync", "0"));
+		config.put("servercollaborate", SQLQuerySettings.getCurrentParameter("servercollaborate", "0"));
 		
 		MainFrame.getInstance().setTitle(getTitle(VERSION));
 	}
