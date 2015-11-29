@@ -52,6 +52,9 @@ public class ChangeLogFrame extends JFrame
 		text.setOpaque(false);
 		text.setContentType("text/html");
 		text.setText("<html>"
+				+ "<h2>--------------------" + "<h2>Dev PreRelese 14"
+				+ "<br><h3>\t- Fix Caricamento Liste (CloudFlare fa schifo)"
+				+ "<br><h3>\t- Funzioni sperimentali per sincronia schede (Non ancora attivati)"
 				+ "<h2>--------------------" + "<h2>Dev PreRelese 13"
 				+ "<br><h3>\t- Fix download 100% non risulta completato (Da testare)"
 				+ "<h2>--------------------" + "<h2>Dev PreRelese 12"

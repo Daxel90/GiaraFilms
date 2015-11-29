@@ -6,11 +6,17 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 
 public class ListLoader
 {
 	public static ArrayList<SourceChan> sources = new ArrayList<SourceChan>();
+	
+	static
+	{
+		System.setProperty("http.agent", "PoWeR-Script");
+	}
 	
 	public static void loadSources()
 	{
@@ -18,7 +24,11 @@ public class ListLoader
 		{
 			
 			URL url = new URL("http://giaratest.altervista.org/giarafilms/database.db");
-			BufferedReader input = new BufferedReader(new InputStreamReader(url.openStream()));
+			
+			URLConnection conn = url.openConnection();
+			conn.connect();
+			
+			BufferedReader input = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF8"));
 			String server = "";
 			String line;
 			
@@ -42,6 +52,8 @@ public class ListLoader
 				}
 				
 			}
+			input.close();
+			
 		} catch (IOException e)
 		{
 			Log.stack(Log.CONFIG, e);

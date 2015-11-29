@@ -6,9 +6,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import it.giara.analyze.enums.MainType;
+import it.giara.phases.Settings;
+import it.giara.syncdata.ServerQuery;
 import it.giara.tmdb.schede.TMDBScheda;
 import it.giara.utils.FunctionsUtils;
 import it.giara.utils.Log;
+import it.giara.utils.ThreadManager;
 
 public class SQLQuery
 {
@@ -61,8 +64,20 @@ public class SQLQuery
 	
 	// Files Table
 	
-	public synchronized static int writeFile(String fileName, String size, int IdScheda, MainType t)
+	public synchronized static int writeFile(final String fileName, final String size, final int IdScheda, final MainType t)
 	{
+		if(Settings.getParameter("servercollaborate").equals("1"))
+		{
+			ThreadManager.submitPoolTask(new Runnable()
+			{
+				@Override
+				public void run()
+				{
+					ServerQuery.sendFileInfo(fileName, size, IdScheda, t);
+				}
+			});
+		}	
+		
 		SQL.ExecuteQuery("INSERT OR IGNORE INTO `Files`(`FileName`, `Size`, `IdScheda`, `Type`, `LastUpdate`) VALUES ('" + SQL.escape(fileName)
 				+ "', '"+SQL.escape(size)+"', "+IdScheda+", "+t.ID+", " + FunctionsUtils.getTime() + ");");
 				
@@ -191,8 +206,21 @@ public class SQLQuery
 	
 	// Schede Table
 	
-	public synchronized static int writeScheda(TMDBScheda i)
+	public synchronized static int writeScheda(final TMDBScheda i)
 	{
+		if(Settings.getParameter("servercollaborate").equals("1"))
+		{
+			ThreadManager.submitPoolTask(new Runnable()
+			{
+				@Override
+				public void run()
+				{
+					ServerQuery.sendScheda(i);
+				}
+			});
+		}	
+		
+		
 		if(readScheda(i.ID,i.type) == null)
 		SQL.ExecuteQuery(
 				"INSERT OR IGNORE INTO `Schede`(`ID`, `Title`, `Relese`, `Poster`, `Back`, `Desc`, `GenID`, `Vote`, `Type`, `LastUpdate`) VALUES "

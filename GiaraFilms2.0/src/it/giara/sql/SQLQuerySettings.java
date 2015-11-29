@@ -112,4 +112,9 @@ public class SQLQuerySettings
 		SQL.ExecuteQuerySettings("DELETE FROM `Parameters` WHERE `Key` = \"" + key + "\";");
 	}
 	
+	public synchronized static void updateParameters(String key, String Val)
+	{
+		SQL.ExecuteQuerySettings("UPDATE `Parameters` SET `Value`= '"+Val+"' WHERE `Key` = \"" + key + "\";");
+	}
+	
 }

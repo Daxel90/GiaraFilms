@@ -9,6 +9,7 @@ import java.net.URLConnection;
 import org.json.JSONObject;
 
 import it.giara.analyze.enums.MainType;
+import it.giara.phases.Settings;
 import it.giara.tmdb.schede.TMDBScheda;
 import it.giara.utils.Log;
 
@@ -119,11 +120,11 @@ public class ServerQuery
 		
 	}
 	
-	public static void loadUntil(int linebreak)
+	public static void loadUntil(int lastloaded)
 	{
 		try
 		{
-			String data = "action=4";
+			String data = "action=4&last="+lastloaded;
 			
 			URL url = new URL("http://giaratest.altervista.org/giarafilms/backend/backend.php");
 			URLConnection conn;
@@ -135,20 +136,41 @@ public class ServerQuery
 			wr.flush();
 			BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 			String line;
+			int nfile = 0;
+			int lastFile = lastloaded;
+			boolean endSync = false;
 			while ((line = rd.readLine()) != null)
 			{
 				Log.log(Log.BACKEND, line);
+				if(line.startsWith("EndSync"))
+				{
+					Settings.setParameter("lastserversync", ""+lastFile);
+					endSync = true;
+					break;
+				}
 				if(!line.contains(":--:"))
 					break;
 				
 				String[] part = line.split(":--:");
 				int n = Integer.parseInt(part[0]);
 				
-				if(n == linebreak)
-					break;
+				lastFile =n;
+				
+				nfile++;
+				if(nfile>=10)
+				{
+					nfile = 0;
+					Settings.setParameter("lastserversync", ""+lastFile);
+				}
 			}
 			wr.close();
 			rd.close();
+			
+			if(!endSync)
+			{
+				loadUntil(lastFile);
+			}
+			
 		} catch (Exception e)
 		{
 			Log.stack(Log.BACKEND, e);
