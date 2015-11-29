@@ -35,7 +35,9 @@ public class UpdateProgram
 				}
 			}
 		} catch (URISyntaxException e)
-		{}
+		{
+			Log.stack(Log.NET,e);
+		}
 		
 	}
 	

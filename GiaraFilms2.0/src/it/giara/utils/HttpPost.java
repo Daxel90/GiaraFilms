@@ -9,6 +9,10 @@ import java.net.URLEncoder;
 
 public class HttpPost
 {
+	static
+	{
+		System.setProperty("http.agent", "PoWeR-Script");
+	}
 	
 	public static String post(String pagina, String variabile, String valore)
 	{
