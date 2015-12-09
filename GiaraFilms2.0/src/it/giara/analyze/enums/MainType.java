@@ -2,7 +2,7 @@ package it.giara.analyze.enums;
 
 public enum MainType
 {
-	Film(1), SerieTV(2), Cartoni(3), Musica(4), Altro(5), NULL(-1);
+	Film(1), SerieTV(2), Archivio(3), Altro(4), NULL(-1);
 	
 	public int ID;
 	
@@ -22,9 +22,7 @@ public enum MainType
 			case 2:
 				return SerieTV;
 			case 3:
-				return Cartoni;
-			case 4:
-				return Musica;
+				return Archivio;
 			case 5:
 				return Altro;
 		}

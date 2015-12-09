@@ -14,7 +14,7 @@ public class FileInfo
 	public String title;
 	
 	// SerieTv
-	public int series = -1;
+	public int series = 1;
 	public int episode = -1;
 	
 	public FileInfo(String s)
@@ -39,7 +39,6 @@ public class FileInfo
 		
 		String[] prt = n.split(" ");
 		
-		boolean flagTVSeries = false;
 		boolean isFilm = false;
 		
 		for (String s : prt)
@@ -54,12 +53,7 @@ public class FileInfo
 					isFilm = false;
 					break;
 				}
-				else if (s.matches(".*s(\\d+).*"))
-				{
-					flagTVSeries = true;
-				}
-				
-				if (flagTVSeries && (s.matches(".*e(\\d+).*") || s.matches(".*ep(\\d+).*")))
+				if ((s.matches(".*e(\\d+).*") || s.matches(".*ep(\\d+).*")))
 				{
 					TVSeries();
 					isFilm = false;
@@ -138,7 +132,6 @@ public class FileInfo
 	{
 		title = "";
 		String[] part = Filename.replace(".", " ").split(" ");
-		boolean flagTVSeries = false;
 		int i = 0;
 		for (String s : part)
 		{
@@ -150,11 +143,7 @@ public class FileInfo
 				{
 					break;
 				}
-				else if (s.matches(".*s(\\d+).*"))
-				{
-					flagTVSeries = true;
-				}
-				else if (flagTVSeries && (s.matches(".*e(\\d+).*") || s.matches(".*ep(\\d+).*")))
+				else if ((s.matches(".*e(\\d+).*") || s.matches(".*ep(\\d+).*")))
 				{
 					break;
 				}
@@ -190,7 +179,6 @@ public class FileInfo
 	public void paraseTVSeriesEpisode()
 	{
 		String[] part = Filename.replace(".", " ").split(" ");
-		boolean flagTVSeries = false;
 		
 		for (String s : part)
 		{
@@ -237,9 +225,8 @@ public class FileInfo
 					{
 						series = Integer.parseInt(m.group(1));
 					}
-					flagTVSeries = true;
 				}
-				else if (flagTVSeries && s.matches(".*e(\\d+).*"))
+				else if (s.matches(".*e(\\d+).*"))
 				{
 					Pattern p = Pattern.compile(".*e(\\d+).*");
 					Matcher m = p.matcher(s);
@@ -249,7 +236,7 @@ public class FileInfo
 					}
 					break;
 				}
-				else if (flagTVSeries && s.matches(".*ep(\\d+).*"))
+				else if (s.matches(".*ep(\\d+).*"))
 				{
 					Pattern p = Pattern.compile(".*ep(\\d+).*");
 					Matcher m = p.matcher(s);
