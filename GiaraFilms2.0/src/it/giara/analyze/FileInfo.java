@@ -119,6 +119,12 @@ public class FileInfo
 			{
 				break;
 			}
+			
+			if (i > 1 && t.contains("("))
+			{
+				break;
+			}
+			
 			title += " " + t;
 			
 		}
@@ -169,6 +175,12 @@ public class FileInfo
 			{
 				break;
 			}
+			
+			if (i > 1 && s.contains("("))
+			{
+				break;
+			}
+			
 			title += " " + s;
 			
 		}
