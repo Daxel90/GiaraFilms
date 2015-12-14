@@ -7,6 +7,20 @@ import it.giara.analyze.enums.SyntaxTags;
 
 public class StringUtils
 {
+	public static int countAlphabet(String n)
+	{
+		int count = 0;
+		for (char c : n.toCharArray())
+		{
+			if (Character.isAlphabetic(c))
+			{
+				count++;
+			}
+		}
+		return count;
+	}
+	
+	
 	
 	public static boolean containsDigit(String n)
 	{

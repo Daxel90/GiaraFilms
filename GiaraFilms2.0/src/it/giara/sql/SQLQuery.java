@@ -303,7 +303,7 @@ public class SQLQuery
 	public synchronized static HashMap<Integer,HashMap<Integer,ArrayList<Integer>>> readEpisodeInfoList(int serieID)
 	{
 		HashMap<Integer,HashMap<Integer,ArrayList<Integer>>> result = new HashMap<Integer,HashMap<Integer,ArrayList<Integer>>>();
-		ResultSet r = SQL.FetchData("SELECT * FROM `EpisodeInfo` WHERE `IdScheda` = " + serieID + ";");
+		ResultSet r = SQL.FetchData("SELECT * FROM `EpisodeInfo` WHERE `IdScheda` = " + serieID + " ORDER BY `Episode`;");
 		try
 		{
 			while (r.next())

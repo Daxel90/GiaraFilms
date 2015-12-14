@@ -40,11 +40,11 @@ public class FileInfo
 		String[] prt = n.split(" ");
 		
 		boolean isFilm = false;
-		
+		boolean markTvSerie = false;
 		for (String s : prt)
 		{
 			// ANALISI PER SERIE TV
-			if (StringUtils.containsDigit(s) && (s.contains("x") || s.contains("e") || s.contains("s")))
+			if (StringUtils.containsDigit(s) || (s.contains("x") || s.contains("e") || s.contains("s")))
 			{
 				if (s.matches(".*(\\d+)x(\\d+).*") || s.matches(".*s(\\d+)e(\\d+).*")
 						|| s.matches(".*s(\\d+)ep(\\d+).*"))
@@ -53,11 +53,26 @@ public class FileInfo
 					isFilm = false;
 					break;
 				}
-				if ((s.matches(".*e(\\d+).*") || s.matches(".*ep(\\d+).*")))
+				if ((s.matches(".*e(\\d+).*") || s.matches(".*ep(\\d+).*")) && StringUtils.countAlphabet(s) <= 3)
 				{
 					TVSeries();
 					isFilm = false;
 					break;
+				}
+				else if(!markTvSerie && s.matches(".*ep.*"))
+				{
+					markTvSerie = true;
+				}
+				
+				else if(markTvSerie && s.matches(".*(\\d+).*"))
+				{
+					TVSeries();
+					isFilm = false;
+					break;
+				}
+				else
+				{
+					markTvSerie = false;
 				}
 			}
 			else if (StringUtils.containTag(s, false))
@@ -139,19 +154,37 @@ public class FileInfo
 		title = "";
 		String[] part = Filename.replace(".", " ").split(" ");
 		int i = 0;
+		boolean markTvSerie = false;
+		int lastPartLength = 0;
+		
 		for (String s : part)
 		{
 			i++;
-			if (StringUtils.containsDigit(s) && (s.contains("x") || s.contains("e") || s.contains("s")))
+			if (StringUtils.containsDigit(s) || (s.contains("x") || s.contains("e") || s.contains("s")))
 			{
+				
 				if (s.matches(".*(\\d+)x(\\d+).*") || s.matches(".*s(\\d+)ep(\\d+).*")
 						|| s.matches(".*s(\\d+)e(\\d+).*"))
 				{
 					break;
 				}
-				else if ((s.matches(".*e(\\d+).*") || s.matches(".*ep(\\d+).*")))
+				else if ((s.matches(".*e(\\d+).*") || s.matches(".*ep(\\d+).*")) && StringUtils.countAlphabet(s) <= 3)
 				{
 					break;
+				}
+				else if(!markTvSerie && s.matches(".*ep.*"))
+				{
+					markTvSerie = true;
+					lastPartLength = s.length();
+				}
+				else if(markTvSerie && s.matches(".*(\\d+).*"))
+				{
+					title = title.substring(0, title.length()-lastPartLength-1);
+					break;
+				}
+				else
+				{
+					markTvSerie = false;
 				}
 			}
 			
@@ -192,9 +225,11 @@ public class FileInfo
 	{
 		String[] part = Filename.replace(".", " ").split(" ");
 		
+		boolean markTvSerie = false;
+		
 		for (String s : part)
 		{
-			if (StringUtils.containsDigit(s) && (s.contains("x") || s.contains("e") || s.contains("s")))
+			if (StringUtils.containsDigit(s) || (s.contains("x") || s.contains("e") || s.contains("s")))
 			{
 				if (s.matches(".*?(\\d+)x(\\d+).*"))
 				{
@@ -229,7 +264,7 @@ public class FileInfo
 					}
 					break;
 				}
-				else if (s.matches(".*s(\\d+).*"))
+				else if (s.matches(".*s(\\d+).*") && StringUtils.countAlphabet(s) <= 2)
 				{
 					Pattern p = Pattern.compile(".*s(\\d+).*");
 					Matcher m = p.matcher(s);
@@ -238,7 +273,7 @@ public class FileInfo
 						series = Integer.parseInt(m.group(1));
 					}
 				}
-				else if (s.matches(".*e(\\d+).*"))
+				else if (s.matches(".*e(\\d+).*")&& StringUtils.countAlphabet(s) <= 2)
 				{
 					Pattern p = Pattern.compile(".*e(\\d+).*");
 					Matcher m = p.matcher(s);
@@ -248,7 +283,7 @@ public class FileInfo
 					}
 					break;
 				}
-				else if (s.matches(".*ep(\\d+).*"))
+				else if (s.matches(".*ep(\\d+).*") && StringUtils.countAlphabet(s) <= 3)
 				{
 					Pattern p = Pattern.compile(".*ep(\\d+).*");
 					Matcher m = p.matcher(s);
@@ -258,6 +293,26 @@ public class FileInfo
 					}
 					break;
 				}
+				else if(!markTvSerie && s.matches(".*ep.*"))
+				{
+					markTvSerie = true;
+				}
+				
+				else if(markTvSerie && s.matches("(\\d+)"))
+				{
+					Pattern p = Pattern.compile("(\\d+)");
+					Matcher m = p.matcher(s);
+					if (m.find())
+					{
+						episode = Integer.parseInt(m.group(1));
+					}
+					break;
+				}
+				else
+				{
+					markTvSerie = false;
+				}
+				
 			}
 			
 		}
