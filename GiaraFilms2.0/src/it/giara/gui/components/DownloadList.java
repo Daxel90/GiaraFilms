@@ -13,8 +13,10 @@ import it.giara.download.DownloadManager;
 import it.giara.gui.DefaultGui;
 import it.giara.gui.MainFrame;
 import it.giara.gui.section.Download;
+import it.giara.gui.section.DownloadAllEpisode;
 import it.giara.gui.utils.ColorUtils;
 import it.giara.gui.utils.ImageUtils;
+import it.giara.phases.DownloadStrategy;
 import it.giara.utils.ThreadManager;
 
 public class DownloadList extends JScrollPane
@@ -84,7 +86,7 @@ public class DownloadList extends JScrollPane
 				}
 				
 				JLabel name = new JLabel();
-				name.setText("<html><h3>" + size +"&nbsp;&nbsp;&nbsp;&nbsp;"+file + "</html>");
+				name.setText("<html><h3>" + size + "&nbsp;&nbsp;&nbsp;&nbsp;" + file + "</html>");
 				name.setBounds(10, 10 + (n - offset) * 40, this.getWidth() - 50, 30);
 				name.setBorder(BorderFactory.createEtchedBorder());
 				this.add(name);
@@ -112,7 +114,7 @@ public class DownloadList extends JScrollPane
 		}
 		else
 		{
-			for (Entry<Integer, HashMap<Integer, ArrayList<String[]>>> serie : SerieList.entrySet())
+			for (final Entry<Integer, HashMap<Integer, ArrayList<String[]>>> serie : SerieList.entrySet())
 			{
 				final int serieN = serie.getKey();
 				
@@ -129,6 +131,29 @@ public class DownloadList extends JScrollPane
 					Object[] obj = { false, new HashMap<Integer, Boolean>() };
 					SerieTree.put(serieN, obj);
 				}
+				
+				ImageButton downloadSerie = new ImageButton(download, download_over, download_over, new Runnable()
+				{
+					@Override
+					public void run()
+					{
+						Runnable task = new Runnable()
+						{
+							public void run()
+							{
+								MainFrame.getInstance()
+										.setInternalPane(new DownloadAllEpisode(gui.guiInstance, serieN,
+												DownloadStrategy.nEpisodesSeries(serie.getValue()),
+												DownloadStrategy.downloadSeries(serie.getValue())));
+							}
+						};
+						ThreadManager.submitCacheTask(task);
+						// MainFrame.getInstance().setInternalPane(new
+						// Download(gui.guiInstance));
+					}
+				});
+				downloadSerie.setBounds(this.getWidth() - 80, 11 + (n - 1 - offset) * 40, 28, 28);
+				this.add(downloadSerie);
 				
 				if ((Boolean) SerieTree.get(serieN)[0])
 				{
@@ -166,7 +191,8 @@ public class DownloadList extends JScrollPane
 				{
 					final int episodeN = episode.getKey();
 					
-//					HashMap<Integer, Boolean> mapTreeSerie = (HashMap<Integer, Boolean>) SerieTree.get(serieN)[1];
+					// HashMap<Integer, Boolean> mapTreeSerie =
+					// (HashMap<Integer, Boolean>) SerieTree.get(serieN)[1];
 					
 					JLabel episodeLabel = new JLabel();
 					episodeLabel.setText("<html><h2>Episodio " + episodeN + "</html>");
@@ -176,19 +202,19 @@ public class DownloadList extends JScrollPane
 					this.add(episodeLabel);
 					n++;
 					
-					if (!((HashMap<Integer, Boolean>)SerieTree.get(serieN)[1]).containsKey(episodeN))
+					if (!((HashMap<Integer, Boolean>) SerieTree.get(serieN)[1]).containsKey(episodeN))
 					{
-						((HashMap<Integer, Boolean>)SerieTree.get(serieN)[1]).put(episodeN, false);
+						((HashMap<Integer, Boolean>) SerieTree.get(serieN)[1]).put(episodeN, false);
 					}
 					
-					if (((HashMap<Integer, Boolean>)SerieTree.get(serieN)[1]).get(episodeN))
+					if (((HashMap<Integer, Boolean>) SerieTree.get(serieN)[1]).get(episodeN))
 					{
 						ImageButton minusSerie = new ImageButton(minus, minus_over, minus_over, new Runnable()
 						{
 							@Override
 							public void run()
 							{
-								((HashMap<Integer, Boolean>)SerieTree.get(serieN)[1]).put(episodeN, false);
+								((HashMap<Integer, Boolean>) SerieTree.get(serieN)[1]).put(episodeN, false);
 								init();
 								repaint();
 							}
@@ -203,7 +229,7 @@ public class DownloadList extends JScrollPane
 							@Override
 							public void run()
 							{
-								((HashMap<Integer, Boolean>)SerieTree.get(serieN)[1]).put(episodeN, true);
+								((HashMap<Integer, Boolean>) SerieTree.get(serieN)[1]).put(episodeN, true);
 								init();
 								repaint();
 							}
@@ -212,11 +238,6 @@ public class DownloadList extends JScrollPane
 						this.add(plusSerie);
 						continue;
 					}
-					
-					
-					
-					
-					
 					
 					for (String[] Arrfile : episode.getValue())
 					{
@@ -229,7 +250,7 @@ public class DownloadList extends JScrollPane
 						}
 						
 						JLabel name = new JLabel();
-						name.setText("<html><h3>" +  size +"&nbsp;&nbsp;&nbsp;&nbsp;"+file  + "</html>");
+						name.setText("<html><h3>" + size + "&nbsp;&nbsp;&nbsp;&nbsp;" + file + "</html>");
 						name.setBounds(50, 10 + (n - offset) * 40, this.getWidth() - 90, 30);
 						name.setBorder(BorderFactory.createEtchedBorder());
 						this.add(name);

@@ -297,7 +297,6 @@ public class FileInfo
 				{
 					markTvSerie = true;
 				}
-				
 				else if(markTvSerie && s.matches("(\\d+)"))
 				{
 					Pattern p = Pattern.compile("(\\d+)");
@@ -311,12 +310,9 @@ public class FileInfo
 				else
 				{
 					markTvSerie = false;
-				}
-				
+				}	
 			}
-			
 		}
-		
 		Log.log(Log.FILEINFO, "TVSeries: " + title + " Serie: " + series + " Episode:" + episode);
 	}
 	
