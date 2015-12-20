@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
-import it.giara.utils.Log;
-
 public class DownloadStrategy
 {
 	public static int nEpisodesSeries(HashMap<Integer, ArrayList<String[]>> list)
@@ -13,14 +11,13 @@ public class DownloadStrategy
 		int max = 0;
 		for (Entry<Integer, ArrayList<String[]>> episode : list.entrySet())
 		{
-			if(max < episode.getKey())
+			if (max < episode.getKey())
 			{
 				max = episode.getKey();
 			}
 		}
 		return max;
 	}
-	
 	
 	public static HashMap<String, HashMap<Integer, String>> downloadSeries(HashMap<Integer, ArrayList<String[]>> list)
 	{
@@ -117,22 +114,21 @@ public class DownloadStrategy
 			}
 		}
 		
-//		for(Entry<String, HashMap<Integer, String>> tag : result.entrySet())
-//		{
-//			String s = tag.getKey();
-//			HashMap<Integer, String> episodes = tag.getValue();
-//			
-//			Log.log(Log.DB, "--"+s+"--");
-//			for(Entry<Integer, String> entry : episodes.entrySet())
-//			{
-//				int i = entry.getKey();
-//				String se = entry.getValue();
-//				Log.log(Log.DB, "   EP:"+i);
-//				Log.log(Log.DB, "   "+se);
-//			}
-//		}
+		// for(Entry<String, HashMap<Integer, String>> tag : result.entrySet())
+		// {
+		// String s = tag.getKey();
+		// HashMap<Integer, String> episodes = tag.getValue();
+		//
+		// Log.log(Log.DB, "--"+s+"--");
+		// for(Entry<Integer, String> entry : episodes.entrySet())
+		// {
+		// int i = entry.getKey();
+		// String se = entry.getValue();
+		// Log.log(Log.DB, " EP:"+i);
+		// Log.log(Log.DB, " "+se);
+		// }
+		// }
 		return result;
 	}
-	
 	
 }

@@ -54,7 +54,7 @@ public class ChangeLogFrame extends JFrame
 		text.setText("<html>"
 				+ "<h2>--------------------" + "<h2>Dev PreRelese 15"
 				+ "<br><h3>\t- Migliorato algoritmo analisi file"
-				+ "<br><h3>\t- "
+				+ "<br><h3>\t- Aggiunto Download per Stagioni Complete SerieTv"
 				+ "<h2>--------------------" + "<h2>Dev PreRelese 14"
 				+ "<br><h3>\t- Fix Caricamento Liste (CloudFlare fa schifo)"
 				+ "<br><h3>\t- Funzioni sperimentali per sincronia schede (Non ancora attivati)"

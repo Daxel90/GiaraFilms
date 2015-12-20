@@ -1,18 +1,20 @@
 package it.giara.gui.section;
 
 import java.awt.Color;
+import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 
+import it.giara.download.DownloadManager;
 import it.giara.gui.DefaultGui;
 import it.giara.gui.MainFrame;
 import it.giara.gui.components.ImageButton;
 import it.giara.gui.utils.ColorUtils;
 import it.giara.gui.utils.ImageUtils;
-import it.giara.utils.Log;
+import it.giara.utils.ThreadManager;
 
 public class DownloadAllEpisode extends DefaultGui
 {
@@ -20,6 +22,7 @@ public class DownloadAllEpisode extends DefaultGui
 	
 	DefaultGui back;
 	private ImageButton ArrowUp, ArrowDown;
+	private BufferedImage download, download_over;
 	int offset = 0;
 	int serie;
 	int nEpisode;
@@ -37,6 +40,8 @@ public class DownloadAllEpisode extends DefaultGui
 		serie = Serie;
 		EpMap = map;
 		nEpisode = nEP;
+		download = ImageUtils.getImage("gui/download.png");
+		download_over = ImageUtils.getImage("gui/download_over.png");
 	}
 	
 	public void loadComponent()
@@ -59,13 +64,16 @@ public class DownloadAllEpisode extends DefaultGui
 		this.add(options);
 		
 		int num = 0;
-		
-		int line = nEpisode / ((FRAME_WIDTH * 7 / 9)/20)+1;
-		Log.log(Log.DEBUG, line);
-		for (Entry<String, HashMap<Integer, String>> Tag : EpMap.entrySet())
+		int itt = 0;
+		int line = nEpisode / ((FRAME_WIDTH * 7 / 9) / 20) + 1;
+		for (final Entry<String, HashMap<Integer, String>> Tag : EpMap.entrySet())
 		{
+			itt++;
+			if (itt <= offset)
+				continue;
+				
 			JLabel tagName = new JLabel();
-			tagName.setBounds(FRAME_WIDTH / 9, 45 +num * (25+10+20*line), FRAME_WIDTH * 7 / 9, 25);
+			tagName.setBounds(FRAME_WIDTH / 9, 45 + num * (25 + 10 + 20 * line), FRAME_WIDTH * 7 / 9, 25);
 			tagName.setText("<html><h3>" + Tag.getKey() + "</html>");
 			tagName.setHorizontalAlignment(JLabel.CENTER);
 			tagName.setBorder(BorderFactory.createLineBorder(ColorUtils.Separator));
@@ -74,11 +82,12 @@ public class DownloadAllEpisode extends DefaultGui
 			for (int x = 1; x <= nEpisode; x++)
 			{
 				JLabel icon = new JLabel();
-				icon.setBounds(FRAME_WIDTH / 9 +(x-1)%((FRAME_WIDTH * 7 / 9)/20)*20, 78 + num * (25+10+20*line) +20*((x-1)/((FRAME_WIDTH * 7 / 9)/20)), 17, 17);
-				icon.setBorder(BorderFactory.createLineBorder(ColorUtils.Separator));
+				icon.setBounds(FRAME_WIDTH / 9 + (x - 1) % ((FRAME_WIDTH * 7 / 9) / 20) * 20,
+						78 + num * (25 + 10 + 20 * line) + 20 * ((x - 1) / ((FRAME_WIDTH * 7 / 9) / 20)), 17, 17);
+				icon.setBorder(BorderFactory.createEtchedBorder());
 				icon.setHorizontalAlignment(JLabel.CENTER);
-				icon.setText(""+x);
-				if(EpMap.get(Tag.getKey()).containsKey(x))
+				icon.setText("" + x);
+				if (EpMap.get(Tag.getKey()).containsKey(x))
 				{
 					icon.setForeground(Color.GREEN);
 				}
@@ -89,6 +98,18 @@ public class DownloadAllEpisode extends DefaultGui
 				this.add(icon);
 			}
 			
+			ImageButton downloads = new ImageButton(download, download_over, download_over, new Runnable()
+			{
+				@Override
+				public void run()
+				{
+					DownloadManager.downloadCollection(EpMap.get(Tag.getKey()));
+					MainFrame.getInstance().setInternalPane(new Download(back));
+				}
+			});
+			downloads.setBounds(FRAME_WIDTH * 8 / 9 - 25, 45 + num * (25 + 10 + 20 * line) + 2, 21, 21);
+			this.add(downloads);
+			
 			num++;
 		}
 		
@@ -97,7 +118,7 @@ public class DownloadAllEpisode extends DefaultGui
 		this.add(ArrowUp);
 		
 		ArrowDown.setBounds(this.getWidth() - 57, this.getHeight() - 42, 32, 32);
-		ArrowDown.setVisible(true);
+		ArrowDown.setVisible(offset < (EpMap.size() - 1));
 		this.add(ArrowDown);
 	}
 	
@@ -115,7 +136,7 @@ public class DownloadAllEpisode extends DefaultGui
 		@Override
 		public void run()
 		{
-			offset -= 2;
+			offset--;
 			if (offset < 0)
 				offset = 0;
 			loadComponent();
@@ -128,7 +149,7 @@ public class DownloadAllEpisode extends DefaultGui
 		@Override
 		public void run()
 		{
-			offset += 2;
+			offset++;
 			loadComponent();
 			repaint();
 		}

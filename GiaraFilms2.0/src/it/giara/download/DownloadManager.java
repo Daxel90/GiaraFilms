@@ -1,9 +1,12 @@
 package it.giara.download;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 
 import it.giara.irc.IrcConnection;
+import it.giara.utils.ThreadManager;
 
 public class DownloadManager
 {
@@ -24,6 +27,21 @@ public class DownloadManager
 	{
 		FileSources sources = DownloadManager.getFileSources(FileName, false);
 		sources.requestDownload();
+	}
+	
+	public static void downloadCollection(HashMap<Integer, String> collection)
+	{
+		for (final Entry<Integer, String> file : collection.entrySet())
+		{
+			Runnable task = new Runnable()
+			{
+				public void run()
+				{
+					downloadFile(file.getValue());
+				}
+			};
+			ThreadManager.submitCacheTask(task);
+		}
 	}
 	
 	public static FileSources getFileSources(String filename, boolean paused)
