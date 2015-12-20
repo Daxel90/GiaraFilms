@@ -1,5 +1,7 @@
 package it.giara.gui.section;
 
+import java.awt.image.BufferedImage;
+
 import javax.swing.BorderFactory;
 import javax.swing.JEditorPane;
 import javax.swing.JLabel;
@@ -23,6 +25,7 @@ public class FilmInfoSchede extends DefaultGui
 	
 	JEditorPane text;
 	JLabel cover;
+	JLabel backGround;
 	JScrollPane scroll;
 	JLabel info;
 	ImageButton downloads;
@@ -75,12 +78,12 @@ public class FilmInfoSchede extends DefaultGui
 		text.setContentType("text/html");
 		text.setText("<html><h2>" + scheda.desc + "</html>");
 		text.setBorder(BorderFactory.createEmptyBorder());
-		text.setBackground(ColorUtils.Back);
+		text.setBackground(ColorUtils.Trasparent);
 		
 		scroll = new JScrollPane(text);
 		scroll.setFocusable(true);
 		scroll.setBorder(BorderFactory.createEmptyBorder());
-		scroll.setBackground(ColorUtils.Back);
+		scroll.setBackground(ColorUtils.Trasparent);
 		
 		if ((int) ((FRAME_WIDTH / 4) * 1.49) < FRAME_HEIGHT / 2)
 			scroll.setBounds(FRAME_WIDTH / 4 + 60, 80, FRAME_WIDTH - (FRAME_WIDTH / 4 + 80),
@@ -89,7 +92,7 @@ public class FilmInfoSchede extends DefaultGui
 			scroll.setBounds((int) ((FRAME_HEIGHT / 2) * 0.67) + 60, 80,
 					FRAME_WIDTH - ((int) ((FRAME_HEIGHT / 2) * 0.67) + 80), FRAME_HEIGHT / 2 - 35);
 					
-		scroll.setOpaque(true);
+		scroll.setOpaque(false);
 		scroll.setVisible(false);
 		this.add(scroll);
 		ThreadManager.submitCacheTask(UpdateText);
@@ -114,6 +117,33 @@ public class FilmInfoSchede extends DefaultGui
 		downloads.setBounds((FRAME_WIDTH - 64) / 2, FRAME_HEIGHT - 100, 64, 64);
 		downloads.setVisible(true);
 		this.add(downloads);
+		
+		if (backGround == null)
+		{
+			backGround = new JLabel();
+			scheda.initBack_w1920(backGround);
+		}
+		
+		backGround.setBounds(0, 0, FRAME_WIDTH, FRAME_HEIGHT);
+		
+		if (scheda.back_w1920 != null)
+		{
+			if (backGround.getWidth() > backGround.getHeight())
+			{
+				BufferedImage img = ImageUtils.scaleWithAspectHeight(scheda.back_w1920, backGround.getHeight());
+				if (img.getWidth() < backGround.getWidth())
+					img = ImageUtils.scaleWithAspectWidth(scheda.back_w1920, backGround.getWidth());
+				backGround.setIcon(ImageUtils.getIcon(img));
+			}
+			else
+			{
+				BufferedImage img = ImageUtils.scaleWithAspectWidth(scheda.back_w1920, backGround.getWidth());
+				if (img.getHeight() < backGround.getHeight())
+					img = ImageUtils.scaleWithAspectHeight(scheda.back_w1920, backGround.getHeight());
+				backGround.setIcon(ImageUtils.getIcon(img));
+			}
+		}
+		this.add(backGround);
 		
 	}
 	

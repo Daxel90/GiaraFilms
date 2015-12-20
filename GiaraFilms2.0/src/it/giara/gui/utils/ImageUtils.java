@@ -136,7 +136,7 @@ public class ImageUtils
 	{
 		try
 		{
-			return scaleImage(ImageIO.read(getResourceAsStream("/it/resources/" + imageName)), w, h);
+			return scaleImageOld(ImageIO.read(getResourceAsStream("/it/resources/" + imageName)), w, h);
 		} catch (final IOException e)
 		{
 			Log.stack(Log.GUI, e);
@@ -149,7 +149,7 @@ public class ImageUtils
 	{
 		try
 		{
-			return new ImageIcon(scaleImage(ImageIO.read(getResourceAsStream("/it/resources/" + iconName)), w, h));
+			return new ImageIcon(scaleImageOld(ImageIO.read(getResourceAsStream("/it/resources/" + iconName)), w, h));
 		} catch (final IOException e)
 		{
 			Log.stack(Log.GUI, e);
@@ -199,7 +199,7 @@ public class ImageUtils
 		final int imgWidth = img.getWidth();
 		final int imgHeight = img.getHeight();
 		final int height = imgHeight * width / imgWidth;
-		return scaleImage(img, width, height);
+		return scaleImageOld(img, width, height);
 	}
 	
 	// scala la BufferedImage senza conservare aspect ratio
@@ -222,6 +222,7 @@ public class ImageUtils
 	
 	// //scalare immagine con qualita' superiore senza conservare aspect ratio
 	//TO SLOW AND CREATE LOOP ON PROCESSOR
+	@Deprecated
 	public static BufferedImage scaleImage(BufferedImage img, int targetWidth, int targetHeight)
 	{
 		BufferedImage ret = (BufferedImage) img;
@@ -266,6 +267,6 @@ public class ImageUtils
 		final int imgWidth = img.getWidth();
 		final int imgHeight = img.getHeight();
 		final int width = imgWidth * height / imgHeight;
-		return scaleImage(img, width, height);
+		return scaleImageOld(img, width, height);
 	}
 }
