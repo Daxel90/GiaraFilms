@@ -6,12 +6,13 @@ import java.util.prefs.Preferences;
 
 import it.giara.gui.ChangeLogFrame;
 import it.giara.gui.MainFrame;
+import it.giara.sql.SQLQuery;
 import it.giara.sql.SQLQuerySettings;
 import it.giara.utils.DirUtils;
 
 public class Settings
 {
-	public final static int VERSION = 14;
+	public final static int VERSION = 15;
 	private final static int END_PreReleseVersion = Integer.MAX_VALUE;
 	private final static int END_BetaVersion = Integer.MAX_VALUE;
 	private static HashMap<String, String> config = new HashMap<String, String>();
@@ -72,6 +73,12 @@ public class Settings
 			new File(DirUtils.getWorkingDirectory(), "FileDatabase.db").delete();
 			SQLQuerySettings.TableFix1();
 			setParameter("DBversion", "10");
+		}
+		
+		if(Integer.parseInt(Settings.getParameter("DBversion")) < 15)
+		{
+			SQLQuery.DbClear();
+			setParameter("DBversion", "15");
 		}
 	}
 	

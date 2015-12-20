@@ -3,6 +3,7 @@ package it.giara.gui.section;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
+import java.util.TreeMap;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
@@ -22,7 +23,7 @@ public class DownloadTVSerie extends DefaultGui
 	
 	DefaultGui back;
 	TMDBScheda scheda;
-	HashMap<Integer, HashMap<Integer, ArrayList<String[]>>> lista = new HashMap<Integer, HashMap<Integer, ArrayList<String[]>>>();
+	HashMap<Integer, TreeMap<Integer, ArrayList<String[]>>> lista = new HashMap<Integer, TreeMap<Integer, ArrayList<String[]>>>();
 	DownloadList panel;
 	
 	public DownloadTVSerie(DefaultGui gui, TMDBScheda scheda2)
@@ -41,7 +42,7 @@ public class DownloadTVSerie extends DefaultGui
 				for (int file : episode.getValue())
 				{
 					if (!lista.containsKey(serieN))
-						lista.put(serieN, new HashMap<Integer, ArrayList<String[]>>());
+						lista.put(serieN, new TreeMap<Integer, ArrayList<String[]>>());
 					if (!lista.get(serieN).containsKey(episodeN))
 						lista.get(serieN).put(episodeN, new ArrayList<String[]>());
 					lista.get(serieN).get(episodeN).add(SQLQuery.getFileNameAndSize(file));

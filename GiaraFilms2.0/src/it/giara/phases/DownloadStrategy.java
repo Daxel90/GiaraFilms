@@ -3,10 +3,11 @@ package it.giara.phases;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
+import java.util.TreeMap;
 
 public class DownloadStrategy
 {
-	public static int nEpisodesSeries(HashMap<Integer, ArrayList<String[]>> list)
+	public static int nEpisodesSeries(TreeMap<Integer, ArrayList<String[]>> list)
 	{
 		int max = 0;
 		for (Entry<Integer, ArrayList<String[]>> episode : list.entrySet())
@@ -19,7 +20,7 @@ public class DownloadStrategy
 		return max;
 	}
 	
-	public static HashMap<String, HashMap<Integer, String>> downloadSeries(HashMap<Integer, ArrayList<String[]>> list)
+	public static HashMap<String, HashMap<Integer, String>> downloadSeries(TreeMap<Integer, ArrayList<String[]>> list)
 	{
 		HashMap<String, HashMap<Integer, String>> result = new HashMap<String, HashMap<Integer, String>>();
 		

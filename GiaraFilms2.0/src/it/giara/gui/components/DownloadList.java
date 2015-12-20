@@ -4,6 +4,7 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
+import java.util.TreeMap;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
@@ -24,7 +25,7 @@ public class DownloadList extends JScrollPane
 	private static final long serialVersionUID = 1L;
 	
 	ArrayList<String[]> fileList;
-	HashMap<Integer, HashMap<Integer, ArrayList<String[]>>> SerieList;
+	TreeMap<Integer, TreeMap<Integer, ArrayList<String[]>>> SerieList;
 	// HashMap<Integer,[boolean,HashMap<Integer, boolean>]>
 	HashMap<Integer, Object[]> SerieTree = new HashMap<Integer, Object[]>();
 	int offset = 0;
@@ -33,10 +34,10 @@ public class DownloadList extends JScrollPane
 	private DefaultGui gui;
 	boolean serie = false;
 	
-	public DownloadList(HashMap<Integer, HashMap<Integer, ArrayList<String[]>>> list, DefaultGui g)
+	public DownloadList(HashMap<Integer, TreeMap<Integer, ArrayList<String[]>>> list, DefaultGui g)
 	{
 		this(g);
-		SerieList = list;
+		SerieList = new TreeMap<Integer, TreeMap<Integer, ArrayList<String[]>>>(list);
 		serie = true;
 	}
 	
@@ -114,7 +115,7 @@ public class DownloadList extends JScrollPane
 		}
 		else
 		{
-			for (final Entry<Integer, HashMap<Integer, ArrayList<String[]>>> serie : SerieList.entrySet())
+			for (final Entry<Integer, TreeMap<Integer, ArrayList<String[]>>> serie : SerieList.entrySet())
 			{
 				final int serieN = serie.getKey();
 				

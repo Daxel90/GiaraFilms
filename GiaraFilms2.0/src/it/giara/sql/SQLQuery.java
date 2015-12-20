@@ -21,52 +21,34 @@ public class SQLQuery
 	public static void initTable()
 	{
 		String query = "CREATE TABLE IF NOT EXISTS `Files` ("
-				+ "`ID`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, " 
-				+ "`FileName`	TEXT NOT NULL UNIQUE, "
-				+ "`Size` TEXT, " 
-				+ "`IdScheda`	INTEGER NOT NULL, "
-				+ "`Type`	INTEGER NOT NULL, " 
-				+ "`LastUpdate`	INTEGER NOT NULL" 
-				+ ");";
+				+ "`ID`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, " + "`FileName`	TEXT NOT NULL UNIQUE, "
+				+ "`Size` TEXT, " + "`IdScheda`	INTEGER NOT NULL, " + "`Type`	INTEGER NOT NULL, "
+				+ "`LastUpdate`	INTEGER NOT NULL" + ");";
 		SQL.ExecuteQuery(query);
 		
-		String query2 = "CREATE TABLE IF NOT EXISTS `Schede` ("
-				+ "`ID`	INTEGER NOT NULL PRIMARY KEY, " 
-				+ "`Title`	TEXT NOT NULL UNIQUE, "
-				+ "`Relese`	TEXT, " 
-				+ "`Poster`	TEXT, " 
-				+ "`Back`	TEXT, "
-				+ "`Desc`	TEXT, " 
-				+ "`GenID`	TEXT, " 
-				+ "`Vote`	REAL, "
-				+ "`Type`	INTEGER NOT NULL, " 
-				+ "`LastUpdate`	INTEGER NOT NULL" 
-				+ ");";
+		String query2 = "CREATE TABLE IF NOT EXISTS `Schede` (" + "`ID`	INTEGER NOT NULL PRIMARY KEY, "
+				+ "`Title`	TEXT NOT NULL UNIQUE, " + "`Relese`	TEXT, " + "`Poster`	TEXT, " + "`Back`	TEXT, "
+				+ "`Desc`	TEXT, " + "`GenID`	TEXT, " + "`Vote`	REAL, " + "`Type`	INTEGER NOT NULL, "
+				+ "`LastUpdate`	INTEGER NOT NULL" + ");";
 		SQL.ExecuteQuery(query2);
 		
 		String query5 = "CREATE TABLE IF NOT EXISTS `CacheSearch` ("
-				+ "`ID`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, " 
-				+ "`Search`	TEXT NOT NULL UNIQUE, "
-				+ "`Type`	INTEGER, " 
-				+ "`IdResult`	INTEGER, " 
-				+ "`LastUpdate`	INTEGER NOT NULL" + ");";
+				+ "`ID`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, " + "`Search`	TEXT NOT NULL UNIQUE, "
+				+ "`Type`	INTEGER, " + "`IdResult`	INTEGER, " + "`LastUpdate`	INTEGER NOT NULL" + ");";
 		SQL.ExecuteQuery(query5);
 		
-		String query6 = "CREATE TABLE IF NOT EXISTS `EpisodeInfo` (" 
-		+ "`IdFile`	INTEGER UNIQUE, "
-		+ "`IdScheda`	INTEGER, " 
-		+ "`Episode`	INTEGER, " 
-		+ "`Serie`	INTEGER, " 
-		+ "`LastUpdate`	INTEGER"
+		String query6 = "CREATE TABLE IF NOT EXISTS `EpisodeInfo` (" + "`IdFile`	INTEGER UNIQUE, "
+				+ "`IdScheda`	INTEGER, " + "`Episode`	INTEGER, " + "`Serie`	INTEGER, " + "`LastUpdate`	INTEGER"
 				+ ");";
 		SQL.ExecuteQuery(query6);
 	}
 	
 	// Files Table
 	
-	public synchronized static int writeFile(final String fileName, final String size, final int IdScheda, final MainType t)
+	public synchronized static int writeFile(final String fileName, final String size, final int IdScheda,
+			final MainType t)
 	{
-		if(Settings.getParameter("servercollaborate").equals("1"))
+		if (Settings.getParameter("servercollaborate").equals("1"))
 		{
 			ThreadManager.submitPoolTask(new Runnable()
 			{
@@ -76,10 +58,11 @@ public class SQLQuery
 					ServerQuery.sendFileInfo(fileName, size, IdScheda, t);
 				}
 			});
-		}	
+		}
 		
-		SQL.ExecuteQuery("INSERT OR IGNORE INTO `Files`(`FileName`, `Size`, `IdScheda`, `Type`, `LastUpdate`) VALUES ('" + SQL.escape(fileName)
-				+ "', '"+SQL.escape(size)+"', "+IdScheda+", "+t.ID+", " + FunctionsUtils.getTime() + ");");
+		SQL.ExecuteQuery("INSERT OR IGNORE INTO `Files`(`FileName`, `Size`, `IdScheda`, `Type`, `LastUpdate`) VALUES ('"
+				+ SQL.escape(fileName) + "', '" + SQL.escape(size) + "', " + IdScheda + ", " + t.ID + ", "
+				+ FunctionsUtils.getTime() + ");");
 				
 		ResultSet r = SQL.FetchData("SELECT * FROM `Files` WHERE `FileName` = '" + SQL.escape(fileName) + "';");
 		try
@@ -167,7 +150,7 @@ public class SQLQuery
 		}
 		return -1;
 	}
-
+	
 	public synchronized static int getFileType(String fileName)
 	{
 		ResultSet r = SQL.FetchData("SELECT * FROM `Files` WHERE `FileName` = '" + SQL.escape(fileName) + "';");
@@ -202,13 +185,13 @@ public class SQLQuery
 		return list;
 	}
 	
-	//-------------------
+	// -------------------
 	
 	// Schede Table
 	
 	public synchronized static int writeScheda(final TMDBScheda i)
 	{
-		if(Settings.getParameter("servercollaborate").equals("1"))
+		if (Settings.getParameter("servercollaborate").equals("1"))
 		{
 			ThreadManager.submitPoolTask(new Runnable()
 			{
@@ -218,30 +201,24 @@ public class SQLQuery
 					ServerQuery.sendScheda(i);
 				}
 			});
-		}	
+		}
 		
-		
-		if(readScheda(i.ID,i.type) == null)
-		SQL.ExecuteQuery(
-				"INSERT OR IGNORE INTO `Schede`(`ID`, `Title`, `Relese`, `Poster`, `Back`, `Desc`, `GenID`, `Vote`, `Type`, `LastUpdate`) VALUES "
-				+ "("+ SQL.escape(""+i.ID) + ","
-						+ " '" + SQL.escape(i.title) + "',"
-						+ " '" + SQL.escape(i.relese) + "',"
-						+ " '" + SQL.escape(i.poster) + "', "
-						+ " '" + SQL.escape(i.back) + "', "
-						+ " '" + SQL.escape(i.desc) + "', "
-						+ " '" + SQL.escape(i.getGeneriIDs()) + "', "
-						+ i.vote + ", "
-						+ i.type.ID + ", "
-						+ FunctionsUtils.getTime() + ");");
-		
+		if (readScheda(i.ID, i.type) == null)
+			SQL.ExecuteQuery(
+					"INSERT OR IGNORE INTO `Schede`(`ID`, `Title`, `Relese`, `Poster`, `Back`, `Desc`, `GenID`, `Vote`, `Type`, `LastUpdate`) VALUES "
+							+ "(" + SQL.escape("" + i.ID) + "," + " '" + SQL.escape(i.title) + "'," + " '"
+							+ SQL.escape(i.relese) + "'," + " '" + SQL.escape(i.poster) + "', " + " '"
+							+ SQL.escape(i.back) + "', " + " '" + SQL.escape(i.desc) + "', " + " '"
+							+ SQL.escape(i.getGeneriIDs()) + "', " + i.vote + ", " + i.type.ID + ", "
+							+ FunctionsUtils.getTime() + ");");
+							
 		return i.ID;
 	}
 	
 	public synchronized static TMDBScheda readScheda(int IdScheda, MainType t)
 	{
 		TMDBScheda scheda = new TMDBScheda();
-		ResultSet r = SQL.FetchData("SELECT * FROM `Schede` WHERE `ID` = " + IdScheda + " AND `Type` = "+t.ID+";");
+		ResultSet r = SQL.FetchData("SELECT * FROM `Schede` WHERE `ID` = " + IdScheda + " AND `Type` = " + t.ID + ";");
 		try
 		{
 			if (r.next())
@@ -265,7 +242,7 @@ public class SQLQuery
 		return scheda;
 	}
 	
-	//-------------------
+	// -------------------
 	
 	// CacheSearch Table
 	
@@ -295,15 +272,16 @@ public class SQLQuery
 		}
 		return -1;
 	}
-
-	//-------------------
+	
+	// -------------------
 	
 	// EpisodeInfo Table
 	
-	public synchronized static HashMap<Integer,HashMap<Integer,ArrayList<Integer>>> readEpisodeInfoList(int serieID)
+	public synchronized static HashMap<Integer, HashMap<Integer, ArrayList<Integer>>> readEpisodeInfoList(int serieID)
 	{
-		HashMap<Integer,HashMap<Integer,ArrayList<Integer>>> result = new HashMap<Integer,HashMap<Integer,ArrayList<Integer>>>();
-		ResultSet r = SQL.FetchData("SELECT * FROM `EpisodeInfo` WHERE `IdScheda` = " + serieID + " ORDER BY `Episode`;");
+		HashMap<Integer, HashMap<Integer, ArrayList<Integer>>> result = new HashMap<Integer, HashMap<Integer, ArrayList<Integer>>>();
+		ResultSet r = SQL
+				.FetchData("SELECT * FROM `EpisodeInfo` WHERE `IdScheda` = " + serieID + " ORDER BY `Episode`;");
 		try
 		{
 			while (r.next())
@@ -312,9 +290,9 @@ public class SQLQuery
 				int episode = r.getInt("Episode");
 				int file = r.getInt("IdFile");
 				
-				if(!result.containsKey(serie))
-					result.put(serie, new HashMap<Integer,ArrayList<Integer>>());
-				if(!result.get(serie).containsKey(episode))
+				if (!result.containsKey(serie))
+					result.put(serie, new HashMap<Integer, ArrayList<Integer>>());
+				if (!result.get(serie).containsKey(episode))
 					result.get(serie).put(episode, new ArrayList<Integer>());
 				result.get(serie).get(episode).add(file);
 			}
@@ -333,7 +311,7 @@ public class SQLQuery
 						+ ");");
 	}
 	
-	//-------------------
+	// -------------------
 	
 	// General Info Query
 	
@@ -385,5 +363,17 @@ public class SQLQuery
 		return -1;
 	}
 	
-	//-------------------
+	// -------------------
+	
+	// Fix
+	
+	public synchronized static void DbClear()
+	{
+		SQL.ExecuteQuery("DROP TABLE `Files`");
+		SQL.ExecuteQuery("DROP TABLE `Schede`");
+		SQL.ExecuteQuery("DROP TABLE `CacheSearch`");
+		SQL.ExecuteQuery("DROP TABLE `EpisodeInfo`");
+		initTable();
+	}
+	// -------------------
 }
