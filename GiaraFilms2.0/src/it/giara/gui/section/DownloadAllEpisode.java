@@ -14,7 +14,6 @@ import it.giara.gui.MainFrame;
 import it.giara.gui.components.ImageButton;
 import it.giara.gui.utils.ColorUtils;
 import it.giara.gui.utils.ImageUtils;
-import it.giara.utils.ThreadManager;
 
 public class DownloadAllEpisode extends DefaultGui
 {

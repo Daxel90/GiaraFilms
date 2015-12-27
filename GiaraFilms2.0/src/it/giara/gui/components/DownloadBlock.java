@@ -43,7 +43,7 @@ public class DownloadBlock extends JPanel
 	public DownloadBlock(FileSources fs, DefaultGui g)
 	{
 		setLayout(null);
-		setOpaque(true);
+		setOpaque(false);
 		setBackground(ColorUtils.Back);
 		file = fs;
 		

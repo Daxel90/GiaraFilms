@@ -67,7 +67,7 @@ public class FilmInfoSchede extends DefaultGui
 			
 		cover.setBorder(BorderFactory.createEtchedBorder());
 		cover.setIcon(ImageUtils.getIcon(
-				ImageUtils.scaleImageOld(scheda.initPoster_original(cover), cover.getWidth(), cover.getHeight())));
+				ImageUtils.scaleImage(scheda.initPoster_original(cover), cover.getWidth(), cover.getHeight())));
 				
 		add(cover);
 		

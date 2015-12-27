@@ -59,7 +59,7 @@ public class TMDBScheda
 							
 							if (poster_w140 != null)
 							{
-								poster_w140 = ImageUtils.scaleImageOld(poster_w140, 140, 200);
+								poster_w140 = ImageUtils.scaleImage(poster_w140, 140, 200);
 								try
 								{
 									if (!f.getParentFile().exists())
@@ -133,7 +133,7 @@ public class TMDBScheda
 						} finally
 						{
 							label.setIcon(ImageUtils.getIcon(
-									ImageUtils.scaleImageOld(poster_original, label.getWidth(), label.getHeight())));
+									ImageUtils.scaleImage(poster_original, label.getWidth(), label.getHeight())));
 						}
 					}
 				};

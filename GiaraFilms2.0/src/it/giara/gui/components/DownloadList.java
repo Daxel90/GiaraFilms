@@ -51,7 +51,7 @@ public class DownloadList extends JScrollPane
 	{
 		gui = g;
 		setLayout(null);
-		setOpaque(true);
+		setOpaque(false);
 		setBackground(ColorUtils.Back);
 		
 		ArrowUp = new ImageButton(ImageUtils.getImage("gui/arrow_up.png"), ImageUtils.getImage("gui/arrow_up_over.png"),

@@ -10,6 +10,7 @@ import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Image;
 import java.awt.RenderingHints;
+import java.awt.Transparency;
 import java.awt.color.ColorSpace;
 import java.awt.image.BufferedImage;
 import java.awt.image.BufferedImageOp;
@@ -42,7 +43,10 @@ public class ImageUtils
 	{
 		try
 		{
-			return ImageIO.read(getResourceAsStream("/it/resources/" + imageName));
+			if(getResourceAsStream("/it/resources/" + imageName) != null)
+				return ImageIO.read(getResourceAsStream("/it/resources/" + imageName));
+			else
+				return new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB);
 		} catch (final IOException e)
 		{
 			Log.stack(Log.GUI, e);
@@ -136,7 +140,7 @@ public class ImageUtils
 	{
 		try
 		{
-			return scaleImageOld(ImageIO.read(getResourceAsStream("/it/resources/" + imageName)), w, h);
+			return scaleImage(ImageIO.read(getResourceAsStream("/it/resources/" + imageName)), w, h);
 		} catch (final IOException e)
 		{
 			Log.stack(Log.GUI, e);
@@ -149,7 +153,7 @@ public class ImageUtils
 	{
 		try
 		{
-			return new ImageIcon(scaleImageOld(ImageIO.read(getResourceAsStream("/it/resources/" + iconName)), w, h));
+			return new ImageIcon(scaleImage(ImageIO.read(getResourceAsStream("/it/resources/" + iconName)), w, h));
 		} catch (final IOException e)
 		{
 			Log.stack(Log.GUI, e);
@@ -199,10 +203,11 @@ public class ImageUtils
 		final int imgWidth = img.getWidth();
 		final int imgHeight = img.getHeight();
 		final int height = imgHeight * width / imgWidth;
-		return scaleImageOld(img, width, height);
+		return scaleImage(img, width, height);
 	}
 	
 	// scala la BufferedImage senza conservare aspect ratio
+	@Deprecated
 	public static BufferedImage scaleImageOld(BufferedImage img, int width, int height)
 	{
 		final BufferedImage newImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
@@ -221,45 +226,51 @@ public class ImageUtils
 	}
 	
 	// //scalare immagine con qualita' superiore senza conservare aspect ratio
-	//TO SLOW AND CREATE LOOP ON PROCESSOR
-	@Deprecated
 	public static BufferedImage scaleImage(BufferedImage img, int targetWidth, int targetHeight)
 	{
-		BufferedImage ret = (BufferedImage) img;
-		int w = img.getWidth();
-		int h = img.getHeight();
-		
-		do
-		{
-			if (w > targetWidth)
-			{
-				w /= 2;
-				if (w < targetWidth)
-				{
-					w = targetWidth;
-				}
-			}
-			
-			if (h > targetHeight)
-			{
-				h /= 2;
-				if (h < targetHeight)
-				{
-					h = targetHeight;
-				}
-			}
-			
-			BufferedImage tmp = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+        int type = (img.getTransparency() == Transparency.OPAQUE) ?
+                BufferedImage.TYPE_INT_RGB : BufferedImage.TYPE_INT_ARGB;
+        BufferedImage ret = img;
+        int w, h;
+
+		// Use multi-step technique: start with original size, then
+		// scale down in multiple passes with drawImage()
+		// until the target size is reached
+		w = img.getWidth();
+		h = img.getHeight();
+
+        do {
+            if (w > targetWidth) {
+                w /= 2;
+                if (w < targetWidth) {
+                    w = targetWidth;
+                }
+            } else {
+                w = targetWidth;
+            }
+
+            if (h > targetHeight) {
+                h /= 2;
+                if (h < targetHeight) {
+                    h = targetHeight;
+                }
+            } else {
+                h = targetHeight;
+            }
+
+            BufferedImage tmp = new BufferedImage(w,h,type);
 			Graphics2D g2 = tmp.createGraphics();
-			g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-			g2.drawImage(ret, 0, 0, w, h, null);
-			g2.dispose();
-			
-			ret = tmp;
-		} while (w != targetWidth || h != targetHeight);
-		
-		return ret;
-	}
+            g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+			g2.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            g2.drawImage(ret, 0, 0, w, h, null);
+            g2.dispose();
+
+            ret = tmp;
+        } while (w != targetWidth || h != targetHeight);
+
+        return ret;
+    }
 	
 	// scala la BufferedImage mantenendo l' aspect ratio riferimento Altezza
 	public static BufferedImage scaleWithAspectHeight(BufferedImage img, int height)
@@ -267,6 +278,6 @@ public class ImageUtils
 		final int imgWidth = img.getWidth();
 		final int imgHeight = img.getHeight();
 		final int width = imgWidth * height / imgHeight;
-		return scaleImageOld(img, width, height);
+		return scaleImage(img, width, height);
 	}
 }

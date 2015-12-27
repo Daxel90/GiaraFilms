@@ -44,7 +44,7 @@ public class FilmListPanel extends JPanel
 	public FilmListPanel(AbstractFilmList l, DefaultGui g)
 	{
 		setLayout(null);
-		setOpaque(true);
+		setOpaque(false);
 		setBackground(ColorUtils.Back);
 		list = l;
 		list.setJPanel(this);
