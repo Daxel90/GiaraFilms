@@ -17,7 +17,7 @@ public class Search extends HomePage
 	private String searchText;
 	FilmListPanel panel;
 	AbstractFilmList lista = new AbstractFilmList();
-	SearchService searchService;
+	public static SearchService searchService;
 	Timer timer;
 	JLabel list;
 	
@@ -86,4 +86,14 @@ public class Search extends HomePage
 		
 	};
 	
+	Runnable OpenHomePage = new Runnable()
+	{
+		@Override
+		public void run()
+		{
+			searchService.StopService();
+			lista.clear();
+			MainFrame.getInstance().setInternalPane(new HomePage());
+		}
+	};
 }

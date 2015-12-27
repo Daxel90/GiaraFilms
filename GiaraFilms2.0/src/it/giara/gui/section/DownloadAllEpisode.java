@@ -56,11 +56,16 @@ public class DownloadAllEpisode extends DefaultGui
 		sep2.setBorder(BorderFactory.createLineBorder(ColorUtils.Separator));
 		this.add(sep2);
 		
-		ImageButton options = new ImageButton(ImageUtils.getImage("gui/arrow_left.png"),
+		ImageButton backbt = new ImageButton(ImageUtils.getImage("gui/arrow_left.png"),
 				ImageUtils.getImage("gui/arrow_left_over.png"), ImageUtils.getImage("gui/arrow_left_over.png"),
 				BackGui);
-		options.setBounds(5, 5, 32, 32);
-		this.add(options);
+		backbt.setBounds(5, 5, 32, 32);
+		this.add(backbt);
+		
+		ImageButton homePage = new ImageButton(ImageUtils.getImage("gui/home.png"),
+				ImageUtils.getImage("gui/home_over.png"), ImageUtils.getImage("gui/home_over.png"), OpenHomePage);
+		homePage.setBounds(40, 5, 32, 32);
+		this.add(homePage);
 		
 		int num = 0;
 		int itt = 0;
@@ -127,6 +132,16 @@ public class DownloadAllEpisode extends DefaultGui
 		public void run()
 		{
 			MainFrame.getInstance().setInternalPane(back);
+		}
+	};
+	
+	Runnable OpenHomePage = new Runnable()
+	{
+		@Override
+		public void run()
+		{
+			Search.searchService.StopService();
+			MainFrame.getInstance().setInternalPane(new HomePage());
 		}
 	};
 	

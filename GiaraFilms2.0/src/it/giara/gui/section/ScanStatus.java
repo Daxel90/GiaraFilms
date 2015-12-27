@@ -81,11 +81,16 @@ public class ScanStatus extends DefaultGui
 		
 		timer = new Timer(500, UpdateStatus);
 		timer.start();
-		ImageButton options = new ImageButton(ImageUtils.getImage("gui/arrow_left.png"),
+		ImageButton backbt = new ImageButton(ImageUtils.getImage("gui/arrow_left.png"),
 				ImageUtils.getImage("gui/arrow_left_over.png"), ImageUtils.getImage("gui/arrow_left_over.png"),
 				BackGui);
-		options.setBounds(5, 5, 32, 32);
-		this.add(options);
+		backbt.setBounds(5, 5, 32, 32);
+		this.add(backbt);
+		
+		ImageButton homePage = new ImageButton(ImageUtils.getImage("gui/home.png"),
+				ImageUtils.getImage("gui/home_over.png"), ImageUtils.getImage("gui/home_over.png"), OpenHomePage);
+		homePage.setBounds(40, 5, 32, 32);
+		this.add(homePage);
 	}
 	
 	Runnable BackGui = new Runnable()
@@ -122,6 +127,15 @@ public class ScanStatus extends DefaultGui
 				fileBar.setMaximum(0);
 				fileBar.setValue(100);
 			}
+		}
+	};
+	
+	Runnable OpenHomePage = new Runnable()
+	{
+		@Override
+		public void run()
+		{
+			MainFrame.getInstance().setInternalPane(new HomePage());
 		}
 	};
 	

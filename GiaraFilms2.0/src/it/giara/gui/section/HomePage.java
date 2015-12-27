@@ -64,9 +64,14 @@ public class HomePage extends DefaultGui
 		downloads.setBounds(40, 5, 32, 32);
 		this.add(downloads);
 		
+		ImageButton homePage = new ImageButton(ImageUtils.getImage("gui/home.png"),
+				ImageUtils.getImage("gui/home_over.png"), ImageUtils.getImage("gui/home_over.png"), OpenHomePage);
+		homePage.setBounds(75, 5, 32, 32);
+		this.add(homePage);
+		
 		if (sync == null)
 			sync = new AnimatedImageButton("sync(n)", 5, OpenSync, CheckSync);
-		sync.setBounds(75, 5, 32, 32);
+		sync.setBounds(110, 5, 32, 32);
 		CheckSync.run();
 		this.add(sync);
 		
@@ -128,6 +133,15 @@ public class HomePage extends DefaultGui
 				sync.setVisible(true);
 			else
 				sync.setVisible(false);
+		}
+	};
+	
+	Runnable OpenHomePage = new Runnable()
+	{
+		@Override
+		public void run()
+		{
+			MainFrame.getInstance().setInternalPane(new HomePage());
 		}
 	};
 

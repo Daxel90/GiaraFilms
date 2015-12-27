@@ -51,11 +51,16 @@ public class FilmInfoSchede extends DefaultGui
 		title.setHorizontalAlignment(JLabel.CENTER);
 		this.add(title);
 		
-		ImageButton back = new ImageButton(ImageUtils.getImage("gui/arrow_left.png"),
+		ImageButton backbt = new ImageButton(ImageUtils.getImage("gui/arrow_left.png"),
 				ImageUtils.getImage("gui/arrow_left_over.png"), ImageUtils.getImage("gui/arrow_left_over.png"),
 				BackGui);
-		back.setBounds(5, 5, 32, 32);
-		this.add(back);
+		backbt.setBounds(5, 5, 32, 32);
+		this.add(backbt);
+		
+		ImageButton homePage = new ImageButton(ImageUtils.getImage("gui/home.png"),
+				ImageUtils.getImage("gui/home_over.png"), ImageUtils.getImage("gui/home_over.png"), OpenHomePage);
+		homePage.setBounds(40, 5, 32, 32);
+		this.add(homePage);
 		
 		if (cover == null)
 			cover = new JLabel();
@@ -200,6 +205,16 @@ public class FilmInfoSchede extends DefaultGui
 		public void run()
 		{
 			MainFrame.getInstance().setInternalPane(back);
+		}
+	};
+	
+	Runnable OpenHomePage = new Runnable()
+	{
+		@Override
+		public void run()
+		{
+			Search.searchService.StopService();
+			MainFrame.getInstance().setInternalPane(new HomePage());
 		}
 	};
 	

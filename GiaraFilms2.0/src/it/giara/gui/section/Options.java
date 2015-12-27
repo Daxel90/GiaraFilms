@@ -45,11 +45,16 @@ public class Options extends DefaultGui
 		sep2.setBorder(BorderFactory.createLineBorder(ColorUtils.Separator));
 		this.add(sep2);
 		
-		ImageButton options = new ImageButton(ImageUtils.getImage("gui/arrow_left.png"),
+		ImageButton backbt = new ImageButton(ImageUtils.getImage("gui/arrow_left.png"),
 				ImageUtils.getImage("gui/arrow_left_over.png"), ImageUtils.getImage("gui/arrow_left_over.png"),
 				BackGui);
-		options.setBounds(5, 5, 32, 32);
-		this.add(options);
+		backbt.setBounds(5, 5, 32, 32);
+		this.add(backbt);
+		
+		ImageButton homePage = new ImageButton(ImageUtils.getImage("gui/home.png"),
+				ImageUtils.getImage("gui/home_over.png"), ImageUtils.getImage("gui/home_over.png"), OpenHomePage);
+		homePage.setBounds(40, 5, 32, 32);
+		this.add(homePage);
 		
 		JLabel downloadDirLabel = new JLabel();
 		downloadDirLabel.setBounds(50, 50, FRAME_WIDTH / 2, 30);
@@ -138,4 +143,12 @@ public class Options extends DefaultGui
 		}
 	};
 	
+	Runnable OpenHomePage = new Runnable()
+	{
+		@Override
+		public void run()
+		{
+			MainFrame.getInstance().setInternalPane(new HomePage());
+		}
+	};
 }
