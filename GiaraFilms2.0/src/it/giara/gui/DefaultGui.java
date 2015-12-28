@@ -71,6 +71,8 @@ public class DefaultGui extends JPanel
 			}
 		}
 		this.add(backGround);
+		
+		
 	}
 	
 	public void loadComponent()

@@ -11,6 +11,7 @@ import it.giara.gui.DefaultGui;
 import it.giara.gui.MainFrame;
 import it.giara.gui.components.AnimatedImageButton;
 import it.giara.gui.components.ImageButton;
+import it.giara.gui.components.home.LateralDrag;
 import it.giara.gui.utils.ColorUtils;
 import it.giara.gui.utils.ImageUtils;
 import it.giara.phases.ScanService;
@@ -23,11 +24,15 @@ public class HomePage extends DefaultGui
 	public static AnimatedImageButton sync = null; // static for using same
 													// instance in all section
 	
+	LateralDrag lateralDrag;
+	
 	public HomePage()
 	{
 		super();
 		if (sync != null)
 			sync.updateRunnable(OpenSync);
+		
+		lateralDrag = new LateralDrag();
 	}
 	
 	public void loadComponent()
@@ -80,11 +85,10 @@ public class HomePage extends DefaultGui
 	
 	public void content()
 	{
-		JLabel avviso = new JLabel();
-		avviso.setText("<html><h1>L'Home page è ancora in sviluppo, <br><br>Puoi comunque effettuare ricerche</html>");
-		avviso.setBounds(FRAME_WIDTH/4, FRAME_HEIGHT*3/8, FRAME_WIDTH/2, FRAME_HEIGHT/4);
-		avviso.setHorizontalAlignment(JLabel.CENTER);
-		this.add(avviso);
+		lateralDrag.setBounds(-FRAME_WIDTH/5+(FRAME_WIDTH/5)*lateralDrag.progress/20, 40, FRAME_WIDTH/5+16, FRAME_HEIGHT-40);
+		this.add(lateralDrag);
+		
+		
 	}
 	
 	
