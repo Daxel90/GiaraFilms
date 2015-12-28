@@ -191,19 +191,20 @@ public class SQLQuery
 	
 	public synchronized static int writeScheda(final TMDBScheda i)
 	{
-		if (Settings.getParameter("servercollaborate").equals("1"))
-		{
-			ThreadManager.submitPoolTask(new Runnable()
-			{
-				@Override
-				public void run()
-				{
-					ServerQuery.sendScheda(i);
-				}
-			});
-		}
-		
 		if (readScheda(i.ID, i.type) == null)
+		{
+			if (Settings.getParameter("servercollaborate").equals("1"))
+			{
+				ThreadManager.submitPoolTask(new Runnable()
+				{
+					@Override
+					public void run()
+					{
+						ServerQuery.sendScheda(i);
+					}
+				});
+			}
+			
 			SQL.ExecuteQuery(
 					"INSERT OR IGNORE INTO `Schede`(`ID`, `Title`, `Relese`, `Poster`, `Back`, `Desc`, `GenID`, `Vote`, `Type`, `LastUpdate`) VALUES "
 							+ "(" + SQL.escape("" + i.ID) + "," + " '" + SQL.escape(i.title) + "'," + " '"
@@ -211,7 +212,7 @@ public class SQLQuery
 							+ SQL.escape(i.back) + "', " + " '" + SQL.escape(i.desc) + "', " + " '"
 							+ SQL.escape(i.getGeneriIDs()) + "', " + i.vote + ", " + i.type.ID + ", "
 							+ FunctionsUtils.getTime() + ");");
-							
+		}
 		return i.ID;
 	}
 	

@@ -218,6 +218,7 @@ public class TMDBScheda
 	{
 		String res = "";
 		boolean first = true;
+		if(genre_ids != null)
 		for (int s : genre_ids)
 		{
 			if (!first)
