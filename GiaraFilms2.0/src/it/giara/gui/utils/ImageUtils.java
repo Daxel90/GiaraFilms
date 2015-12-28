@@ -15,6 +15,7 @@ import java.awt.color.ColorSpace;
 import java.awt.image.BufferedImage;
 import java.awt.image.BufferedImageOp;
 import java.awt.image.ColorConvertOp;
+import java.awt.image.RescaleOp;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -195,6 +196,13 @@ public class ImageUtils
 			g.dispose();
 		}
 		return newImage;
+	}
+	
+	// RescaleOp Filter
+	public static BufferedImage FilterRescaleOp(BufferedImage img, float val)
+	{
+		final RescaleOp op = new RescaleOp(val, 0, null);
+		return op.filter(img,null);
 	}
 	
 	// scala la BufferedImage mantenendo l' aspect ratio riferimento Larghezza

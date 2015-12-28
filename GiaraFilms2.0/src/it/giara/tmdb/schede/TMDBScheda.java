@@ -1,7 +1,6 @@
 package it.giara.tmdb.schede;
 
 import java.awt.image.BufferedImage;
-import java.awt.image.RescaleOp;
 import java.io.File;
 
 import javax.imageio.ImageIO;
@@ -11,6 +10,7 @@ import org.json.JSONObject;
 
 import it.giara.analyze.enums.MainType;
 import it.giara.gui.components.FilmListPanel;
+import it.giara.gui.components.home.NewsButton;
 import it.giara.gui.utils.ImageUtils;
 import it.giara.tmdb.GenereType;
 import it.giara.utils.DirUtils;
@@ -33,6 +33,9 @@ public class TMDBScheda
 	public BufferedImage poster_w140 = null;
 	public BufferedImage poster_original = null;
 	public BufferedImage back_w1920 = null;
+	
+	public BufferedImage home_w185 = null;
+	public BufferedImage home_w500 = null;
 	
 	public BufferedImage initPoster_w140(final FilmListPanel filmListPanel)
 	{
@@ -151,13 +154,12 @@ public class TMDBScheda
 		if (back_w1920 == null)
 		{
 			final File f = new File(DirUtils.getCacheDir() + File.separator + "image",
-					MD5.generatemd5(link + poster) + ".jpg");
-			final RescaleOp op = new RescaleOp(.4f, 0, null);
-			
+					MD5.generatemd5(link + back) + ".jpg");
+					
 			if (f.exists())
 			{
 				back_w1920 = ImageUtils.getImage(f);
-				back_w1920 = op.filter(back_w1920,null);
+				back_w1920 = ImageUtils.FilterRescaleOp(back_w1920, 0.4f);
 			}
 			else
 			{
@@ -177,7 +179,7 @@ public class TMDBScheda
 										f.getParentFile().mkdirs();
 										
 									ImageIO.write(back_w1920, "JPG", f);
-									back_w1920 = op.filter(back_w1920,null);
+									back_w1920 = ImageUtils.FilterRescaleOp(back_w1920, 0.4f);
 								} catch (Exception e)
 								{
 									Log.stack(Log.IMAGE, e);
@@ -214,19 +216,129 @@ public class TMDBScheda
 		return back_w1920;
 	}
 	
+	public BufferedImage initHome_w185(final NewsButton news)
+	{
+		final String link = "http://image.tmdb.org/t/p/w185";
+		if (home_w185 == null)
+		{
+			final File f = new File(DirUtils.getCacheDir() + File.separator + "image",
+					MD5.generatemd5(link + poster) + ".jpg");
+					
+			if (f.exists())
+			{
+				home_w185 = ImageUtils.getImage(f);
+			}
+			else
+			{
+				Runnable task = new Runnable()
+				{
+					@Override
+					public void run()
+					{
+						try
+						{
+							home_w185 = ImageUtils.getHttpBufferedImage(link + poster);
+							
+							if (home_w185 != null)
+							{
+								home_w185 = ImageUtils.scaleImage(home_w185, 185, 280);
+								try
+								{
+									if (!f.getParentFile().exists())
+										f.getParentFile().mkdirs();
+										
+									ImageIO.write(home_w185, "JPG", f);
+								} catch (Exception e)
+								{
+									Log.stack(Log.IMAGE, e);
+								}
+							}
+							else
+							{
+								home_w185 = ImageUtils.getImage("notFound.png");
+							}
+						} finally
+						{
+							news.updateImage(home_w185);
+						}
+					}
+				};
+				
+				ThreadManager.submitPoolTask(task);
+				home_w185 = ImageUtils.getImage("loading.png");
+			}
+		}
+		return home_w185;
+	}
+	
+	public BufferedImage initHome_w500(final NewsButton news)
+	{
+		final String link = "http://image.tmdb.org/t/p/w500";
+		if (home_w500 == null)
+		{
+			final File f = new File(DirUtils.getCacheDir() + File.separator + "image",
+					MD5.generatemd5(link + back) + ".jpg");
+					
+			if (f.exists())
+			{
+				home_w500 = ImageUtils.getImage(f);
+			}
+			else
+			{
+				Runnable task = new Runnable()
+				{
+					@Override
+					public void run()
+					{
+						try
+						{
+							home_w500 = ImageUtils.getHttpBufferedImage(link + back);
+							
+							if (home_w500 != null)
+							{
+								home_w500 = ImageUtils.scaleImage(home_w500, 500, 280);
+								try
+								{
+									if (!f.getParentFile().exists())
+										f.getParentFile().mkdirs();
+										
+									ImageIO.write(home_w500, "JPG", f);
+								} catch (Exception e)
+								{
+									Log.stack(Log.IMAGE, e);
+								}
+							}
+							else
+							{
+								home_w500 = ImageUtils.getImage("notFound.png");
+							}
+						} finally
+						{
+							news.updateImage(home_w500);
+						}
+					}
+				};
+				
+				ThreadManager.submitPoolTask(task);
+				home_w500 = ImageUtils.getImage("loading.png");
+			}
+		}
+		return home_w500;
+	}
+	
 	public String getGeneriIDs()
 	{
 		String res = "";
 		boolean first = true;
-		if(genre_ids != null)
-		for (int s : genre_ids)
-		{
-			if (!first)
-				res += ", ";
-			else
-				first = false;
-			res += s;
-		}
+		if (genre_ids != null)
+			for (int s : genre_ids)
+			{
+				if (!first)
+					res += ", ";
+				else
+					first = false;
+				res += s;
+			}
 		return res;
 	}
 	

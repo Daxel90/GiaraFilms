@@ -12,6 +12,7 @@ import it.giara.gui.MainFrame;
 import it.giara.gui.components.AnimatedImageButton;
 import it.giara.gui.components.ImageButton;
 import it.giara.gui.components.home.LateralDrag;
+import it.giara.gui.components.home.NewsPanel;
 import it.giara.gui.utils.ColorUtils;
 import it.giara.gui.utils.ImageUtils;
 import it.giara.phases.ScanService;
@@ -25,6 +26,7 @@ public class HomePage extends DefaultGui
 													// instance in all section
 	
 	LateralDrag lateralDrag;
+	NewsPanel news;
 	
 	public HomePage()
 	{
@@ -33,6 +35,7 @@ public class HomePage extends DefaultGui
 			sync.updateRunnable(OpenSync);
 		
 		lateralDrag = new LateralDrag();
+		news = new NewsPanel();
 	}
 	
 	public void loadComponent()
@@ -88,7 +91,8 @@ public class HomePage extends DefaultGui
 		lateralDrag.setBounds(-FRAME_WIDTH/5+(FRAME_WIDTH/5)*lateralDrag.progress/20, 40, FRAME_WIDTH/5+16, FRAME_HEIGHT-40);
 		this.add(lateralDrag);
 		
-		
+		news.setBounds(16,56,FRAME_WIDTH-48,FRAME_HEIGHT-56-16);
+		this.add(news);
 	}
 	
 	
