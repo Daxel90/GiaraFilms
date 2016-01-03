@@ -189,11 +189,11 @@ public class SQLQuery
 	
 	// Schede Table
 	
-	public synchronized static int writeScheda(final TMDBScheda i)
+	public synchronized static int writeScheda(final TMDBScheda i, boolean collaborate)
 	{
 		if (readScheda(i.ID, i.type) == null)
 		{
-			if (Settings.getParameter("servercollaborate").equals("1"))
+			if (Settings.getParameter("servercollaborate").equals("1") && collaborate)
 			{
 				ThreadManager.submitPoolTask(new Runnable()
 				{

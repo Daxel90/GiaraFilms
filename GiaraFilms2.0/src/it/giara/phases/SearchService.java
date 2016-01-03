@@ -112,7 +112,7 @@ public class SearchService
 														SQLQuery.writeCacheSearch(f.title, f.type, -1);
 														break;
 													}
-													int schedaID = SQLQuery.writeScheda(httpF.scheda);
+													int schedaID = SQLQuery.writeScheda(httpF.scheda, true);
 													
 													list.addPreSchedaFilm(httpF.scheda);
 													
@@ -138,7 +138,7 @@ public class SearchService
 														SQLQuery.writeCacheSearch(f.title, f.type, -1);
 														break;
 													}
-													int schedaSTV = SQLQuery.writeScheda(httpF.scheda);
+													int schedaSTV = SQLQuery.writeScheda(httpF.scheda, true);
 													
 													SQLQuery.writeCacheSearch(f.title, f.type, schedaSTV);
 													int FileId = SQLQuery.writeFile(s2, size, schedaSTV, f.type);

@@ -6,6 +6,7 @@ import javax.swing.JPanel;
 import it.giara.analyze.enums.MainType;
 import it.giara.gui.utils.ColorUtils;
 import it.giara.sql.SQLQuery;
+import it.giara.syncdata.ServerQuery;
 import it.giara.utils.FunctionsUtils;
 
 public class NewsPanel extends JPanel
@@ -23,6 +24,11 @@ public class NewsPanel extends JPanel
 		setLayout(null);
 		setOpaque(false);
 		setBackground(ColorUtils.Back);
+		
+		if(!ServerQuery.newsLoaded)
+		{
+			ServerQuery.load150News();
+		}
 		
 		createScheme();
 		init();
@@ -71,6 +77,8 @@ public class NewsPanel extends JPanel
 		int posX;
 		int posY = 8 + ((this.getHeight() - 16) - scheme.length * IMG_H) / 2;
 		
+		int nScheda = 0;
+		
 		for (int y = 0; y < scheme.length; y++)
 		{
 			int size = 0;
@@ -90,7 +98,7 @@ public class NewsPanel extends JPanel
 				if (scheme[y][x] == 0)
 					break;
 					
-				NewsButton sep3 = new NewsButton(SQLQuery.readScheda(169917, MainType.Film), scheme[y][x]);
+				NewsButton sep3 = new NewsButton(SQLQuery.readScheda(ServerQuery.news[nScheda], MainType.Film), scheme[y][x]);
 				sep3.setBorder(BorderFactory.createLineBorder(ColorUtils.Separator));
 				if (scheme[y][x] == 1)
 				{
@@ -104,6 +112,7 @@ public class NewsPanel extends JPanel
 				}
 				
 				this.add(sep3);
+				nScheda++;
 			}
 			
 			posY += IMG_H;

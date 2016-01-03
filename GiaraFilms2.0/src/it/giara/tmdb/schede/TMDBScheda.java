@@ -344,6 +344,11 @@ public class TMDBScheda
 	
 	public void setGeneriIDs(String d)
 	{
+		if (d.equals(""))
+		{
+			genre_ids = new int[0];
+			return;
+		}
 		String[] Generi = d.split(", ");
 		genre_ids = new int[Generi.length];
 		for (int x = 0; x < genre_ids.length; x++)
@@ -372,12 +377,12 @@ public class TMDBScheda
 		JSONObject json = new JSONObject();
 		try
 		{
-			json.put("id", ID);
+			json.put("scheda_id", ID);
 			json.put("title", title);
-			json.put("relese", relese);
+			json.put("release_date", relese);
 			json.put("poster", poster);
-			json.put("back", back);
-			json.put("desc", desc);
+			json.put("background", back);
+			json.put("description", desc);
 			json.put("genre_ids", getGeneriIDs());
 			json.put("vote", vote);
 			json.put("type", type.ID);
@@ -393,12 +398,12 @@ public class TMDBScheda
 	{
 		try
 		{
-			ID = json.getInt("id");
+			ID = json.getInt("scheda_id");
 			title = json.getString("title");
-			relese = json.getString("relese");
+			relese = json.getString("release_date");
 			poster = json.getString("poster");
-			back = json.getString("back");
-			desc = json.getString("desc");
+			back = json.getString("background");
+			desc = json.getString("description");
 			this.setGeneriIDs(json.getString("genre_ids"));
 			vote = json.getDouble("vote");
 			type = MainType.getMainTypeByID(json.getInt("type"));
