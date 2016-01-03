@@ -55,13 +55,14 @@ public class FilmInfoSchede extends DefaultGui
 				ImageUtils.getImage("gui/arrow_left_over.png"), ImageUtils.getImage("gui/arrow_left_over.png"),
 				BackGui);
 		backbt.setBounds(5, 5, 32, 32);
+		backbt.setToolTipText("Indietro");
 		this.add(backbt);
 		
 		ImageButton homePage = new ImageButton(ImageUtils.getImage("gui/home.png"),
 				ImageUtils.getImage("gui/home_over.png"), ImageUtils.getImage("gui/home_over.png"), OpenHomePage);
 		homePage.setBounds(40, 5, 32, 32);
 		this.add(homePage);
-		
+		homePage.setToolTipText("Home");
 		if (cover == null)
 			cover = new JLabel();
 			
@@ -120,6 +121,7 @@ public class FilmInfoSchede extends DefaultGui
 				ImageUtils.getImage("gui/download_over.png"), ImageUtils.getImage("gui/download_over.png"),
 				OpenDownloads);
 		downloads.setBounds((FRAME_WIDTH - 64) / 2, FRAME_HEIGHT - 100, 64, 64);
+		downloads.setToolTipText("Scarica");
 		downloads.setVisible(true);
 		this.add(downloads);
 		

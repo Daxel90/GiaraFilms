@@ -1,14 +1,12 @@
 package it.giara.gui.components.home;
 
 import javax.swing.BorderFactory;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import it.giara.analyze.enums.MainType;
 import it.giara.gui.utils.ColorUtils;
 import it.giara.sql.SQLQuery;
 import it.giara.utils.FunctionsUtils;
-import it.giara.utils.Log;
 
 public class NewsPanel extends JPanel
 {
@@ -71,45 +69,44 @@ public class NewsPanel extends JPanel
 	{
 		this.removeAll();
 		int posX;
-		int posY = 8+((this.getHeight() - 16)-scheme.length*IMG_H)/2;
+		int posY = 8 + ((this.getHeight() - 16) - scheme.length * IMG_H) / 2;
 		
-		
-		for(int y = 0; y< scheme.length;y++)
+		for (int y = 0; y < scheme.length; y++)
 		{
-			int size =0;
-			for(int k = 0; k< scheme[y].length;k++)
+			int size = 0;
+			for (int k = 0; k < scheme[y].length; k++)
 			{
-				if(scheme[y][k] == 0)
+				if (scheme[y][k] == 0)
 					break;
-				if(scheme[y][k] == 1)
-					size+=IMG_W1;
-				else if(scheme[y][k] == 2)
-					size+=IMG_W2;
+				if (scheme[y][k] == 1)
+					size += IMG_W1;
+				else if (scheme[y][k] == 2)
+					size += IMG_W2;
 			}
 			
-			posX = 8 +((this.getWidth() - 16)-size)/2;
-			for(int x = 0; x< scheme[y].length;x++)
+			posX = 8 + ((this.getWidth() - 16) - size) / 2;
+			for (int x = 0; x < scheme[y].length; x++)
 			{
-				if(scheme[y][x] == 0)
+				if (scheme[y][x] == 0)
 					break;
-				
+					
 				NewsButton sep3 = new NewsButton(SQLQuery.readScheda(169917, MainType.Film), scheme[y][x]);
 				sep3.setBorder(BorderFactory.createLineBorder(ColorUtils.Separator));
-				if(scheme[y][x] == 1)
+				if (scheme[y][x] == 1)
 				{
 					sep3.setBounds(posX, posY, IMG_W1, IMG_H);
-					posX+=IMG_W1;
+					posX += IMG_W1;
 				}
-				else if(scheme[y][x] == 2)
+				else if (scheme[y][x] == 2)
 				{
 					sep3.setBounds(posX, posY, IMG_W2, IMG_H);
-					posX+=IMG_W2;
+					posX += IMG_W2;
 				}
-					
+				
 				this.add(sep3);
 			}
 			
-			posY+=IMG_H;
+			posY += IMG_H;
 		}
 		
 	}

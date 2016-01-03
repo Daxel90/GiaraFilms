@@ -55,7 +55,7 @@ public class ChangeLogFrame extends JFrame
 				+ "<h2>--------------------" + "<h2>Dev PreRelese 16"
 				+ "<br><h3>\t- Migliorato Aspetto Grafico"
 				+ "<br><h3>\t- Aggiunto tasto Home in tutte le schermate"
-				+ "<br><h3>\t- "
+				+ "<br><h3>\t- Aggiunti suggerimenti sui bottoni"
 				+ "<h2>--------------------" + "<h2>Dev PreRelese 15"
 				+ "<br><h3>\t- Migliorato algoritmo analisi file"
 				+ "<br><h3>\t- Aggiunti Sfondi schede informative"

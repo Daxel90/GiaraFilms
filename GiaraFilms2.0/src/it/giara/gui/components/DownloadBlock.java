@@ -67,10 +67,12 @@ public class DownloadBlock extends JPanel
 		
 		startBt = new ImageButton(start, start_over, start_over, startRun);
 		startBt.setBounds(g.FRAME_WIDTH * 3 / 4 + 10, 44, 32, 32);
+		startBt.setToolTipText("Avvia");
 		this.add(startBt);
 		
 		stopBt = new ImageButton(stop, stop_over, stop_over, stopRun);
 		stopBt.setBounds(g.FRAME_WIDTH * 3 / 4 + 10, 44, 32, 32);
+		stopBt.setToolTipText("Pausa");
 		this.add(stopBt);
 		
 		startBt.setVisible(file.paused);
@@ -78,7 +80,7 @@ public class DownloadBlock extends JPanel
 		
 		ImageButton deleteBt = new ImageButton(delete, delete_over, delete_over, deleteRun);
 		deleteBt.setBounds(g.FRAME_WIDTH * 3 / 4 + 52, 44, 32, 32);
-		
+		deleteBt.setToolTipText("Elimina");
 		this.add(deleteBt);
 		
 		updateBarData();

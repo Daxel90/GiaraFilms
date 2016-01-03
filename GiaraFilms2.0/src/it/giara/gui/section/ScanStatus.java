@@ -85,11 +85,13 @@ public class ScanStatus extends DefaultGui
 				ImageUtils.getImage("gui/arrow_left_over.png"), ImageUtils.getImage("gui/arrow_left_over.png"),
 				BackGui);
 		backbt.setBounds(5, 5, 32, 32);
+		backbt.setToolTipText("Indietro");
 		this.add(backbt);
 		
 		ImageButton homePage = new ImageButton(ImageUtils.getImage("gui/home.png"),
 				ImageUtils.getImage("gui/home_over.png"), ImageUtils.getImage("gui/home_over.png"), OpenHomePage);
 		homePage.setBounds(40, 5, 32, 32);
+		homePage.setToolTipText("Home");
 		this.add(homePage);
 	}
 	

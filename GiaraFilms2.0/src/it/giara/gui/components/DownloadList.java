@@ -109,6 +109,7 @@ public class DownloadList extends JScrollPane
 					}
 				});
 				downloads.setBounds(this.getWidth() - 80, 11 + (n - offset) * 40, 28, 28);
+				downloads.setToolTipText("Scarica File");
 				this.add(downloads);
 				n++;
 			}
@@ -154,6 +155,7 @@ public class DownloadList extends JScrollPane
 					}
 				});
 				downloadSerie.setBounds(this.getWidth() - 80, 11 + (n - 1 - offset) * 40, 28, 28);
+				downloadSerie.setToolTipText("Scarica Stagione");
 				this.add(downloadSerie);
 				
 				if ((Boolean) SerieTree.get(serieN)[0])
@@ -272,6 +274,7 @@ public class DownloadList extends JScrollPane
 								MainFrame.getInstance().setInternalPane(new Download(gui.guiInstance));
 							}
 						});
+						downloads.setToolTipText("Scarica File");
 						downloads.setBounds(this.getWidth() - 80, 11 + (n - offset) * 40, 28, 28);
 						this.add(downloads);
 						n++;

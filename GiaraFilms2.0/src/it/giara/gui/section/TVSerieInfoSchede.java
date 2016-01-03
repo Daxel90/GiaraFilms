@@ -55,11 +55,13 @@ public class TVSerieInfoSchede extends DefaultGui
 				ImageUtils.getImage("gui/arrow_left_over.png"), ImageUtils.getImage("gui/arrow_left_over.png"),
 				BackGui);
 		backbt.setBounds(5, 5, 32, 32);
+		backbt.setToolTipText("Indietro");
 		this.add(backbt);
 		
 		ImageButton homePage = new ImageButton(ImageUtils.getImage("gui/home.png"),
 				ImageUtils.getImage("gui/home_over.png"), ImageUtils.getImage("gui/home_over.png"), OpenHomePage);
 		homePage.setBounds(40, 5, 32, 32);
+		homePage.setToolTipText("Home");
 		this.add(homePage);
 		
 		if (cover == null)
@@ -121,6 +123,7 @@ public class TVSerieInfoSchede extends DefaultGui
 				OpenDownloads);
 		downloads.setBounds((FRAME_WIDTH - 64) / 2, FRAME_HEIGHT - 100, 64, 64);
 		downloads.setVisible(true);
+		downloads.setToolTipText("Scarica");
 		this.add(downloads);
 		
 		if (backGround == null)

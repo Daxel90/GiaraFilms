@@ -4,6 +4,7 @@ import java.awt.Font;
 import java.awt.GraphicsEnvironment;
 import java.util.Enumeration;
 
+import javax.swing.ToolTipManager;
 import javax.swing.UIManager;
 import javax.swing.plaf.FontUIResource;
 
@@ -21,6 +22,8 @@ public class FontUtils
 			if (value != null && value instanceof FontUIResource)
 				UIManager.put(key, getFont());
 		}
+		
+		ToolTipManager.sharedInstance().setInitialDelay(500);
 	}
 	
 	public static Font getFrameFont(int size, int type)
