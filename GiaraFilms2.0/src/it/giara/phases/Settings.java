@@ -9,6 +9,8 @@ import it.giara.gui.MainFrame;
 import it.giara.sql.SQLQuery;
 import it.giara.sql.SQLQuerySettings;
 import it.giara.utils.DirUtils;
+import it.giara.utils.Log;
+import it.giara.utils.ThreadManager;
 
 public class Settings
 {
@@ -25,12 +27,23 @@ public class Settings
 		config.put("DBversion", SQLQuerySettings.getCurrentParameter("DBversion", "" + VERSION));
 		config.put("downloadfolder", SQLQuerySettings.getCurrentParameter("downloadfolder",
 				DirUtils.getDefaultDownloadDir().getAbsolutePath()));
-		config.put("lastdbcheck", SQLQuerySettings.getCurrentParameter("lastdbcheck", "0"));
+				
 		config.put("scanservice", SQLQuerySettings.getCurrentParameter("scanservice", "0"));
-		
-		config.put("serversync", SQLQuerySettings.getCurrentParameter("serversync", "0"));
-		config.put("lastserversync", SQLQuerySettings.getCurrentParameter("lastserversync", "0"));
+		config.put("scanservicethread", SQLQuerySettings.getCurrentParameter("scanservicethread", "2"));
 		config.put("servercollaborate", SQLQuerySettings.getCurrentParameter("servercollaborate", "0"));
+		config.put("serversync", SQLQuerySettings.getCurrentParameter("serversync", "0")); // Features
+		config.put("lastserversync", SQLQuerySettings.getCurrentParameter("lastserversync", "0")); // Features
+		
+		try
+		{
+			ThreadManager.poolScanServiceSize = Integer.parseInt(getParameter("scanservicethread"));
+		} catch (NumberFormatException e)
+		{
+			Log.stack(Log.CONFIG, e);
+			ThreadManager.poolScanServiceSize = 3;
+			setParameter("scanservicethread", "3");
+			config.put("scanservicethread", "3");
+		}
 		
 		if (MainFrame.getInstance() != null)
 			MainFrame.getInstance().setTitle(getTitle(VERSION));
@@ -75,10 +88,18 @@ public class Settings
 			setParameter("DBversion", "10");
 		}
 		
-		if(Integer.parseInt(Settings.getParameter("DBversion")) < 15)
+		if (Integer.parseInt(Settings.getParameter("DBversion")) < 15)
 		{
 			SQLQuery.DbClear();
 			setParameter("DBversion", "15");
+		}
+		
+		if (Integer.parseInt(Settings.getParameter("DBversion")) < 16)
+		{
+			SQLQuerySettings.removeParameters("lastdbcheck");
+			Settings.setParameter("servercollaborate", "1");
+			Settings.setParameter("scanservice", "0");
+			setParameter("DBversion", "16");
 		}
 	}
 	

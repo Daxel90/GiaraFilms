@@ -110,6 +110,9 @@ public class LoadScreen extends DefaultGui
 						bar.setValue(1);
 						textProgress.setText("Carico Impostazioni");
 						Settings.init();
+						Settings.UpdateFixer();
+						textProgress.setText("Inizializzo il ThreadManager");
+						ThreadManager.init();
 						bar.setValue(2);
 						textProgress.setText("Carico le sorgenti");
 						ListLoader.loadSources();
@@ -119,11 +122,13 @@ public class LoadScreen extends DefaultGui
 						textProgress.setText("Riavvio Download Interrotti");
 						RecoverDownload.asyncRestartDownload();
 						bar.setValue(4);
+						if (Settings.getParameter("scanservice").equals("1"))
+						{
+							textProgress.setText("Avvio ScanService");
+							ThreadManager.submitCacheTask(new ScanService());
+						}
 						textProgress.setText("Verifica Completata");
 						bar.setValue(5);
-						if (Settings.getParameter("scanservice").equals("1"))
-							ThreadManager.submitCacheTask(new ScanService());
-						Settings.UpdateFixer();
 						FunctionsUtils.sleep(500);
 						MainFrame.getInstance().setInternalPane(new HomePage());
 					}

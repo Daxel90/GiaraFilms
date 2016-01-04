@@ -23,22 +23,23 @@ public class ThreadManager
 	public static int SearchPoolSize = 5;				//SearchThreads need to be very fast
 	public static int SearchIndicizerPoolSize = 15;
 	
-	public static int poolScanServiceSize = 3;
+	public static int poolScanServiceSize = 2;
 	public static int SystemPoolSize = 5;
 	public static int SchedulePoolSize = 2;
 	
 	static
 	{
 		CachedExecutor = Executors.newCachedThreadPool();
+		ScheduledExecutorService = Executors.newScheduledThreadPool(SchedulePoolSize);
+		SystemPoolExecutor = Executors.newFixedThreadPool(poolScanServiceSize);
+	}
+	
+	public static void init()
+	{
 		PoolScanServiceExecutor = Executors.newFixedThreadPool(poolScanServiceSize);
 		
 		PoolExecutorSearch = Executors.newFixedThreadPool(SearchPoolSize);
 		PoolExecutorSearchIndicizer = Executors.newFixedThreadPool(SearchIndicizerPoolSize);
-		
-		ScheduledExecutorService = Executors.newScheduledThreadPool(SchedulePoolSize);
-		
-		SystemPoolExecutor = Executors.newFixedThreadPool(poolScanServiceSize);
-		
 	}
 	
 	// Very Height priority, execute instant task
