@@ -7,6 +7,7 @@ import it.giara.analyze.enums.MainType;
 import it.giara.gui.utils.ColorUtils;
 import it.giara.sql.SQLQuery;
 import it.giara.syncdata.ServerQuery;
+import it.giara.tmdb.schede.TMDBScheda;
 import it.giara.utils.FunctionsUtils;
 
 public class NewsPanel extends JPanel
@@ -97,7 +98,16 @@ public class NewsPanel extends JPanel
 			{
 				if (scheme[y][x] == 0)
 					break;
-					
+				
+				TMDBScheda scheda = SQLQuery.readScheda(ServerQuery.news[nScheda], MainType.Film);
+				while(scheda == null || scheda.back.equals("") || scheda.poster.equals(""))
+				{
+					nScheda++;
+					if(nScheda >149)
+						return;
+					scheda = SQLQuery.readScheda(ServerQuery.news[nScheda], MainType.Film);
+				}
+				
 				NewsButton sep3 = new NewsButton(SQLQuery.readScheda(ServerQuery.news[nScheda], MainType.Film), scheme[y][x]);
 				sep3.setBorder(BorderFactory.createLineBorder(ColorUtils.Separator));
 				if (scheme[y][x] == 1)

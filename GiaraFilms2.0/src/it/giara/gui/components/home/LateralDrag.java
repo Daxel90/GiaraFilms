@@ -1,12 +1,20 @@
 package it.giara.gui.components.home;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.BorderFactory;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import it.giara.analyze.enums.MainType;
 import it.giara.gui.components.ImageButton;
+import it.giara.gui.section.HomePage;
+import it.giara.gui.utils.AbstractFilmList;
 import it.giara.gui.utils.ColorUtils;
 import it.giara.gui.utils.ImageUtils;
+import it.giara.phases.SearchService;
 import it.giara.utils.FunctionsUtils;
 import it.giara.utils.ThreadManager;
 
@@ -19,13 +27,17 @@ public class LateralDrag extends JPanel
 	public boolean inUse = false;
 	ImageButton letOut;
 	ImageButton letIn;
-	JLabel allFilm;
+	JButton news, allFilm;
 	JLabel sep3;
-	public LateralDrag()
+	JLabel background;
+	HomePage home;
+	
+	public LateralDrag(HomePage i)
 	{
 		setLayout(null);
 		setOpaque(false);
 		setBackground(ColorUtils.Back);
+		home = i;
 		
 		letOut = new ImageButton(ImageUtils.getImage("gui/drag_right.png"),
 				ImageUtils.getImage("gui/drag_right_over.png"), ImageUtils.getImage("gui/drag_right_over.png"),
@@ -33,13 +45,24 @@ public class LateralDrag extends JPanel
 		letIn = new ImageButton(ImageUtils.getImage("gui/drag_left.png"), ImageUtils.getImage("gui/drag_left_over.png"),
 				ImageUtils.getImage("gui/drag_left_over.png"), RunLetIn);
 		
-		allFilm = new JLabel();
+		news = new JButton();
+		news.setText("<html> <h3> News</html>");
+		news.setHorizontalAlignment(JLabel.CENTER);
+		news.setBorder(BorderFactory.createLineBorder(ColorUtils.Separator));
+		news.addActionListener(newsAL);
+		
+		allFilm = new JButton();
 		allFilm.setText("<html> <h3> Tutti i Film</html>");
 		allFilm.setHorizontalAlignment(JLabel.CENTER);
 		allFilm.setBorder(BorderFactory.createLineBorder(ColorUtils.Separator));
+		allFilm.addActionListener(allFilmAL);
 		
 		sep3 = new JLabel();
 		sep3.setBorder(BorderFactory.createLineBorder(ColorUtils.Separator));
+		
+		background = new JLabel();
+		background.setBackground(ColorUtils.Back);
+		background.setOpaque(true);
 		init();
 	}
 	
@@ -48,7 +71,7 @@ public class LateralDrag extends JPanel
 		this.removeAll();
 		
 		letOut.setBounds(this.getWidth() - 16, this.getHeight()/2-16, 16, 32);
-		letIn.setBounds(this.getWidth() - 16, this.getHeight()/2-16, 16, 32);
+		letIn.setBounds(this.getWidth() - 32, this.getHeight()/2-16, 16, 32);
 		
 		letIn.setVisible(out);
 		letOut.setVisible(!out);
@@ -56,11 +79,17 @@ public class LateralDrag extends JPanel
 		this.add(letOut);
 		this.add(letIn);
 		
-		allFilm.setBounds(0, 10, this.getWidth() - 16, 30);
+		news.setBounds(0, 10, this.getWidth() - 16, 30);
+		this.add(news);
+		
+		allFilm.setBounds(0, 50, this.getWidth() - 16, 30);
 		this.add(allFilm);
 		
 		sep3.setBounds(this.getWidth() - 16, 0, 1, this.getHeight());
 		this.add(sep3);
+		
+		background.setBounds(0, 0, this.getWidth() - 16, this.getHeight());
+		this.add(background);
 		
 	}
 	
@@ -120,6 +149,26 @@ public class LateralDrag extends JPanel
 					repaint();
 				}
 			});
+		}
+	};
+	
+	private ActionListener allFilmAL = new ActionListener()
+	{
+		@Override
+		public void actionPerformed(ActionEvent e)
+		{
+			AbstractFilmList lista = new AbstractFilmList();
+			new SearchService(lista, "iron");
+			home.showOnHomepage(lista, MainType.Film);
+		}
+	};
+	
+	private ActionListener newsAL = new ActionListener()
+	{
+		@Override
+		public void actionPerformed(ActionEvent e)
+		{
+			home.showOnHomepage(null, MainType.NULL);
 		}
 	};
 	

@@ -5,11 +5,13 @@ import java.io.File;
 
 import javax.imageio.ImageIO;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 import org.json.JSONObject;
 
 import it.giara.analyze.enums.MainType;
 import it.giara.gui.components.FilmListPanel;
+import it.giara.gui.components.home.HomeListPanel;
 import it.giara.gui.components.home.NewsButton;
 import it.giara.gui.utils.ImageUtils;
 import it.giara.tmdb.GenereType;
@@ -37,7 +39,7 @@ public class TMDBScheda
 	public BufferedImage home_w185 = null;
 	public BufferedImage home_w500 = null;
 	
-	public BufferedImage initPoster_w140(final FilmListPanel filmListPanel)
+	public BufferedImage initPoster_w140(final JPanel filmListPanel)
 	{
 		final String link = "http://image.tmdb.org/t/p/w148";
 		if (poster_w140 == null)
@@ -80,8 +82,16 @@ public class TMDBScheda
 							}
 						} finally
 						{
-							filmListPanel.init();
+							if(filmListPanel instanceof FilmListPanel)
+							{
+								((FilmListPanel)filmListPanel).init();
+							}
+							else if(filmListPanel instanceof HomeListPanel)
+							{
+								((HomeListPanel)filmListPanel).init();
+							}
 							filmListPanel.repaint();
+							
 						}
 					}
 				};

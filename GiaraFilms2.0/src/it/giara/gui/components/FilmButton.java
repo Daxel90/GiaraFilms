@@ -11,6 +11,7 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.border.EtchedBorder;
 
 import it.giara.gui.MainFrame;
@@ -24,12 +25,10 @@ public class FilmButton extends JLabel implements MouseListener
 	public boolean isOver = false;
 	TMDBScheda film;
 	JLabel text = new JLabel();
-	FilmListPanel panel;
 	
-	public FilmButton(TMDBScheda f, int x, int y, FilmListPanel pa)
+	public FilmButton(TMDBScheda f, int x, int y, JPanel panel)
 	{
 		super();
-		panel = pa;
 		film = f;
 		if (film == null)
 			return;

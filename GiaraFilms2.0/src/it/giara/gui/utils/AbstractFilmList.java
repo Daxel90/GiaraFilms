@@ -6,6 +6,7 @@ import javax.swing.JPanel;
 
 import it.giara.analyze.enums.MainType;
 import it.giara.gui.components.FilmListPanel;
+import it.giara.gui.components.home.HomeListPanel;
 import it.giara.tmdb.schede.TMDBScheda;
 
 public class AbstractFilmList
@@ -75,6 +76,8 @@ public class AbstractFilmList
 	{
 		if (panel instanceof FilmListPanel)
 			((FilmListPanel) panel).updateFromList(type);
+		else if (panel instanceof HomeListPanel)
+			((HomeListPanel) panel).updateFromList(type);
 		else
 			panel.repaint();
 	}

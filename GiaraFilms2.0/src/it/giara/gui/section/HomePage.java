@@ -1,5 +1,6 @@
 package it.giara.gui.section;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -7,12 +8,15 @@ import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
+import it.giara.analyze.enums.MainType;
 import it.giara.gui.DefaultGui;
 import it.giara.gui.MainFrame;
 import it.giara.gui.components.AnimatedImageButton;
 import it.giara.gui.components.ImageButton;
+import it.giara.gui.components.home.HomeListPanel;
 import it.giara.gui.components.home.LateralDrag;
 import it.giara.gui.components.home.NewsPanel;
+import it.giara.gui.utils.AbstractFilmList;
 import it.giara.gui.utils.ColorUtils;
 import it.giara.gui.utils.ImageUtils;
 import it.giara.phases.ScanService;
@@ -27,6 +31,7 @@ public class HomePage extends DefaultGui
 	
 	LateralDrag lateralDrag;
 	NewsPanel news;
+	HomeListPanel homelist;
 	
 	public HomePage()
 	{
@@ -34,8 +39,10 @@ public class HomePage extends DefaultGui
 		if (sync != null)
 			sync.updateRunnable(OpenSync);
 		
-		lateralDrag = new LateralDrag();
+		lateralDrag = new LateralDrag(this);
 		news = new NewsPanel();
+		homelist = new HomeListPanel();
+		homelist.setVisible(false);
 	}
 	
 	public void loadComponent()
@@ -98,6 +105,26 @@ public class HomePage extends DefaultGui
 		
 		news.setBounds(16,56,FRAME_WIDTH-48,FRAME_HEIGHT-56-16);
 		this.add(news);
+		
+		homelist.setBounds(16,56,FRAME_WIDTH-48,FRAME_HEIGHT-56-16);
+		homelist.init();
+		this.add(homelist);
+	}
+	
+	public void showOnHomepage(AbstractFilmList list, MainType t)
+	{
+		if(list == null)
+		{
+			news.setVisible(true);
+			homelist.setVisible(false);
+		}
+		else
+		{
+			news.setVisible(false);
+			homelist.updateAbstractFilmList(list, t);
+			homelist.setVisible(true);
+		}
+		
 	}
 	
 	
