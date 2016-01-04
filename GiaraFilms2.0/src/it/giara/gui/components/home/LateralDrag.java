@@ -64,11 +64,17 @@ public class LateralDrag extends JPanel
 		background.setBackground(ColorUtils.Back);
 		background.setOpaque(true);
 		init();
+		
+		this.add(letOut);
+		this.add(letIn);
+		this.add(news);
+		this.add(allFilm);
+		this.add(sep3);
+		this.add(background);
 	}
 	
 	public void init()
 	{
-		this.removeAll();
 		
 		letOut.setBounds(this.getWidth() - 16, this.getHeight()/2-16, 16, 32);
 		letIn.setBounds(this.getWidth() - 32, this.getHeight()/2-16, 16, 32);
@@ -76,20 +82,13 @@ public class LateralDrag extends JPanel
 		letIn.setVisible(out);
 		letOut.setVisible(!out);
 		
-		this.add(letOut);
-		this.add(letIn);
-		
 		news.setBounds(0, 10, this.getWidth() - 16, 30);
-		this.add(news);
-		
+
 		allFilm.setBounds(0, 50, this.getWidth() - 16, 30);
-		this.add(allFilm);
-		
+
 		sep3.setBounds(this.getWidth() - 16, 0, 1, this.getHeight());
-		this.add(sep3);
-		
+
 		background.setBounds(0, 0, this.getWidth() - 16, this.getHeight());
-		this.add(background);
 		
 	}
 	

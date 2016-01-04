@@ -7,26 +7,38 @@ import java.util.concurrent.TimeUnit;
 public class ThreadManager
 {
 	public static ExecutorService CachedExecutor;
-	public static ExecutorService PoolExecutor;
 	
 	public static ExecutorService PoolExecutorSearch; // this pool is for Loading List File
-	public static ExecutorService PoolExecutorSearchIndicizer; //this pool run file indicizer
+	public static ExecutorService PoolExecutorSearchIndicizer; //this pool run file indicizer during Search
 	
+	public static ExecutorService PoolScanServiceExecutor;
+	
+	public static ExecutorService SystemPoolExecutor;
 	public static ScheduledExecutorService  ScheduledExecutorService ; //scheduleThreadPool
 	
-	public static int poolWait = 0;
+	public static int poolScanServiceWait = 0;
+	
+	
 	public static int poolSearchWait = 0;
-	public static int poolSize = 10;
+	public static int SearchPoolSize = 5;				//SearchThreads need to be very fast
+	public static int SearchIndicizerPoolSize = 15;
+	
+	public static int poolScanServiceSize = 3;
+	public static int SystemPoolSize = 5;
+	public static int SchedulePoolSize = 2;
 	
 	static
 	{
 		CachedExecutor = Executors.newCachedThreadPool();
-		PoolExecutor = Executors.newFixedThreadPool(poolSize);
+		PoolScanServiceExecutor = Executors.newFixedThreadPool(poolScanServiceSize);
 		
-		PoolExecutorSearch = Executors.newFixedThreadPool(poolSize /2);
-		PoolExecutorSearchIndicizer = Executors.newFixedThreadPool(poolSize * 2);
+		PoolExecutorSearch = Executors.newFixedThreadPool(SearchPoolSize);
+		PoolExecutorSearchIndicizer = Executors.newFixedThreadPool(SearchIndicizerPoolSize);
 		
-		ScheduledExecutorService = Executors.newScheduledThreadPool(2);
+		ScheduledExecutorService = Executors.newScheduledThreadPool(SchedulePoolSize);
+		
+		SystemPoolExecutor = Executors.newFixedThreadPool(poolScanServiceSize);
+		
 	}
 	
 	// Very Height priority, execute instant task
@@ -35,10 +47,17 @@ public class ThreadManager
 		CachedExecutor.submit(task);
 	}
 	
-	// insert task without checking poolWait, create medium priority
-	public static void submitPoolTask(final Runnable task)
+	
+	public static void submitSystemTask(Runnable task)
 	{
-		poolWait++;
+		SystemPoolExecutor.submit(task);
+	}
+	
+	
+	// insert task without checking poolWait, create medium priority
+	public static void submitPoolScanServiceTask(final Runnable task)
+	{
+		poolScanServiceWait++;
 		Runnable runnable = new Runnable()
 		{
 			@Override
@@ -49,18 +68,25 @@ public class ThreadManager
 					task.run();
 				} finally
 				{
-					poolWait--;
+					poolScanServiceWait--;
 				}
 			}
 		};
 		
-		PoolExecutor.submit(runnable);
+		PoolScanServiceExecutor.submit(runnable);
 	}
 	
-	public static int getPoolWait()
+	public static int getPoolScanServiceWait()
 	{
-		return poolWait;
+		return poolScanServiceWait;
 	}
+	
+	// ScheduleTask
+	public static void submitScheduleTask(Runnable task, int second)
+	{
+		ScheduledExecutorService.schedule(task, second, TimeUnit.SECONDS);
+	}
+	
 	
 	//SEARCH SECTION
 	
@@ -89,24 +115,17 @@ public class ThreadManager
 		PoolExecutorSearchIndicizer.submit(runnable);
 	}
 	
-	// Very Height priority, execute instant task
 	public static void submitSearchTask(Runnable task)
 	{
 		PoolExecutorSearch.submit(task);
 	}
 	
-	// ScheduleTask
-	public static void submitScheduleTask(Runnable task, int second)
-	{
-		ScheduledExecutorService.schedule(task, second, TimeUnit.SECONDS);
-	}
-	
-	public static void resetThreadSearch()
+	public static void resetPoolSearch()
 	{
 		PoolExecutorSearchIndicizer.shutdownNow();
 		PoolExecutorSearch.shutdownNow();
 		poolSearchWait = 0;
-		PoolExecutorSearchIndicizer = Executors.newFixedThreadPool(poolSize * 2);
-		PoolExecutorSearch = Executors.newFixedThreadPool(poolSize /2);
+		PoolExecutorSearchIndicizer = Executors.newFixedThreadPool(SearchIndicizerPoolSize);
+		PoolExecutorSearch = Executors.newFixedThreadPool(SearchPoolSize);
 	}
 }

@@ -50,7 +50,7 @@ public class SQLQuery
 	{
 		if (Settings.getParameter("servercollaborate").equals("1"))
 		{
-			ThreadManager.submitPoolTask(new Runnable()
+			ThreadManager.submitSystemTask(new Runnable()
 			{
 				@Override
 				public void run()
@@ -195,7 +195,7 @@ public class SQLQuery
 		{
 			if (Settings.getParameter("servercollaborate").equals("1") && collaborate)
 			{
-				ThreadManager.submitPoolTask(new Runnable()
+				ThreadManager.submitSystemTask(new Runnable()
 				{
 					@Override
 					public void run()

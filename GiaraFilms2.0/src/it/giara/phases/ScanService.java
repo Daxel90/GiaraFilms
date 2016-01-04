@@ -129,11 +129,11 @@ public class ScanService implements Runnable
 							}
 						}
 					};
-					while(ThreadManager.getPoolWait()>=ThreadManager.poolSize)
+					while(ThreadManager.getPoolScanServiceWait()>=ThreadManager.poolScanServiceSize)
 					{
 						FunctionsUtils.sleep(10);
 					}
-					ThreadManager.submitPoolTask(check);
+					ThreadManager.submitPoolScanServiceTask(check);
 				}
 				
 			}

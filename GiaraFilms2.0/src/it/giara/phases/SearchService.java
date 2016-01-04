@@ -160,7 +160,7 @@ public class SearchService
 									}
 								};
 								
-								while (ThreadManager.getPoolSearchWait() >= ThreadManager.poolSize * 2)
+								while (ThreadManager.getPoolSearchWait() >= ThreadManager.SearchPoolSize)
 								{
 									FunctionsUtils.sleep(10);
 								}
@@ -192,7 +192,7 @@ public class SearchService
 	public void StopService()
 	{
 		run = false;
-		ThreadManager.resetThreadSearch();
+		ThreadManager.resetPoolSearch();
 	}
 	
 }

@@ -96,7 +96,7 @@ public class TMDBScheda
 					}
 				};
 				
-				ThreadManager.submitPoolTask(task);
+				ThreadManager.submitSystemTask(task);
 				poster_w140 = ImageUtils.getImage("loading.png");
 			}
 		}
@@ -151,7 +151,7 @@ public class TMDBScheda
 					}
 				};
 				
-				ThreadManager.submitPoolTask(task);
+				ThreadManager.submitSystemTask(task);
 				poster_original = ImageUtils.getImage("loading.png");
 			}
 		}
@@ -219,7 +219,7 @@ public class TMDBScheda
 					}
 				};
 				
-				ThreadManager.submitPoolTask(task);
+				ThreadManager.submitSystemTask(task);
 				back_w1920 = null;
 			}
 		}
@@ -274,7 +274,7 @@ public class TMDBScheda
 					}
 				};
 				
-				ThreadManager.submitPoolTask(task);
+				ThreadManager.submitSystemTask(task);
 				home_w185 = ImageUtils.getImage("loading.png");
 			}
 		}
@@ -329,7 +329,7 @@ public class TMDBScheda
 					}
 				};
 				
-				ThreadManager.submitPoolTask(task);
+				ThreadManager.submitSystemTask(task);
 				home_w500 = ImageUtils.getImage("loading.png");
 			}
 		}
