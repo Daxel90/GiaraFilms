@@ -28,9 +28,9 @@ public class Settings
 		config.put("downloadfolder", SQLQuerySettings.getCurrentParameter("downloadfolder",
 				DirUtils.getDefaultDownloadDir().getAbsolutePath()));
 				
-		config.put("scanservice", SQLQuerySettings.getCurrentParameter("scanservice", "0"));
+		config.put("scanservice", SQLQuerySettings.getCurrentParameter("scanservice", "1"));
 		config.put("scanservicethread", SQLQuerySettings.getCurrentParameter("scanservicethread", "2"));
-		config.put("servercollaborate", SQLQuerySettings.getCurrentParameter("servercollaborate", "0"));
+		config.put("servercollaborate", SQLQuerySettings.getCurrentParameter("servercollaborate", "1"));
 		config.put("serversync", SQLQuerySettings.getCurrentParameter("serversync", "0")); // Features
 		config.put("lastserversync", SQLQuerySettings.getCurrentParameter("lastserversync", "0")); // Features
 		
@@ -98,7 +98,7 @@ public class Settings
 		{
 			SQLQuerySettings.removeParameters("lastdbcheck");
 			Settings.setParameter("servercollaborate", "1");
-			Settings.setParameter("scanservice", "0");
+			Settings.setParameter("scanservice", "1");
 			setParameter("DBversion", "16");
 		}
 	}

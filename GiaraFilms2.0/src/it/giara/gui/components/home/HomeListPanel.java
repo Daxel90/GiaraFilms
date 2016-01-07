@@ -87,7 +87,7 @@ public class HomeListPanel extends JPanel
 		ArrowUp.setVisible(upArr);
 		this.add(ArrowUp);
 		
-		ArrowDown.setBounds(this.getWidth() - 37, this.getHeight() - 2, 32, 32);
+		ArrowDown.setBounds(this.getWidth() - 37, this.getHeight() - 32, 32, 32);
 		ArrowDown.setVisible(downArr);
 		this.add(ArrowDown);
 		

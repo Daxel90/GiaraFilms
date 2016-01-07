@@ -25,29 +25,29 @@ public class AnimatedImageButton extends JLabel implements MouseListener
 	private BufferedImage[] images = null;
 	private int current = 0;
 	private int frame = 0;
-	public AnimatedImageButton instance;
 	public Timer timer;
+	private int timerVal;
 	
-	public AnimatedImageButton(String imageName, int n, Runnable action, Runnable onUpdateFrame)
+	public AnimatedImageButton(String imageName, int n, Runnable action, Runnable onUpdateFrame, int time)
 	{
-		this(imageName, n, action);
+		this(imageName, n, action, time);
 		frameUpdate = onUpdateFrame;
 	}
 	
-	public AnimatedImageButton(String imageName, int n, Runnable action)
+	public AnimatedImageButton(String imageName, int n, Runnable action, int time)
 	{
 		super();
-		instance = this;
 		frame = n;
 		act = action;
 		images = new BufferedImage[n];
+		timerVal = time;
 		for (int x = 0; x < n; x++)
 		{
 			images[x] = ImageUtils.getImage("gui/animation/" + imageName.replace("(n)", "" + x) + ".png");
 		}
 		this.addMouseListener(this);
 		
-		timer = new Timer(500, updateFrame);
+		timer = new Timer(timerVal, updateFrame);
 		timer.start();
 	}
 	
@@ -105,7 +105,7 @@ public class AnimatedImageButton extends JLabel implements MouseListener
 		}
 		else if (vis && timer == null)
 		{
-			timer = new Timer(500, updateFrame);
+			timer = new Timer(timerVal, updateFrame);
 			timer.start();
 		}
 		super.setVisible(vis);
@@ -122,12 +122,12 @@ public class AnimatedImageButton extends JLabel implements MouseListener
 		@Override
 		public void actionPerformed(ActionEvent e)
 		{
-			instance.current++;
-			if (instance.current >= instance.frame)
+			current++;
+			if (current >= frame)
 			{
-				instance.current = 0;
+				current = 0;
 			}
-			instance.repaint();
+			repaint();
 			
 			if (frameUpdate != null)
 				frameUpdate.run();

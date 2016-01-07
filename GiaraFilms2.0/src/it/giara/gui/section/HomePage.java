@@ -1,6 +1,5 @@
 package it.giara.gui.section;
 
-import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -20,6 +19,8 @@ import it.giara.gui.utils.AbstractFilmList;
 import it.giara.gui.utils.ColorUtils;
 import it.giara.gui.utils.ImageUtils;
 import it.giara.phases.ScanService;
+import it.giara.phases.Settings;
+import it.giara.syncdata.ServerQuery;
 
 public class HomePage extends DefaultGui
 {
@@ -32,15 +33,28 @@ public class HomePage extends DefaultGui
 	LateralDrag lateralDrag;
 	NewsPanel news;
 	HomeListPanel homelist;
+	public static AnimatedImageButton loadingHomePage;
+	JLabel Colltext;
 	
 	public HomePage()
 	{
 		super();
 		if (sync != null)
 			sync.updateRunnable(OpenSync);
-		
+			
+		if (loadingHomePage != null && Settings.getParameter("servercollaborate").equals("1"))
+			loadingHomePage.updateRunnable(CheckHome);
+			
 		lateralDrag = new LateralDrag(this);
-		news = new NewsPanel();
+		Colltext = new JLabel();
+		Colltext.setVisible(!Settings.getParameter("servercollaborate").equals("1"));
+		
+		if (Settings.getParameter("servercollaborate").equals("1"))
+		{
+			news = new NewsPanel();
+			news.setVisible(ServerQuery.newsLoaded);
+		}
+		
 		homelist = new HomeListPanel();
 		homelist.setVisible(false);
 	}
@@ -77,7 +91,8 @@ public class HomePage extends DefaultGui
 		this.add(options);
 		
 		ImageButton downloads = new ImageButton(ImageUtils.getImage("gui/download.png"),
-				ImageUtils.getImage("gui/download_over.png"), ImageUtils.getImage("gui/download_over.png"), OpenDownloads);
+				ImageUtils.getImage("gui/download_over.png"), ImageUtils.getImage("gui/download_over.png"),
+				OpenDownloads);
 		downloads.setBounds(40, 5, 32, 32);
 		downloads.setToolTipText("Downloads");
 		this.add(downloads);
@@ -89,44 +104,69 @@ public class HomePage extends DefaultGui
 		this.add(homePage);
 		
 		if (sync == null)
-			sync = new AnimatedImageButton("sync(n)", 5, OpenSync, CheckSync);
+			sync = new AnimatedImageButton("sync(n)", 5, OpenSync, CheckSync, 500);
 		sync.setBounds(110, 5, 32, 32);
 		sync.setToolTipText("Scan Service");
 		CheckSync.run();
 		this.add(sync);
+		
+		if (Settings.getParameter("servercollaborate").equals("1"))
+		{
+			if (loadingHomePage == null)
+				loadingHomePage = new AnimatedImageButton("loading(n)", 9, null, CheckHome, 100);
+				
+			loadingHomePage.setVisible(!ServerQuery.newsLoaded);
+			loadingHomePage.setBounds((FRAME_WIDTH - 256) / 2, (FRAME_HEIGHT - 128) / 2, 256, 128);
+			this.add(loadingHomePage);
+		}
 		
 		this.content();
 	}
 	
 	public void content()
 	{
-		lateralDrag.setBounds(-FRAME_WIDTH/5+(FRAME_WIDTH/5)*lateralDrag.progress/20, 40, FRAME_WIDTH/5+16, FRAME_HEIGHT-40);
+		lateralDrag.setBounds(-FRAME_WIDTH / 5 + (FRAME_WIDTH / 5) * lateralDrag.progress / 20, 40,
+				FRAME_WIDTH / 5 + 16, FRAME_HEIGHT - 40);
 		this.add(lateralDrag);
 		
-		news.setBounds(16,56,FRAME_WIDTH-48,FRAME_HEIGHT-56-16);
-		this.add(news);
+		if (Settings.getParameter("servercollaborate").equals("1"))
+		{
+			news.setBounds(16, 56, FRAME_WIDTH - 48, FRAME_HEIGHT - 56 - 16);
+			this.add(news);
+		}
+		else
+		{
+			Colltext.setText(
+					"<html><h2>Per poter usare l'HomePage, è necessario abilitare la Collaborazione Server</html>");
+			Colltext.setHorizontalAlignment(JLabel.CENTER);
+			Colltext.setBounds(0, (FRAME_HEIGHT - 128) / 2, FRAME_WIDTH, 128);
+			this.add(Colltext);
+		}
 		
-		homelist.setBounds(16,56,FRAME_WIDTH-48,FRAME_HEIGHT-56-16);
+		homelist.setBounds(16, 56, FRAME_WIDTH - 48, FRAME_HEIGHT - 56 - 16);
 		homelist.init();
 		this.add(homelist);
 	}
 	
 	public void showOnHomepage(AbstractFilmList list, MainType t)
 	{
-		if(list == null)
+		if (list == null)
 		{
-			news.setVisible(true);
+			if (news != null)
+				news.setVisible(true);
 			homelist.setVisible(false);
+			Colltext.setVisible(!Settings.getParameter("servercollaborate").equals("1"));
 		}
 		else
 		{
-			news.setVisible(false);
+			if (news != null)
+				news.setVisible(false);
 			homelist.updateAbstractFilmList(list, t);
 			homelist.setVisible(true);
+			Colltext.setVisible(false);
 		}
 		
 	}
-	
 	
 	Runnable RunSearch = new Runnable()
 	{
@@ -176,6 +216,20 @@ public class HomePage extends DefaultGui
 		}
 	};
 	
+	Runnable CheckHome = new Runnable()
+	{
+		@Override
+		public void run()
+		{
+			if (ServerQuery.newsLoaded)
+			{
+				loadingHomePage.setVisible(false);
+				news.setVisible(true);
+				news.setBounds(16, 56, FRAME_WIDTH - 48, FRAME_HEIGHT - 56 - 16);
+			}
+		}
+	};
+	
 	Runnable OpenHomePage = new Runnable()
 	{
 		@Override
@@ -184,5 +238,5 @@ public class HomePage extends DefaultGui
 			MainFrame.getInstance().setInternalPane(new HomePage());
 		}
 	};
-
+	
 }
