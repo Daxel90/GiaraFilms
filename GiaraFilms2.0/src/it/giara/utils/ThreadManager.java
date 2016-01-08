@@ -24,7 +24,7 @@ public class ThreadManager
 	public static int SearchIndicizerPoolSize = 15;
 	
 	public static int poolScanServiceSize = 2;
-	public static int SystemPoolSize = 5;
+	public static int SystemPoolSize = 10;
 	public static int SchedulePoolSize = 2;
 	
 	static

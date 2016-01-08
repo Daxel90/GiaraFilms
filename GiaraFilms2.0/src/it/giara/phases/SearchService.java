@@ -72,20 +72,12 @@ public class SearchService
 								if (IDScheda == -1)
 									continue;
 									
-								TMDBScheda scheda = SQLQuery.readScheda(IDScheda, MainType.getMainTypeByID(SQLQuery.getFileType(s2)));
-								
+								TMDBScheda scheda = SQLQuery.readScheda(IDScheda,
+										MainType.getMainTypeByID(SQLQuery.getFileType(s2)));
+										
 								if (scheda != null)
-									switch (scheda.type)
-									{
-										case Film:
-											list.addPreSchedaFilm(scheda);
-											break;
-										case SerieTV:
-											list.addPreSchedaTVSerie(scheda);
-											break;
-										default:
-											break;
-									}
+									list.addScheda(scheda);
+									
 							}
 							else
 							{
@@ -114,7 +106,7 @@ public class SearchService
 													}
 													int schedaID = SQLQuery.writeScheda(httpF.scheda, true);
 													
-													list.addPreSchedaFilm(httpF.scheda);
+													list.addScheda(httpF.scheda);
 													
 													SQLQuery.writeCacheSearch(f.title, f.type, schedaID);
 													SQLQuery.writeFile(s2, size, schedaID, f.type);
@@ -143,7 +135,7 @@ public class SearchService
 													SQLQuery.writeCacheSearch(f.title, f.type, schedaSTV);
 													int FileId = SQLQuery.writeFile(s2, size, schedaSTV, f.type);
 													
-													list.addPreSchedaTVSerie(httpF.scheda);
+													list.addScheda(httpF.scheda);
 													
 													SQLQuery.writeEpisodeInfo(FileId, schedaSTV, f.episode, f.series);
 												}

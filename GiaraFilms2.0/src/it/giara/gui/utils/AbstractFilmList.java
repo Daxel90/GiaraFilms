@@ -22,7 +22,7 @@ public class AbstractFilmList
 		panel = pane;
 	}
 	
-	public void addPreSchedaFilm(TMDBScheda p)
+	public void addScheda(TMDBScheda p)
 	{
 		if (p == null)
 			return;
@@ -30,32 +30,28 @@ public class AbstractFilmList
 			return;
 		if (p.title.equals(""))
 			return;
-		for (int k = 0; k < films.size(); k++)
+		if (p.type == MainType.SerieTV)
 		{
-			if (p.title.equals(films.get(k).title))
-				return;
+			for (int k = 0; k < series.size(); k++)
+			{
+				if (p.title.equals(series.get(k).title))
+					return;
+			}
+			
+			series.add(p);
+			notifyChange(MainType.SerieTV);
 		}
-		
-		films.add(p);
-		notifyChange(MainType.Film);
-	}
-	
-	public void addPreSchedaTVSerie(TMDBScheda p)
-	{
-		if (p == null)
-			return;
-		if (p.title == null)
-			return;
-		if (p.title.equals(""))
-			return;
-		for (int k = 0; k < series.size(); k++)
+		else if (p.type == MainType.Film)
 		{
-			if (p.title.equals(series.get(k).title))
-				return;
+			for (int k = 0; k < films.size(); k++)
+			{
+				if (p.title.equals(films.get(k).title))
+					return;
+			}
+			
+			films.add(p);
+			notifyChange(MainType.Film);
 		}
-		
-		series.add(p);
-		notifyChange(MainType.SerieTV);
 	}
 	
 	public void addFile(String[] p)
