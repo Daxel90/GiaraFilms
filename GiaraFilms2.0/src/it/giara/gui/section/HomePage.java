@@ -49,12 +49,6 @@ public class HomePage extends DefaultGui
 		Colltext = new JLabel();
 		Colltext.setVisible(!Settings.getParameter("servercollaborate").equals("1"));
 		
-		if (Settings.getParameter("servercollaborate").equals("1"))
-		{
-			news = new NewsPanel();
-			news.setVisible(ServerQuery.newsLoaded);
-		}
-		
 		homelist = new HomeListPanel();
 		homelist.setVisible(false);
 	}
@@ -77,6 +71,13 @@ public class HomePage extends DefaultGui
 			}
 		});
 		this.add(searchTx);
+		
+		if(news == null)
+		if (Settings.getParameter("servercollaborate").equals("1"))
+		{
+			news = new NewsPanel();
+			news.setVisible(ServerQuery.newsLoaded);
+		}
 		
 		ImageButton search = new ImageButton(ImageUtils.getImage("gui/search.png"),
 				ImageUtils.getImage("gui/search_over.png"), ImageUtils.getImage("gui/search_clicked.png"), RunSearch);
@@ -163,6 +164,7 @@ public class HomePage extends DefaultGui
 				news.setVisible(false);
 			homelist.updateAbstractFilmList(list, t);
 			homelist.setVisible(true);
+			homelist.updateFromList(homelist.show);
 			Colltext.setVisible(false);
 		}
 		

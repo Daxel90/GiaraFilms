@@ -1,5 +1,6 @@
 package it.giara.gui.utils;
 
+import java.nio.file.Files;
 import java.util.ArrayList;
 
 import javax.swing.JPanel;
@@ -76,6 +77,21 @@ public class AbstractFilmList
 			((HomeListPanel) panel).updateFromList(type);
 		else
 			panel.repaint();
+	}
+	
+	public int sizeofList(MainType t)
+	{
+		switch(t)
+		{
+			case Film:
+				return films.size();
+			case SerieTV:
+				return series.size();
+			case NULL:
+				return allFile.size();
+			default:
+			return 0;
+		}
 	}
 	
 	private boolean contains(String data, ArrayList<String[]> list)

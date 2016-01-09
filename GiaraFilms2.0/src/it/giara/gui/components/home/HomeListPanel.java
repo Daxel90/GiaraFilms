@@ -1,5 +1,6 @@
 package it.giara.gui.components.home;
 
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import it.giara.analyze.enums.MainType;
@@ -22,9 +23,11 @@ public class HomeListPanel extends JPanel
 	private int column = 1;
 	private int offset = 0;
 	
-	MainType show = MainType.Film;
+	public MainType show = MainType.Film;
 	
 	private ImageButton ArrowUp, ArrowDown;
+	
+	JLabel textlabel;
 	
 	public void updateAbstractFilmList(AbstractFilmList l, MainType t)
 	{
@@ -48,7 +51,10 @@ public class HomeListPanel extends JPanel
 		ArrowDown = new ImageButton(ImageUtils.getImage("gui/arrow_down.png"),
 				ImageUtils.getImage("gui/arrow_down_over.png"), ImageUtils.getImage("gui/arrow_down_over.png"),
 				RunDown);
-				
+		
+		textlabel = new JLabel();
+		textlabel.setText("<html><h2> O Film Disponibili</html>");
+		textlabel.setHorizontalAlignment(JLabel.CENTER);
 		init();
 	}
 	
@@ -58,6 +64,9 @@ public class HomeListPanel extends JPanel
 		
 		if (list == null)
 			return;
+		
+		textlabel.setBounds(0, 0, this.getWidth(), 20);
+		this.add(textlabel);
 		
 		column = (this.getWidth() - 32 - 2 * spaceFileButton) / (FileButtonWidth + spaceFileButton);
 		int COLUMNcenterOffset = ((this.getWidth() - 32 - 2 * spaceFileButton)
@@ -146,6 +155,19 @@ public class HomeListPanel extends JPanel
 	public void updateFromList(MainType type)
 	{
 		if (type.equals(show))
+		switch(type)
+		{
+			case Film:
+				textlabel.setText("<html><h2> "+list.sizeofList(MainType.Film)+" Film Disponibili</html>");
+				break;
+			case SerieTV:
+				textlabel.setText("<html><h2> "+list.sizeofList(MainType.SerieTV)+" SerieTV Disponibili</html>");
+				break;
+			default:
+				break;
+		}
+		
+		if (type.equals(show) && (offset+(row*column)+1)>=list.sizeofList(show))
 		{
 			init();
 			this.repaint();

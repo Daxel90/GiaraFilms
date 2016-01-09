@@ -61,7 +61,7 @@ public class LateralDrag extends JPanel
 		for (int k = 0; k < GenereType.values().length; k++)
 		{
 			final GenereType type = GenereType.values()[k];
-			
+			final int indice = k;
 			genreFilm[k] = new LateralButton(new Runnable()
 			{
 				@Override
@@ -70,6 +70,24 @@ public class LateralDrag extends JPanel
 					AbstractFilmList lista = new AbstractFilmList();
 					new ListRequest(type, MainType.Film, lista);
 					home.showOnHomepage(lista, MainType.Film);
+					news.setSelected(false);
+					Films.setSelected(false);
+					TVSeries.setSelected(false);
+					news.repaint();
+					Films.repaint();
+					TVSeries.repaint();
+					for (int j = 0; j < genreFilm.length; j++)
+					{
+						genreFilm[j].setSelected(false);
+						genreFilm[j].repaint();
+					}
+					for (int j = 0; j < genreTVSerie.length; j++)
+					{
+						genreTVSerie[j].setSelected(false);
+						genreTVSerie[j].repaint();
+					}
+					genreFilm[indice].setSelected(true);
+					genreFilm[indice].repaint();
 				}
 			});
 			genreFilm[k]
@@ -83,6 +101,7 @@ public class LateralDrag extends JPanel
 		for (int k = 0; k < GenereType.values().length; k++)
 		{
 			final GenereType type = GenereType.values()[k];
+			final int indice = k;
 			
 			genreTVSerie[k] = new LateralButton(new Runnable()
 			{
@@ -92,7 +111,26 @@ public class LateralDrag extends JPanel
 				{
 					AbstractFilmList lista = new AbstractFilmList();
 					new ListRequest(type, MainType.SerieTV, lista);
-					home.showOnHomepage(lista, MainType.Film);
+					home.showOnHomepage(lista, MainType.SerieTV);
+					news.setSelected(false);
+					Films.setSelected(false);
+					TVSeries.setSelected(false);
+					news.repaint();
+					Films.repaint();
+					TVSeries.repaint();
+					for (int j = 0; j < genreFilm.length; j++)
+					{
+						genreFilm[j].setSelected(false);
+						genreFilm[j].repaint();
+					}
+					for (int j = 0; j < genreTVSerie.length; j++)
+					{
+						genreTVSerie[j].setSelected(false);
+						genreTVSerie[j].repaint();
+					}
+					genreTVSerie[indice].setSelected(true);
+					genreTVSerie[indice].repaint();
+					
 				}
 			});
 			genreTVSerie[k]
@@ -266,6 +304,18 @@ public class LateralDrag extends JPanel
 			news.setSelected(false);
 			Films.setSelected(true);
 			TVSeries.setSelected(false);
+			
+			for (int j = 0; j < genreFilm.length; j++)
+			{
+				genreFilm[j].setSelected(false);
+				genreFilm[j].repaint();
+			}
+			for (int j = 0; j < genreTVSerie.length; j++)
+			{
+				genreTVSerie[j].setSelected(false);
+				genreTVSerie[j].repaint();
+			}
+			
 			expandingFilm = !expandingFilm;
 			if (expandingFilm)
 				expandindTVSerie = false;
@@ -285,6 +335,18 @@ public class LateralDrag extends JPanel
 			news.setSelected(false);
 			Films.setSelected(false);
 			TVSeries.setSelected(true);
+			
+			for (int j = 0; j < genreFilm.length; j++)
+			{
+				genreFilm[j].setSelected(false);
+				genreFilm[j].repaint();
+			}
+			for (int j = 0; j < genreTVSerie.length; j++)
+			{
+				genreTVSerie[j].setSelected(false);
+				genreTVSerie[j].repaint();
+			}
+			
 			expandindTVSerie = !expandindTVSerie;
 			if (expandindTVSerie)
 				expandingFilm = false;

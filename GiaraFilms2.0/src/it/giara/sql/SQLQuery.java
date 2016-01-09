@@ -6,8 +6,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import it.giara.analyze.enums.MainType;
+import it.giara.gui.utils.AbstractFilmList;
 import it.giara.phases.Settings;
 import it.giara.syncdata.ServerQuery;
+import it.giara.tmdb.GenereType;
 import it.giara.tmdb.schede.TMDBScheda;
 import it.giara.utils.FunctionsUtils;
 import it.giara.utils.Log;
@@ -241,6 +243,32 @@ public class SQLQuery
 			Log.stack(Log.DB, e);
 		}
 		return scheda;
+	}
+	
+	public synchronized static void loadSchedeList(GenereType g, MainType t, AbstractFilmList l)
+	{
+		ResultSet r = SQL.FetchData("SELECT * FROM `Schede` WHERE `Type` = "+t.ID+" AND `GenID` LIKE '%"+g.Id+"%' ORDER BY `Relese` DESC;");
+		try
+		{
+			while (r.next())
+			{
+				TMDBScheda scheda = new TMDBScheda();
+				scheda.ID = r.getInt("ID");
+				scheda.title = SQL.unescape(r.getString("Title"));
+				scheda.relese = SQL.unescape(r.getString("Relese"));
+				scheda.poster = SQL.unescape(r.getString("Poster"));
+				scheda.back = SQL.unescape(r.getString("Back"));
+				scheda.desc = SQL.unescape(r.getString("Desc"));
+				scheda.setGeneriIDs(SQL.unescape(r.getString("GenID")));
+				scheda.vote = r.getDouble("Vote");
+				scheda.type = MainType.getMainTypeByID(r.getInt("Type"));
+				
+				l.addScheda(scheda);
+			}
+		} catch (SQLException e)
+		{
+			Log.stack(Log.DB, e);
+		}
 	}
 	
 	// -------------------
