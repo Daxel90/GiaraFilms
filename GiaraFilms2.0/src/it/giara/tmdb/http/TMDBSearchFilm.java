@@ -11,6 +11,7 @@ import java.util.Iterator;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import it.giara.analyze.MatchStringAlghorithm;
 import it.giara.analyze.enums.MainType;
 import it.giara.tmdb.schede.TMDBScheda;
 import it.giara.utils.Log;
@@ -19,14 +20,15 @@ public class TMDBSearchFilm
 {
 	
 	public TMDBScheda scheda;
+	double matchName = -1;
 	
-	public TMDBSearchFilm(String search)
+	public TMDBSearchFilm(String search, int year)
 	{
 		Log.log(Log.FILMINFO, search);
 		scheda = new TMDBScheda();
 		try
 		{
-			getFileInfo(search);
+			getFileInfo(search, year);
 		} catch (Exception e)
 		{
 			Log.stack(Log.NET, e);
@@ -37,7 +39,7 @@ public class TMDBSearchFilm
 			
 	}
 	
-	private void getFileInfo(String title) throws IOException, JSONException
+	private void getFileInfo(String title, int year) throws IOException, JSONException
 	{
 		{
 			String result = "{\"films\":";
@@ -70,27 +72,63 @@ public class TMDBSearchFilm
 				
 				if (film.getString("media_type").equals("movie"))
 				{
-					scheda.ID = film.getInt("id");
-					scheda.title = film.optString("name");
-					scheda.relese = film.optString("release_date");
-					scheda.poster = film.optString("poster_path");
-					scheda.back = film.optString("backdrop_path");
-					scheda.desc = film.optString("overview");
-					ArrayList<Integer> gens = new ArrayList<Integer>();
+					double m = MatchStringAlghorithm.compareStrings(film.optString("name"),title);
+					String data = film.optString("release_date");
+					int filmyear = -1;
+					if(!data.equals("") && data != null && data.contains("-"))
+					{
+						filmyear = Integer.parseInt(data.split("-")[0]);
+					}
 					
-					for (int l = 0; l < film.getJSONArray("genre_ids").length(); l++)
+					if(year != -1 && filmyear == year)
 					{
-						gens.add(film.getJSONArray("genre_ids").getInt(l));
+						scheda.ID = film.getInt("id");
+						scheda.title = film.optString("name");
+						scheda.relese = film.optString("release_date");
+						scheda.poster = film.optString("poster_path");
+						scheda.back = film.optString("backdrop_path");
+						scheda.desc = film.optString("overview");
+						ArrayList<Integer> gens = new ArrayList<Integer>();
+						
+						for (int l = 0; l < film.getJSONArray("genre_ids").length(); l++)
+						{
+							gens.add(film.getJSONArray("genre_ids").getInt(l));
+						}
+						scheda.genre_ids = new int[gens.size()];
+						Iterator<Integer> iterator = gens.iterator();
+						for (int i = 0; i < scheda.genre_ids.length; i++)
+						{
+							scheda.genre_ids[i] = iterator.next().intValue();
+						}
+						scheda.vote = film.optDouble("vote_average");
+						scheda.type = MainType.Film;
+						break;
 					}
-					scheda.genre_ids = new int[gens.size()];
-					Iterator<Integer> iterator = gens.iterator();
-					for (int i = 0; i < scheda.genre_ids.length; i++)
+					
+					if(matchName < m)
 					{
-						scheda.genre_ids[i] = iterator.next().intValue();
+						matchName = m;
+						scheda.ID = film.getInt("id");
+						scheda.title = film.optString("name");
+						scheda.relese = film.optString("release_date");
+						scheda.poster = film.optString("poster_path");
+						scheda.back = film.optString("backdrop_path");
+						scheda.desc = film.optString("overview");
+						ArrayList<Integer> gens = new ArrayList<Integer>();
+						
+						for (int l = 0; l < film.getJSONArray("genre_ids").length(); l++)
+						{
+							gens.add(film.getJSONArray("genre_ids").getInt(l));
+						}
+						scheda.genre_ids = new int[gens.size()];
+						Iterator<Integer> iterator = gens.iterator();
+						for (int i = 0; i < scheda.genre_ids.length; i++)
+						{
+							scheda.genre_ids[i] = iterator.next().intValue();
+						}
+						scheda.vote = film.optDouble("vote_average");
+						scheda.type = MainType.Film;
 					}
-					scheda.vote = film.optDouble("vote_average");
-					scheda.type = MainType.Film;
-					break;
 				}
 			}
 		}

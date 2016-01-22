@@ -52,10 +52,11 @@ public class ChangeLogFrame extends JFrame
 		text.setOpaque(false);
 		text.setContentType("text/html");
 		text.setText("<html>"
-				+ "<h2>--------------------" + "<h2>Dev PreRelese 16"
+				+ "<h2>--------------------" + "<h2>Dev PreRelese 16 BIG UPDATE"
 				+ "<br><h3>\t- Aggiunta HomePage"
 				+ "<br><h3>\t- Aggiunta sezione Film e SerieTv"
 				+ "<br><h3>\t- Aggiunta sincronia automatica file con il server"
+				+ "<br><h3>\t- Migliorato algoritmo riconoscimento file"
 				+ "<br><h3>\t- Riabilitato ScanService locale"
 				+ "<br><h3>\t- Inserita opzione di collaborazione con il server"
 				+ "<br><h3>\t- Migliorato Aspetto Grafico"

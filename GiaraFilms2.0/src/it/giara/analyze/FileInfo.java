@@ -12,6 +12,7 @@ public class FileInfo
 	public MainType type = MainType.NULL;
 	public String Filename;
 	public String title;
+	public int year = -1;
 	
 	// SerieTv
 	public int series = 1;
@@ -125,7 +126,8 @@ public class FileInfo
 				}
 				if (flag)
 				{
-					if (Integer.parseInt(t) <= 2016)
+					year = Integer.parseInt(t);
+					if (year <= 2017)
 						break;
 				}
 			}
@@ -199,7 +201,8 @@ public class FileInfo
 				}
 				if (flag)
 				{
-					if (Integer.parseInt(s) <= 2016)
+					year = Integer.parseInt(s);
+					if (year <= 2017)
 						break;
 				}
 			}

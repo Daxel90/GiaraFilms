@@ -98,7 +98,7 @@ public class SearchService
 													
 												if (cache == -1)
 												{
-													TMDBSearchFilm httpF = new TMDBSearchFilm(f.title);
+													TMDBSearchFilm httpF = new TMDBSearchFilm(f.title, f.year);
 													if (httpF.scheda == null)
 													{
 														SQLQuery.writeCacheSearch(f.title, f.type, -1);

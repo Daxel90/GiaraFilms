@@ -11,6 +11,7 @@ import java.util.Iterator;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import it.giara.analyze.MatchStringAlghorithm;
 import it.giara.analyze.enums.MainType;
 import it.giara.tmdb.schede.TMDBScheda;
 import it.giara.utils.Log;
@@ -19,6 +20,7 @@ public class TMDBSearchTVSerie
 {
 	
 	public TMDBScheda scheda;
+	double matchName = -1;
 	
 	public TMDBSearchTVSerie(String search)
 	{
@@ -70,27 +72,32 @@ public class TMDBSearchTVSerie
 				
 				if (film.getString("media_type").equals("tv"))
 				{
-					scheda.ID = film.getInt("id");
-					scheda.title = film.optString("name");
-					scheda.relese = film.optString("first_air_date");
-					scheda.poster = film.optString("poster_path");
-					scheda.back = film.optString("backdrop_path");
-					scheda.desc = film.optString("overview");
-					ArrayList<Integer> gens = new ArrayList<Integer>();
+					double m = MatchStringAlghorithm.compareStrings(film.optString("name"), title);
 					
-					for (int l = 0; l < film.getJSONArray("genre_ids").length(); l++)
+					if (matchName < m)
 					{
-						gens.add(film.getJSONArray("genre_ids").getInt(l));
+						matchName = m;
+						scheda.ID = film.getInt("id");
+						scheda.title = film.optString("name");
+						scheda.relese = film.optString("first_air_date");
+						scheda.poster = film.optString("poster_path");
+						scheda.back = film.optString("backdrop_path");
+						scheda.desc = film.optString("overview");
+						ArrayList<Integer> gens = new ArrayList<Integer>();
+						
+						for (int l = 0; l < film.getJSONArray("genre_ids").length(); l++)
+						{
+							gens.add(film.getJSONArray("genre_ids").getInt(l));
+						}
+						scheda.genre_ids = new int[gens.size()];
+						Iterator<Integer> iterator = gens.iterator();
+						for (int i = 0; i < scheda.genre_ids.length; i++)
+						{
+							scheda.genre_ids[i] = iterator.next().intValue();
+						}
+						scheda.vote = film.optDouble("vote_average");
+						scheda.type = MainType.SerieTV;
 					}
-					scheda.genre_ids = new int[gens.size()];
-					Iterator<Integer> iterator = gens.iterator();
-					for (int i = 0; i < scheda.genre_ids.length; i++)
-					{
-						scheda.genre_ids[i] = iterator.next().intValue();
-					}
-					scheda.vote = film.optDouble("vote_average");
-					scheda.type = MainType.SerieTV;
-					break;
 				}
 			}
 		}
