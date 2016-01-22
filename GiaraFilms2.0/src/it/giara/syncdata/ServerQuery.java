@@ -9,8 +9,10 @@ import java.net.URLConnection;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import it.giara.analyze.FileInfo;
 import it.giara.analyze.enums.MainType;
 import it.giara.gui.utils.AbstractFilmList;
+import it.giara.phases.ListRequest;
 import it.giara.phases.Settings;
 import it.giara.sql.SQLQuery;
 import it.giara.tmdb.GenereType;
@@ -270,11 +272,90 @@ public class ServerQuery
 		}
 	}
 
-	public static void loadSchedeList(GenereType g, MainType t, AbstractFilmList l)
+	public static void loadSchedeList(GenereType g, MainType t, AbstractFilmList l, ListRequest.MyBoolean running)
 	{
 		try
 		{
 			String data = "action=6&type="+t.ID+"&genre="+g.Id;
+			
+			URL url = new URL("http://giaratest.altervista.org/giarafilms/backend/backend.php");
+			URLConnection conn;
+			conn = url.openConnection();
+			conn.setDoOutput(true);
+			conn.setDoInput(true);
+			OutputStream wr = conn.getOutputStream();
+			wr.write(data.getBytes("UTF-8"));
+			wr.flush();
+			BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+			String line;
+			while ((line = rd.readLine()) != null && running.getValue())
+			{
+				Log.log(Log.BACKEND, line);
+				if (!line.contains(":--:"))
+					break;
+					
+				String[] part = line.split(":--:");
+				
+				JSONObject json = new JSONObject(part[1]);
+				TMDBScheda scheda = new TMDBScheda();
+				scheda.setJson(json);
+				SQLQuery.writeScheda(scheda, false);
+				l.addScheda(scheda);
+				
+			}
+			wr.close();
+			rd.close();
+			
+		} catch (Exception e)
+		{
+			Log.stack(Log.BACKEND, e);
+		}
+	}
+	
+	public static void loadAllSchedeList(MainType t, AbstractFilmList l, ListRequest.MyBoolean running)
+	{
+		try
+		{
+			String data = "action=7&type="+t.ID;
+			
+			URL url = new URL("http://giaratest.altervista.org/giarafilms/backend/backend.php");
+			URLConnection conn;
+			conn = url.openConnection();
+			conn.setDoOutput(true);
+			conn.setDoInput(true);
+			OutputStream wr = conn.getOutputStream();
+			wr.write(data.getBytes("UTF-8"));
+			wr.flush();
+			BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+			String line;
+			while ((line = rd.readLine()) != null && running.getValue())
+			{
+				Log.log(Log.BACKEND, line);
+				if (!line.contains(":--:"))
+					break;
+					
+				String[] part = line.split(":--:");
+				
+				JSONObject json = new JSONObject(part[1]);
+				TMDBScheda scheda = new TMDBScheda();
+				scheda.setJson(json);
+				SQLQuery.writeScheda(scheda, false);
+				l.addScheda(scheda);
+			}
+			wr.close();
+			rd.close();
+			
+		} catch (Exception e)
+		{
+			Log.stack(Log.BACKEND, e);
+		}
+	}
+	
+	public static void loadFileOfSchede(TMDBScheda scheda)
+	{
+		try
+		{
+			String data = "action=8&scheda_id=" + scheda.ID+"&type="+scheda.type.ID;
 			
 			URL url = new URL("http://giaratest.altervista.org/giarafilms/backend/backend.php");
 			URLConnection conn;
@@ -293,12 +374,15 @@ public class ServerQuery
 					break;
 					
 				String[] part = line.split(":--:");
+				MainType type = MainType.getMainTypeByID(Integer.parseInt(part[4]));
+				int id = SQLQuery.writeFile(part[1], part[2], Integer.parseInt(part[3]), type, false);
 				
-				JSONObject json = new JSONObject(part[1]);
-				TMDBScheda scheda = new TMDBScheda();
-				scheda.setJson(json);
-				SQLQuery.writeScheda(scheda, false);
-				l.addScheda(scheda);
+				if(type.equals(MainType.SerieTV))
+				{
+					FileInfo f = new FileInfo(part[1]);
+					SQLQuery.writeEpisodeInfo(id, Integer.parseInt(part[3]), f.episode, f.series);
+				}
+				
 				
 			}
 			wr.close();

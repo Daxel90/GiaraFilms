@@ -1,6 +1,5 @@
 package it.giara.gui.utils;
 
-import java.nio.file.Files;
 import java.util.ArrayList;
 
 import javax.swing.JPanel;

@@ -29,20 +29,26 @@ public class Settings
 				DirUtils.getDefaultDownloadDir().getAbsolutePath()));
 				
 		config.put("scanservice", SQLQuerySettings.getCurrentParameter("scanservice", "1"));
-		config.put("scanservicethread", SQLQuerySettings.getCurrentParameter("scanservicethread", "2"));
+		config.put("scanservicethread", SQLQuerySettings.getCurrentParameter("scanservicethread", "1"));
 		config.put("servercollaborate", SQLQuerySettings.getCurrentParameter("servercollaborate", "1"));
 		config.put("serversync", SQLQuerySettings.getCurrentParameter("serversync", "0")); // Features
 		config.put("lastserversync", SQLQuerySettings.getCurrentParameter("lastserversync", "0")); // Features
 		
 		try
 		{
-			ThreadManager.poolScanServiceSize = Integer.parseInt(getParameter("scanservicethread"));
+			int n = Integer.parseInt(getParameter("scanservicethread"));
+			
+			if (n <= 0)
+				ThreadManager.poolScanServiceSize = 1;
+			else
+				ThreadManager.poolScanServiceSize = n;
+			
 		} catch (NumberFormatException e)
 		{
 			Log.stack(Log.CONFIG, e);
-			ThreadManager.poolScanServiceSize = 3;
-			setParameter("scanservicethread", "3");
-			config.put("scanservicethread", "3");
+			ThreadManager.poolScanServiceSize = 1;
+			setParameter("scanservicethread", "1");
+			config.put("scanservicethread", "1");
 		}
 		
 		if (MainFrame.getInstance() != null)

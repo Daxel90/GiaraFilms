@@ -12,6 +12,8 @@ import it.giara.gui.MainFrame;
 import it.giara.gui.components.ImageButton;
 import it.giara.gui.utils.ColorUtils;
 import it.giara.gui.utils.ImageUtils;
+import it.giara.phases.Settings;
+import it.giara.syncdata.ServerQuery;
 import it.giara.tmdb.schede.TMDBScheda;
 import it.giara.utils.FunctionsUtils;
 import it.giara.utils.ThreadManager;
@@ -35,6 +37,17 @@ public class FilmInfoSchede extends DefaultGui
 		super();
 		back = gui;
 		scheda = f;
+		if(Settings.getParameter("servercollaborate").equals("1"))
+		{
+			Runnable r = new Runnable()
+			{
+				public void run()
+				{
+					ServerQuery.loadFileOfSchede(scheda);
+				}
+			};
+			ThreadManager.submitCacheTask(r);
+		}
 	}
 	
 	public void loadComponent()

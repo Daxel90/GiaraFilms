@@ -109,11 +109,11 @@ public class SearchService
 													list.addScheda(httpF.scheda);
 													
 													SQLQuery.writeCacheSearch(f.title, f.type, schedaID);
-													SQLQuery.writeFile(s2, size, schedaID, f.type);
+													SQLQuery.writeFile(s2, size, schedaID, f.type, true);
 												}
 												else
 												{
-													SQLQuery.writeFile(s2, size, cache, f.type);
+													SQLQuery.writeFile(s2, size, cache, f.type, true);
 												}
 												break;
 											case SerieTV:
@@ -133,7 +133,7 @@ public class SearchService
 													int schedaSTV = SQLQuery.writeScheda(httpF.scheda, true);
 													
 													SQLQuery.writeCacheSearch(f.title, f.type, schedaSTV);
-													int FileId = SQLQuery.writeFile(s2, size, schedaSTV, f.type);
+													int FileId = SQLQuery.writeFile(s2, size, schedaSTV, f.type, true);
 													
 													list.addScheda(httpF.scheda);
 													
@@ -141,7 +141,7 @@ public class SearchService
 												}
 												else
 												{
-													int FileId = SQLQuery.writeFile(s2, size, cache2, f.type);
+													int FileId = SQLQuery.writeFile(s2, size, cache2, f.type, true);
 													SQLQuery.writeEpisodeInfo(FileId, cache2, f.episode, f.series);
 												}
 												

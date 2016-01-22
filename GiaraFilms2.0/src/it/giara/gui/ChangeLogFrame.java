@@ -53,6 +53,11 @@ public class ChangeLogFrame extends JFrame
 		text.setContentType("text/html");
 		text.setText("<html>"
 				+ "<h2>--------------------" + "<h2>Dev PreRelese 16"
+				+ "<br><h3>\t- Aggiunta HomePage"
+				+ "<br><h3>\t- Aggiunta sezione Film e SerieTv"
+				+ "<br><h3>\t- Aggiunta sincronia automatica file con il server"
+				+ "<br><h3>\t- Riabilitato ScanService locale"
+				+ "<br><h3>\t- Inserita opzione di collaborazione con il server"
 				+ "<br><h3>\t- Migliorato Aspetto Grafico"
 				+ "<br><h3>\t- Aggiunto tasto Home in tutte le schermate"
 				+ "<br><h3>\t- Aggiunti suggerimenti sui bottoni"

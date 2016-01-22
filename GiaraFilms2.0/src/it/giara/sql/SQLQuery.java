@@ -48,9 +48,9 @@ public class SQLQuery
 	// Files Table
 	
 	public synchronized static int writeFile(final String fileName, final String size, final int IdScheda,
-			final MainType t)
+			final MainType t, boolean collaborate)
 	{
-		if (Settings.getParameter("servercollaborate").equals("1"))
+		if (Settings.getParameter("servercollaborate").equals("1") && collaborate)
 		{
 			ThreadManager.submitSystemTask(new Runnable()
 			{
@@ -248,6 +248,32 @@ public class SQLQuery
 	public synchronized static void loadSchedeList(GenereType g, MainType t, AbstractFilmList l)
 	{
 		ResultSet r = SQL.FetchData("SELECT * FROM `Schede` WHERE `Type` = "+t.ID+" AND `GenID` LIKE '%"+g.Id+"%' ORDER BY `Relese` DESC;");
+		try
+		{
+			while (r.next())
+			{
+				TMDBScheda scheda = new TMDBScheda();
+				scheda.ID = r.getInt("ID");
+				scheda.title = SQL.unescape(r.getString("Title"));
+				scheda.relese = SQL.unescape(r.getString("Relese"));
+				scheda.poster = SQL.unescape(r.getString("Poster"));
+				scheda.back = SQL.unescape(r.getString("Back"));
+				scheda.desc = SQL.unescape(r.getString("Desc"));
+				scheda.setGeneriIDs(SQL.unescape(r.getString("GenID")));
+				scheda.vote = r.getDouble("Vote");
+				scheda.type = MainType.getMainTypeByID(r.getInt("Type"));
+				
+				l.addScheda(scheda);
+			}
+		} catch (SQLException e)
+		{
+			Log.stack(Log.DB, e);
+		}
+	}
+	
+	public synchronized static void loadAllSchedeList( MainType t, AbstractFilmList l)
+	{
+		ResultSet r = SQL.FetchData("SELECT * FROM `Schede` WHERE `Type` = "+t.ID+" ORDER BY `Relese` DESC;");
 		try
 		{
 			while (r.next())

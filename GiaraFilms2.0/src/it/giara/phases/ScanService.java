@@ -66,7 +66,7 @@ public class ScanService implements Runnable
 									
 									if (cache == -2)
 									{
-										SQLQuery.writeFile(s2,size, -1, f.type);
+										SQLQuery.writeFile(s2,size, -1, f.type, true);
 										return;
 									}
 										
@@ -76,18 +76,18 @@ public class ScanService implements Runnable
 										if (httpF.scheda == null)
 										{
 											SQLQuery.writeCacheSearch(f.title, f.type, -1);
-											SQLQuery.writeFile(s2,size, -1, f.type);
+											SQLQuery.writeFile(s2,size, -1, f.type, true);
 											break;
 										}
 										int schedaID = SQLQuery.writeScheda(httpF.scheda, true);
 										
 										SQLQuery.writeCacheSearch(f.title, f.type, schedaID);
-										SQLQuery.writeFile(s2,size, schedaID, f.type);
+										SQLQuery.writeFile(s2,size, schedaID, f.type, true);
 										Nfilm++;
 									}
 									else
 									{
-										SQLQuery.writeFile(s2,size, cache, f.type);
+										SQLQuery.writeFile(s2,size, cache, f.type, true);
 									}
 									break;
 								case SerieTV:
@@ -95,7 +95,7 @@ public class ScanService implements Runnable
 									
 									if (cache2 == -2)
 									{
-										SQLQuery.writeFile(s2,size, -1, f.type);
+										SQLQuery.writeFile(s2,size, -1, f.type, true);
 										return;
 									}
 										
@@ -104,27 +104,27 @@ public class ScanService implements Runnable
 										TMDBSearchTVSerie httpF = new TMDBSearchTVSerie(f.title);
 										if (httpF.scheda == null)
 										{
-											SQLQuery.writeFile(s2,size, -1, f.type);
+											SQLQuery.writeFile(s2,size, -1, f.type, true);
 											SQLQuery.writeCacheSearch(f.title, f.type, -1);
 											break;
 										}
 										int schedaSTV = SQLQuery.writeScheda(httpF.scheda, true);
 										
 										SQLQuery.writeCacheSearch(f.title, f.type, schedaSTV);
-										int FileId = SQLQuery.writeFile(s2,size, schedaSTV, f.type);
+										int FileId = SQLQuery.writeFile(s2,size, schedaSTV, f.type, true);
 										
 										SQLQuery.writeEpisodeInfo(FileId, schedaSTV, f.episode, f.series);
 										NEpisode++;
 									}
 									else
 									{
-										int FileId = SQLQuery.writeFile(s2,size, cache2, f.type);
+										int FileId = SQLQuery.writeFile(s2,size, cache2, f.type, true);
 										SQLQuery.writeEpisodeInfo(FileId, cache2, f.episode, f.series);
 										NEpisode++;
 									}
 									break;
 								default:
-									SQLQuery.writeFile(s2,size, -1, f.type);
+									SQLQuery.writeFile(s2,size, -1, f.type, true);
 									break;
 							}
 						}

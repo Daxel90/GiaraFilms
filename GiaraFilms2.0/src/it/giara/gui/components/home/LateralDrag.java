@@ -34,6 +34,8 @@ public class LateralDrag extends JPanel
 	int offsetFilm = 0;
 	int offsetTvSerie = 0;
 	
+	ListRequest listR = null;
+	
 	public LateralDrag(HomePage i)
 	{
 		setLayout(null);
@@ -68,7 +70,9 @@ public class LateralDrag extends JPanel
 				public void run()
 				{
 					AbstractFilmList lista = new AbstractFilmList();
-					new ListRequest(type, MainType.Film, lista);
+					if (listR != null)
+						listR.running.setValue(false);
+					listR = new ListRequest(type, MainType.Film, lista);
 					home.showOnHomepage(lista, MainType.Film);
 					news.setSelected(false);
 					Films.setSelected(false);
@@ -110,7 +114,9 @@ public class LateralDrag extends JPanel
 				public void run()
 				{
 					AbstractFilmList lista = new AbstractFilmList();
-					new ListRequest(type, MainType.SerieTV, lista);
+					if (listR != null)
+						listR.running.setValue(false);
+					listR = new ListRequest(type, MainType.SerieTV, lista);
 					home.showOnHomepage(lista, MainType.SerieTV);
 					news.setSelected(false);
 					Films.setSelected(false);
@@ -321,7 +327,9 @@ public class LateralDrag extends JPanel
 				expandindTVSerie = false;
 			init();
 			AbstractFilmList lista = new AbstractFilmList();
-			new ListRequest(null, MainType.Film, lista);
+			if (listR != null)
+				listR.running.setValue(false);
+			listR = new ListRequest(null, MainType.Film, lista);
 			home.showOnHomepage(lista, MainType.Film);
 			repaint();
 		}
@@ -352,7 +360,9 @@ public class LateralDrag extends JPanel
 				expandingFilm = false;
 			init();
 			AbstractFilmList lista = new AbstractFilmList();
-			new ListRequest(null, MainType.SerieTV, lista);
+			if (listR != null)
+				listR.running.setValue(false);
+			listR = new ListRequest(null, MainType.SerieTV, lista);
 			home.showOnHomepage(lista, MainType.SerieTV);
 			repaint();
 		}
