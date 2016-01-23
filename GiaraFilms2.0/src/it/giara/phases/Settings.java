@@ -14,7 +14,7 @@ import it.giara.utils.ThreadManager;
 
 public class Settings
 {
-	public final static int VERSION = 16;
+	public final static int VERSION = 17;
 	private final static int END_PreReleseVersion = Integer.MAX_VALUE;
 	private final static int END_BetaVersion = Integer.MAX_VALUE;
 	private static HashMap<String, String> config = new HashMap<String, String>();
@@ -106,6 +106,11 @@ public class Settings
 			Settings.setParameter("servercollaborate", "1");
 			Settings.setParameter("scanservice", "1");
 			setParameter("DBversion", "16");
+		}
+		
+		if(Integer.parseInt(Settings.getParameter("DBversion")) < 17)
+		{
+			SQLQuery.DbClear();
 		}
 	}
 	
