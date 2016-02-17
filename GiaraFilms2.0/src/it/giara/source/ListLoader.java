@@ -22,7 +22,6 @@ public class ListLoader
 	{
 		try
 		{
-			
 			URL url = new URL("http://giaratest.altervista.org/giarafilms/database.db");
 			
 			URLConnection conn = url.openConnection();
