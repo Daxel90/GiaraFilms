@@ -8,15 +8,8 @@ import javax.swing.JProgressBar;
 import javax.swing.Timer;
 
 import it.giara.gui.DefaultGui;
-import it.giara.gui.MainFrame;
 import it.giara.gui.utils.ImageUtils;
-import it.giara.phases.RecoverDownload;
-import it.giara.phases.ScanService;
-import it.giara.phases.Settings;
-import it.giara.phases.UpdateProgram;
-import it.giara.source.ListLoader;
-import it.giara.sql.SQL;
-import it.giara.utils.FunctionsUtils;
+import it.giara.phases.InitializeRunnable;
 import it.giara.utils.ThreadManager;
 
 public class LoadScreen extends DefaultGui
@@ -97,42 +90,7 @@ public class LoadScreen extends DefaultGui
 				timer2 = null;
 				bar.setVisible(true);
 				visible = true;
-				ThreadManager.submitCacheTask(new Runnable()
-				{
-					@Override
-					public void run()
-					{
-						bar.setMaximum(5);
-						bar.setValue(0);
-						textProgress.setText("Mi connetto al Database");
-						textProgress.setVisible(true);
-						SQL.connect();
-						bar.setValue(1);
-						textProgress.setText("Carico Impostazioni");
-						Settings.init();
-						Settings.UpdateFixer();
-						textProgress.setText("Inizializzo il ThreadManager");
-						ThreadManager.init();
-						bar.setValue(2);
-						textProgress.setText("Carico le sorgenti");
-						ListLoader.loadSources();
-						bar.setValue(3);
-						textProgress.setText("Verifico aggiornamenti");
-						UpdateProgram.checkUpdate(instance);
-						textProgress.setText("Riavvio Download Interrotti");
-						RecoverDownload.asyncRestartDownload();
-						bar.setValue(4);
-						if (Settings.getParameter("scanservice").equals("1"))
-						{
-							textProgress.setText("Avvio ScanService");
-							ThreadManager.submitCacheTask(new ScanService());
-						}
-						textProgress.setText("Verifica Completata");
-						bar.setValue(5);
-						FunctionsUtils.sleep(500);
-						MainFrame.getInstance().setInternalPane(new HomePage());
-					}
-				});
+				ThreadManager.submitCacheTask(new InitializeRunnable(instance));
 			}
 			else
 			{

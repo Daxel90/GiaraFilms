@@ -33,6 +33,7 @@ public class Settings
 		config.put("servercollaborate", SQLQuerySettings.getCurrentParameter("servercollaborate", "1"));
 		config.put("serversync", SQLQuerySettings.getCurrentParameter("serversync", "0")); // Features
 		config.put("lastserversync", SQLQuerySettings.getCurrentParameter("lastserversync", "0")); // Features
+		config.put("tos", SQLQuerySettings.getCurrentParameter("tos", "0"));
 		
 		try
 		{
