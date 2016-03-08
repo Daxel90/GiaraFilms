@@ -52,6 +52,8 @@ public class ChangeLogFrame extends JFrame
 		text.setOpaque(false);
 		text.setContentType("text/html");
 		text.setText("<html>"
+				+ "<h2>--------------------" + "<h2>Dev PreRelese 18"
+				+ "<br><h3>\t- Migliorato algoritmo di cache"
 				+ "<h2>--------------------" + "<h2>Dev PreRelese 17"
 				+ "<br><h3>\t- Piccoli Fix di rilascio aggiornamento"
 				+ "<h2>--------------------" + "<h2>Dev PreRelese 16 BIG UPDATE"

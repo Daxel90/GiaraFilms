@@ -91,7 +91,7 @@ public class SearchService
 										switch (f.type)
 										{
 											case Film:
-												int cache = SQLQuery.getCacheSearch(f.title, f.type);
+												int cache = SQLQuery.getCacheSearch(f.title, f.type, f.year);
 												
 												if (cache == -2)
 													return;
@@ -101,14 +101,14 @@ public class SearchService
 													TMDBSearchFilm httpF = new TMDBSearchFilm(f.title, f.year);
 													if (httpF.scheda == null)
 													{
-														SQLQuery.writeCacheSearch(f.title, f.type, -1);
+														SQLQuery.writeCacheSearch(f.title, f.type, -1, f.year);
 														break;
 													}
 													int schedaID = SQLQuery.writeScheda(httpF.scheda, true);
 													
 													list.addScheda(httpF.scheda);
 													
-													SQLQuery.writeCacheSearch(f.title, f.type, schedaID);
+													SQLQuery.writeCacheSearch(f.title, f.type, schedaID, f.year);
 													SQLQuery.writeFile(s2, size, schedaID, f.type, true);
 												}
 												else
@@ -117,7 +117,7 @@ public class SearchService
 												}
 												break;
 											case SerieTV:
-												int cache2 = SQLQuery.getCacheSearch(f.title, f.type);
+												int cache2 = SQLQuery.getCacheSearch(f.title, f.type, f.year);
 												
 												if (cache2 == -2)
 													return;
@@ -127,12 +127,12 @@ public class SearchService
 													TMDBSearchTVSerie httpF = new TMDBSearchTVSerie(f.title);
 													if (httpF.scheda == null)
 													{
-														SQLQuery.writeCacheSearch(f.title, f.type, -1);
+														SQLQuery.writeCacheSearch(f.title, f.type, -1, f.year);
 														break;
 													}
 													int schedaSTV = SQLQuery.writeScheda(httpF.scheda, true);
 													
-													SQLQuery.writeCacheSearch(f.title, f.type, schedaSTV);
+													SQLQuery.writeCacheSearch(f.title, f.type, schedaSTV, f.year);
 													int FileId = SQLQuery.writeFile(s2, size, schedaSTV, f.type, true);
 													
 													list.addScheda(httpF.scheda);

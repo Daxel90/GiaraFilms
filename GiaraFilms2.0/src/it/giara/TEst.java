@@ -20,6 +20,9 @@ public class TEst
 //		ThreadManager.submitCacheTask(new InitializeRunnable(null));
 		
 		SQL.connect();
+		
+		SQLQuery.DbClear();
+		
 		Settings.init();
 		ListLoader.loadSources();
 //		ServerQuery.load150News();

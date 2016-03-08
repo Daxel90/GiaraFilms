@@ -36,7 +36,8 @@ public class SQLQuery
 		
 		String query5 = "CREATE TABLE IF NOT EXISTS `CacheSearch` ("
 				+ "`ID`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, " + "`Search`	TEXT NOT NULL UNIQUE, "
-				+ "`Type`	INTEGER, " + "`IdResult`	INTEGER, " + "`LastUpdate`	INTEGER NOT NULL" + ");";
+				+ "`Type`	INTEGER, " + "`IdResult`	INTEGER, " + "`Year`	INTEGER, "
+				+ "`LastUpdate`	INTEGER NOT NULL" + ");";
 		SQL.ExecuteQuery(query5);
 		
 		String query6 = "CREATE TABLE IF NOT EXISTS `EpisodeInfo` (" + "`IdFile`	INTEGER UNIQUE, "
@@ -247,7 +248,8 @@ public class SQLQuery
 	
 	public synchronized static void loadSchedeList(GenereType g, MainType t, AbstractFilmList l)
 	{
-		ResultSet r = SQL.FetchData("SELECT * FROM `Schede` WHERE `Type` = "+t.ID+" AND `GenID` LIKE '%"+g.Id+"%' ORDER BY `Relese` DESC;");
+		ResultSet r = SQL.FetchData("SELECT * FROM `Schede` WHERE `Type` = " + t.ID + " AND `GenID` LIKE '%" + g.Id
+				+ "%' ORDER BY `Relese` DESC;");
 		try
 		{
 			while (r.next())
@@ -271,9 +273,9 @@ public class SQLQuery
 		}
 	}
 	
-	public synchronized static void loadAllSchedeList( MainType t, AbstractFilmList l)
+	public synchronized static void loadAllSchedeList(MainType t, AbstractFilmList l)
 	{
-		ResultSet r = SQL.FetchData("SELECT * FROM `Schede` WHERE `Type` = "+t.ID+" ORDER BY `Relese` DESC;");
+		ResultSet r = SQL.FetchData("SELECT * FROM `Schede` WHERE `Type` = " + t.ID + " ORDER BY `Relese` DESC;");
 		try
 		{
 			while (r.next())
@@ -301,16 +303,18 @@ public class SQLQuery
 	
 	// CacheSearch Table
 	
-	public synchronized static void writeCacheSearch(String search, MainType type, int ID)
+	public synchronized static void writeCacheSearch(String search, MainType type, int ID, int year)
 	{
-		SQL.ExecuteQuery("INSERT OR REPLACE INTO `CacheSearch`(`Search`, `Type`, `IdResult`, `LastUpdate`) VALUES ('"
-				+ SQL.escape(search) + "', " + type.ID + ", " + ID + ", " + FunctionsUtils.getTime() + ");");
+		SQL.ExecuteQuery(
+				"INSERT OR REPLACE INTO `CacheSearch`(`Search`, `Type`, `IdResult`, `Year`, `LastUpdate`) VALUES ('"
+						+ SQL.escape(search) + "', " + type.ID + ", " + ID + ", " + year + ", "
+						+ FunctionsUtils.getTime() + ");");
 	}
 	
-	public synchronized static int getCacheSearch(String search, MainType type)
+	public synchronized static int getCacheSearch(String search, MainType type, int year)
 	{
 		ResultSet r = SQL.FetchData("SELECT * FROM `CacheSearch` WHERE `Search` = '" + SQL.escape(search)
-				+ "' AND Type = " + type.ID + ";");
+				+ "' AND Type = " + type.ID + " AND Year = " + year + " ;");
 		try
 		{
 			if (r.next())

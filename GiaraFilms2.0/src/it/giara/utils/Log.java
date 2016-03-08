@@ -30,7 +30,8 @@ public class Log
 				&& !l.equals(FILMINFO))
 		{
 			System.out.println(o);
-			writeLog(o.toString());
+			if(o != null)
+				writeLog(o.toString());
 		}
 	}
 	

@@ -62,7 +62,7 @@ public class ScanService implements Runnable
 							switch (f.type)
 							{
 								case Film:
-									int cache = SQLQuery.getCacheSearch(f.title, f.type);
+									int cache = SQLQuery.getCacheSearch(f.title, f.type, f.year);
 									
 									if (cache == -2)
 									{
@@ -75,13 +75,13 @@ public class ScanService implements Runnable
 										TMDBSearchFilm httpF = new TMDBSearchFilm(f.title, f.year);
 										if (httpF.scheda == null)
 										{
-											SQLQuery.writeCacheSearch(f.title, f.type, -1);
+											SQLQuery.writeCacheSearch(f.title, f.type, -1, f.year);
 											SQLQuery.writeFile(s2,size, -1, f.type, true);
 											break;
 										}
 										int schedaID = SQLQuery.writeScheda(httpF.scheda, true);
 										
-										SQLQuery.writeCacheSearch(f.title, f.type, schedaID);
+										SQLQuery.writeCacheSearch(f.title, f.type, schedaID, f.year);
 										SQLQuery.writeFile(s2,size, schedaID, f.type, true);
 										Nfilm++;
 									}
@@ -91,7 +91,7 @@ public class ScanService implements Runnable
 									}
 									break;
 								case SerieTV:
-									int cache2 = SQLQuery.getCacheSearch(f.title, f.type);
+									int cache2 = SQLQuery.getCacheSearch(f.title, f.type, f.year);
 									
 									if (cache2 == -2)
 									{
@@ -105,12 +105,12 @@ public class ScanService implements Runnable
 										if (httpF.scheda == null)
 										{
 											SQLQuery.writeFile(s2,size, -1, f.type, true);
-											SQLQuery.writeCacheSearch(f.title, f.type, -1);
+											SQLQuery.writeCacheSearch(f.title, f.type, -1, f.year);
 											break;
 										}
 										int schedaSTV = SQLQuery.writeScheda(httpF.scheda, true);
 										
-										SQLQuery.writeCacheSearch(f.title, f.type, schedaSTV);
+										SQLQuery.writeCacheSearch(f.title, f.type, schedaSTV, f.year);
 										int FileId = SQLQuery.writeFile(s2,size, schedaSTV, f.type, true);
 										
 										SQLQuery.writeEpisodeInfo(FileId, schedaSTV, f.episode, f.series);
