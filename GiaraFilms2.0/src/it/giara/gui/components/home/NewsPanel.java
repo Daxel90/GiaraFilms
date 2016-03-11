@@ -9,6 +9,7 @@ import it.giara.sql.SQLQuery;
 import it.giara.syncdata.ServerQuery;
 import it.giara.tmdb.schede.TMDBScheda;
 import it.giara.utils.FunctionsUtils;
+import it.giara.utils.Log;
 import it.giara.utils.ThreadManager;
 
 public class NewsPanel extends JPanel
@@ -56,30 +57,30 @@ public class NewsPanel extends JPanel
 		
 		scheme = new int[maxH][maxW];
 		int x = 0;
-		for (int j = 0; j < scheme.length; j++)
+		int i = 0;
+		while (x < w)
 		{
-			x = 0;
-			int i = 0;
-			while (x < w)
+			int rand = FunctionsUtils.getRandom().nextInt(3);
+			if (rand == 0 && (x + IMG_W2) < w) // 0 is 33% of probability
 			{
-				int rand = FunctionsUtils.getRandom().nextInt(3);
-				if (rand == 0 && (x + IMG_W2) < w) // 0 is 33% of probability
-				{
-					scheme[j][i] = 2;
-					x += IMG_W2;
-				}
-				else if ((x + IMG_W1) < w)
-				{
-					scheme[j][i] = 1;
-					x += IMG_W1;
-				}
-				else
-				{
-					break;
-				}
-				i++;
+				scheme[0][i] = 2;
+				x += IMG_W2;
 			}
-			
+			else if ((x + IMG_W1) < w)
+			{
+				scheme[0][i] = 1;
+				x += IMG_W1;
+			}
+			else
+			{
+				break;
+			}
+			i++;
+		}
+		
+		for (int j = 1; j < scheme.length; j++)
+		{
+			scheme[j] = FunctionsUtils.shuffleArray(FunctionsUtils.truncateArray(scheme[0],i));
 		}
 	}
 	

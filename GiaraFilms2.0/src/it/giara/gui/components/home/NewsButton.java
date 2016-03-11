@@ -1,7 +1,11 @@
 package it.giara.gui.components.home;
 
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
 
 import javax.swing.JLabel;
@@ -10,6 +14,7 @@ import it.giara.analyze.enums.MainType;
 import it.giara.gui.MainFrame;
 import it.giara.gui.section.FilmInfoSchede;
 import it.giara.gui.section.TVSerieInfoSchede;
+import it.giara.gui.utils.ColorUtils;
 import it.giara.gui.utils.ImageUtils;
 import it.giara.tmdb.schede.TMDBScheda;
 
@@ -64,7 +69,7 @@ public class NewsButton extends JLabel implements MouseListener
 		text.setHorizontalAlignment(JLabel.CENTER);
 		text.setOpaque(false);
 		text.setVisible(false);
-		this.add(text);
+		text.setForeground(ColorUtils.DarkText);
 		
 		back.setBounds(0, 0, this.getWidth(), this.getHeight());
 		this.add(back);
@@ -75,13 +80,11 @@ public class NewsButton extends JLabel implements MouseListener
 		this.removeAll();
 		
 		text.setBounds(0, 0, this.getWidth(), this.getHeight());
-		this.add(text);
 		
 		back.setBounds(0, 0, this.getWidth(), this.getHeight());
 		this.add(back);
 		
 	}
-	
 	
 	@Override
 	public void mouseClicked(MouseEvent e)
@@ -96,27 +99,13 @@ public class NewsButton extends JLabel implements MouseListener
 	public void mouseEntered(MouseEvent e)
 	{
 		isOver = true;
-		text.setVisible(true);
-		
-		if (Type == 1)
-			back.setIcon(ImageUtils.getIcon(ImageUtils.FilterRescaleOp(film.initHome_w185(this), 0.4f)));
-		else if (Type == 2)
-			back.setIcon(ImageUtils.getIcon(ImageUtils.FilterRescaleOp(film.initHome_w500(this), 0.4f)));
 		repaint();
 	}
 	
 	@Override
 	public void mouseExited(MouseEvent e)
 	{
-		isOver = false;
-		
-		text.setVisible(false);
-		
-		if (Type == 1)
-			back.setIcon(ImageUtils.getIcon(film.initHome_w185(this)));
-		else if (Type == 2)
-			back.setIcon(ImageUtils.getIcon(film.initHome_w500(this)));
-		
+		isOver = false;	
 		repaint();
 	}
 	
@@ -135,6 +124,23 @@ public class NewsButton extends JLabel implements MouseListener
 	public void updateImage(BufferedImage i1)
 	{
 		back.setIcon(ImageUtils.getIcon(i1));
+	}
+	
+	@Override
+	public void paint(Graphics g)
+	{
+		super.paint(g);
+		
+		if (isOver)
+		{
+			Graphics2D g2 = (Graphics2D) g;
+			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+			
+			g2.setPaint(ColorUtils.AlphaWhite);
+			
+			g2.fill(new RoundRectangle2D.Float(0, 0, this.getWidth(), this.getHeight(), 6, 6));
+			text.paint(g);
+		}
 	}
 	
 	@Override

@@ -54,6 +54,7 @@ public class ChangeLogFrame extends JFrame
 		text.setText("<html>"
 				+ "<h2>--------------------" + "<h2>Dev PreRelese 18"
 				+ "<br><h3>\t- Migliorato algoritmo di cache"
+				+ "<br><h3>\t- Allineata HomePage News"
 				+ "<h2>--------------------" + "<h2>Dev PreRelese 17"
 				+ "<br><h3>\t- Piccoli Fix di rilascio aggiornamento"
 				+ "<h2>--------------------" + "<h2>Dev PreRelese 16 BIG UPDATE"

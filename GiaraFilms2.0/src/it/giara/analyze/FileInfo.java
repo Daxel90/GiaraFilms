@@ -147,7 +147,8 @@ public class FileInfo
 		}
 		if (title.length() > 0)
 			title = title.substring(1);
-			
+		
+		title = title.replace("_", " ").replace("-", " ");
 		Log.log(Log.FILEINFO, "Film: " + title);
 	}
 	
