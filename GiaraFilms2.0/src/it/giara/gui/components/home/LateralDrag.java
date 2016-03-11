@@ -1,8 +1,11 @@
 package it.giara.gui.components.home;
 
+import java.awt.BorderLayout;
+
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 import it.giara.analyze.enums.MainType;
 import it.giara.gui.components.ImageButton;
@@ -22,6 +25,11 @@ public class LateralDrag extends JPanel
 	public int progress = 0;
 	public boolean out = false;
 	public boolean inUse = false;
+	
+	JScrollPane scroll;
+	JPanel scrolJPanel;
+	
+	
 	ImageButton letOut;
 	ImageButton letIn;
 	LateralButton news, Films, TVSeries;
@@ -42,6 +50,16 @@ public class LateralDrag extends JPanel
 		setOpaque(false);
 		setBackground(ColorUtils.Back);
 		home = i;
+		scrolJPanel = new JPanel();
+		scrolJPanel.setOpaque(false);
+		scrolJPanel.setLayout(null);
+		scrolJPanel.setBackground(ColorUtils.Trasparent);
+		
+		scroll = new JScrollPane();
+		scroll.setViewportView(scrolJPanel);
+		scroll.setFocusable(true);
+		scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		scroll.setBackground(ColorUtils.Back);
 		
 		letOut = new ImageButton(ImageUtils.getImage("gui/drag_right.png"),
 				ImageUtils.getImage("gui/drag_right_over.png"), ImageUtils.getImage("gui/drag_right_over.png"),
@@ -159,14 +177,16 @@ public class LateralDrag extends JPanel
 		
 		this.add(letOut);
 		this.add(letIn);
-		this.add(news);
-		this.add(Films);
+		
+		this.add(scroll);
+		scrolJPanel.add(news);
+		scrolJPanel.add(Films);
 		for (
 		
 		int k = 0; k < genreFilm.length; k++)
 		
 		{
-			this.add(genreFilm[k]);
+			scrolJPanel.add(genreFilm[k]);
 		}
 		
 		for (
@@ -174,13 +194,13 @@ public class LateralDrag extends JPanel
 		int k = 0; k < genreTVSerie.length; k++)
 		
 		{
-			this.add(genreTVSerie[k]);
+			scrolJPanel.add(genreTVSerie[k]);
 		}
 		
-		this.add(TVSeries);
+		scrolJPanel.add(TVSeries);
 		
-		this.add(sep3);
-		this.add(background);
+		scrolJPanel.add(sep3);
+		scrolJPanel.add(background);
 		
 	}
 	
@@ -189,21 +209,24 @@ public class LateralDrag extends JPanel
 		offsetFilm = 0;
 		offsetTvSerie = 0;
 		
+		scrolJPanel.setSize(this.getWidth(),this.getHeight()*2);
+		scroll.setBounds(0,0,this.getWidth()-26,this.getHeight());
+		
 		letOut.setBounds(this.getWidth() - 16, this.getHeight() / 2 - 16, 16, 32);
 		letIn.setBounds(this.getWidth() - 32, this.getHeight() / 2 - 16, 16, 32);
 		
 		letIn.setVisible(out);
 		letOut.setVisible(!out);
 		
-		news.setBounds(0, 0, this.getWidth() - 16, 40);
+		news.setBounds(0, 0, this.getWidth() - 16-26, 40);
 		
-		Films.setBounds(0, 40, this.getWidth() - 16, 40);
+		Films.setBounds(0, 40, this.getWidth() - 16-26, 40);
 		
 		if (expandingFilm)
 		{
 			for (int k = 0; k < genreFilm.length; k++)
 			{
-				genreFilm[k].setBounds(0, 80 + offsetFilm, this.getWidth() - 16, 30);
+				genreFilm[k].setBounds(0, 80 + offsetFilm, this.getWidth() - 16-26, 30);
 				genreFilm[k].setVisible(true);
 				offsetFilm += 30;
 			}
@@ -216,13 +239,13 @@ public class LateralDrag extends JPanel
 			}
 		}
 		
-		TVSeries.setBounds(0, 80 + offsetFilm, this.getWidth() - 16, 40);
+		TVSeries.setBounds(0, 80 + offsetFilm, this.getWidth() - 16-26, 40);
 		
 		if (expandindTVSerie)
 		{
 			for (int k = 0; k < genreTVSerie.length; k++)
 			{
-				genreTVSerie[k].setBounds(0, 120 + offsetFilm + offsetTvSerie, this.getWidth() - 16, 30);
+				genreTVSerie[k].setBounds(0, 120 + offsetFilm + offsetTvSerie, this.getWidth() - 16-26, 30);
 				genreTVSerie[k].setVisible(true);
 				offsetTvSerie += 30;
 			}

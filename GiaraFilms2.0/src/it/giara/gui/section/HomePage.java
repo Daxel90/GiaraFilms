@@ -46,6 +46,7 @@ public class HomePage extends DefaultGui
 			loadingHomePage.updateRunnable(CheckHome);
 			
 		lateralDrag = new LateralDrag(this);
+		
 		Colltext = new JLabel();
 		Colltext.setVisible(!Settings.getParameter("servercollaborate").equals("1"));
 		
