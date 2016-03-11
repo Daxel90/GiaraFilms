@@ -9,7 +9,6 @@ import it.giara.sql.SQLQuery;
 import it.giara.syncdata.ServerQuery;
 import it.giara.tmdb.schede.TMDBScheda;
 import it.giara.utils.FunctionsUtils;
-import it.giara.utils.Log;
 import it.giara.utils.ThreadManager;
 
 public class NewsPanel extends JPanel
@@ -80,7 +79,7 @@ public class NewsPanel extends JPanel
 		
 		for (int j = 1; j < scheme.length; j++)
 		{
-			scheme[j] = FunctionsUtils.shuffleArray(FunctionsUtils.truncateArray(scheme[0],i));
+			scheme[j] = FunctionsUtils.shuffleArray(FunctionsUtils.truncateArray(scheme[0], i));
 		}
 	}
 	

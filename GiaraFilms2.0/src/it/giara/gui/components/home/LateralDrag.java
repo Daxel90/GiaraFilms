@@ -1,6 +1,5 @@
 package it.giara.gui.components.home;
 
-import java.awt.BorderLayout;
 import java.awt.Dimension;
 
 import javax.swing.BorderFactory;
@@ -30,7 +29,6 @@ public class LateralDrag extends JPanel
 	JScrollPane scroll;
 	JPanel scrolJPanel;
 	
-	
 	ImageButton letOut;
 	ImageButton letIn;
 	LateralButton news, Films, TVSeries;
@@ -58,8 +56,8 @@ public class LateralDrag extends JPanel
 		
 		scroll = new JScrollPane();
 		scroll.setFocusable(true);
-		scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		scroll.setBackground(ColorUtils.Back);
+		scroll.getVerticalScrollBar().setUnitIncrement(10);
 		
 		letOut = new ImageButton(ImageUtils.getImage("gui/drag_right.png"),
 				ImageUtils.getImage("gui/drag_right_over.png"), ImageUtils.getImage("gui/drag_right_over.png"),
@@ -209,9 +207,9 @@ public class LateralDrag extends JPanel
 		offsetFilm = 0;
 		offsetTvSerie = 0;
 		
-//		scrolJPanel.setSize(this.getWidth(),this.getHeight()*2);
-		scrolJPanel.setPreferredSize(new Dimension(this.getWidth(),this.getHeight()*2));
-		scroll.setBounds(0,0,this.getWidth()-26,this.getHeight());
+		// scrolJPanel.setSize(this.getWidth(),this.getHeight()*2);
+		scrolJPanel.setPreferredSize(new Dimension(this.getWidth() - 32 - 16, 1550));
+		scroll.setBounds(0, 0, this.getWidth() - 26, this.getHeight());
 		scroll.setViewportView(scrolJPanel);
 		
 		letOut.setBounds(this.getWidth() - 16, this.getHeight() / 2 - 16, 16, 32);
@@ -220,15 +218,15 @@ public class LateralDrag extends JPanel
 		letIn.setVisible(out);
 		letOut.setVisible(!out);
 		
-		news.setBounds(0, 0, this.getWidth() - 16-26, 40);
+		news.setBounds(0, 0, this.getWidth() - 16 - 26, 40);
 		
-		Films.setBounds(0, 40, this.getWidth() - 16-26, 40);
+		Films.setBounds(0, 40, this.getWidth() - 16 - 26, 40);
 		
 		if (expandingFilm)
 		{
 			for (int k = 0; k < genreFilm.length; k++)
 			{
-				genreFilm[k].setBounds(0, 80 + offsetFilm, this.getWidth() - 16-26, 30);
+				genreFilm[k].setBounds(0, 80 + offsetFilm, this.getWidth() - 16 - 26, 30);
 				genreFilm[k].setVisible(true);
 				offsetFilm += 30;
 			}
@@ -241,13 +239,13 @@ public class LateralDrag extends JPanel
 			}
 		}
 		
-		TVSeries.setBounds(0, 80 + offsetFilm, this.getWidth() - 16-26, 40);
+		TVSeries.setBounds(0, 80 + offsetFilm, this.getWidth() - 16 - 26, 40);
 		
 		if (expandindTVSerie)
 		{
 			for (int k = 0; k < genreTVSerie.length; k++)
 			{
-				genreTVSerie[k].setBounds(0, 120 + offsetFilm + offsetTvSerie, this.getWidth() - 16-26, 30);
+				genreTVSerie[k].setBounds(0, 120 + offsetFilm + offsetTvSerie, this.getWidth() - 16 - 26, 30);
 				genreTVSerie[k].setVisible(true);
 				offsetTvSerie += 30;
 			}
@@ -260,7 +258,7 @@ public class LateralDrag extends JPanel
 			}
 		}
 		
-		sep3.setBounds(this.getWidth() - 16, 0, 1, this.getHeight());
+		sep3.setBounds(this.getWidth() - 16 - 32, 0, 1, this.getHeight());
 		
 		background.setBounds(0, 0, this.getWidth() - 16, this.getHeight());
 		
@@ -347,9 +345,9 @@ public class LateralDrag extends JPanel
 				genreTVSerie[j].repaint();
 			}
 			
-//			expandingFilm = !expandingFilm;
-//			if (expandingFilm)
-//				expandindTVSerie = false;
+			// expandingFilm = !expandingFilm;
+			// if (expandingFilm)
+			// expandindTVSerie = false;
 			init();
 			AbstractFilmList lista = new AbstractFilmList();
 			if (listR != null)
@@ -380,9 +378,9 @@ public class LateralDrag extends JPanel
 				genreTVSerie[j].repaint();
 			}
 			
-//			expandindTVSerie = !expandindTVSerie;
-//			if (expandindTVSerie)
-//				expandingFilm = false;
+			// expandindTVSerie = !expandindTVSerie;
+			// if (expandindTVSerie)
+			// expandingFilm = false;
 			init();
 			AbstractFilmList lista = new AbstractFilmList();
 			if (listR != null)
