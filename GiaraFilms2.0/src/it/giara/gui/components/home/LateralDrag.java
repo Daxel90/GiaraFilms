@@ -1,6 +1,7 @@
 package it.giara.gui.components.home;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
@@ -38,7 +39,7 @@ public class LateralDrag extends JPanel
 	JLabel background;
 	HomePage home;
 	boolean expandingFilm = true;
-	boolean expandindTVSerie = false;
+	boolean expandindTVSerie = true;
 	int offsetFilm = 0;
 	int offsetTvSerie = 0;
 	
@@ -56,7 +57,6 @@ public class LateralDrag extends JPanel
 		scrolJPanel.setBackground(ColorUtils.Trasparent);
 		
 		scroll = new JScrollPane();
-		scroll.setViewportView(scrolJPanel);
 		scroll.setFocusable(true);
 		scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		scroll.setBackground(ColorUtils.Back);
@@ -209,8 +209,10 @@ public class LateralDrag extends JPanel
 		offsetFilm = 0;
 		offsetTvSerie = 0;
 		
-		scrolJPanel.setSize(this.getWidth(),this.getHeight()*2);
+//		scrolJPanel.setSize(this.getWidth(),this.getHeight()*2);
+		scrolJPanel.setPreferredSize(new Dimension(this.getWidth(),this.getHeight()*2));
 		scroll.setBounds(0,0,this.getWidth()-26,this.getHeight());
+		scroll.setViewportView(scrolJPanel);
 		
 		letOut.setBounds(this.getWidth() - 16, this.getHeight() / 2 - 16, 16, 32);
 		letIn.setBounds(this.getWidth() - 32, this.getHeight() / 2 - 16, 16, 32);
@@ -345,9 +347,9 @@ public class LateralDrag extends JPanel
 				genreTVSerie[j].repaint();
 			}
 			
-			expandingFilm = !expandingFilm;
-			if (expandingFilm)
-				expandindTVSerie = false;
+//			expandingFilm = !expandingFilm;
+//			if (expandingFilm)
+//				expandindTVSerie = false;
 			init();
 			AbstractFilmList lista = new AbstractFilmList();
 			if (listR != null)
@@ -378,9 +380,9 @@ public class LateralDrag extends JPanel
 				genreTVSerie[j].repaint();
 			}
 			
-			expandindTVSerie = !expandindTVSerie;
-			if (expandindTVSerie)
-				expandingFilm = false;
+//			expandindTVSerie = !expandindTVSerie;
+//			if (expandindTVSerie)
+//				expandingFilm = false;
 			init();
 			AbstractFilmList lista = new AbstractFilmList();
 			if (listR != null)
