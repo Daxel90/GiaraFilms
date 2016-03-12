@@ -55,6 +55,8 @@ public class ChangeLogFrame extends JFrame
 				+ "<h2>--------------------" + "<h2>Dev PreRelese 18"
 				+ "<br><h3>\t- Migliorato algoritmo di cache"
 				+ "<br><h3>\t- Allineata HomePage News"
+				+ "<br><h3>\t- Aggiunta ScrollBar nella sezione film laterale"
+				+ "<br><h3>\t- Aggiunta ScrollBar nelle liste file"
 				+ "<h2>--------------------" + "<h2>Dev PreRelese 17"
 				+ "<br><h3>\t- Piccoli Fix di rilascio aggiornamento"
 				+ "<h2>--------------------" + "<h2>Dev PreRelese 16 BIG UPDATE"

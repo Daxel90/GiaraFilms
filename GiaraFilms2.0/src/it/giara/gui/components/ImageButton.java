@@ -2,6 +2,7 @@ package it.giara.gui.components;
 
 import java.awt.AlphaComposite;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
@@ -21,6 +22,14 @@ public class ImageButton extends JLabel implements MouseListener
 	public boolean isOver = false;
 	
 	private BufferedImage current = null;
+	private Component comp;
+	
+	public ImageButton(BufferedImage i1, BufferedImage i2, BufferedImage bufferedImage, Runnable action,
+			Component component)
+	{
+		this(i1, i1, i1, action);
+		comp = component;
+	}
 	
 	public ImageButton(BufferedImage i1, Runnable action)
 	{
@@ -52,7 +61,11 @@ public class ImageButton extends JLabel implements MouseListener
 		isOver = true;
 		if (over != null)
 			current = over;
-		repaint();
+			
+		if (comp != null)
+			comp.repaint();
+		else
+			repaint();
 	}
 	
 	@Override
@@ -61,7 +74,10 @@ public class ImageButton extends JLabel implements MouseListener
 		isOver = false;
 		if (normal != null)
 			current = normal;
-		repaint();
+		if (comp != null)
+			comp.repaint();
+		else
+			repaint();
 	}
 	
 	@Override
@@ -69,13 +85,19 @@ public class ImageButton extends JLabel implements MouseListener
 	{
 		if (clicked != null)
 			current = clicked;
-		repaint();
+		if (comp != null)
+			comp.repaint();
+		else
+			repaint();
 	}
 	
 	@Override
 	public void mouseReleased(MouseEvent e)
 	{
-		repaint();
+		if (comp != null)
+			comp.repaint();
+		else
+			repaint();
 	}
 	
 	@Override
@@ -105,7 +127,10 @@ public class ImageButton extends JLabel implements MouseListener
 	public void updateImage(BufferedImage i1)
 	{
 		normal = i1;
-		repaint();
+		if (comp != null)
+			comp.repaint();
+		else
+			repaint();
 	}
 	
 }

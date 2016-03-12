@@ -1,9 +1,13 @@
 package it.giara.gui.section;
 
+import java.awt.Dimension;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseWheelEvent;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
+import javax.swing.JScrollPane;
 
 import it.giara.analyze.enums.MainType;
 import it.giara.gui.DefaultGui;
@@ -23,6 +27,7 @@ public class DownloadFilm extends DefaultGui
 	TMDBScheda scheda;
 	ArrayList<String[]> lista = new ArrayList<String[]>();
 	DownloadList panel;
+	JScrollPane scroll;
 	
 	public DownloadFilm(DefaultGui gui, TMDBScheda s)
 	{
@@ -35,6 +40,48 @@ public class DownloadFilm extends DefaultGui
 		}
 		panel = new DownloadList(lista, this);
 		
+		scroll = new JScrollPane(panel);
+		scroll.setBorder(BorderFactory.createEtchedBorder());
+		scroll.setFocusable(true);
+		scroll.setOpaque(false);
+		scroll.setBackground(ColorUtils.Trasparent);
+		scroll.getVerticalScrollBar().setUnitIncrement(10);
+		scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		
+		panel.addMouseWheelListener(new MouseAdapter()
+		{
+			public void mouseWheelMoved(MouseWheelEvent evt)
+			{
+				if (evt.getWheelRotation() == 1)
+				{
+					int iScrollAmount = evt.getScrollAmount();
+					int iNewValue = scroll.getVerticalScrollBar().getValue()
+							+ scroll.getVerticalScrollBar().getBlockIncrement() * iScrollAmount;
+					if (iNewValue <= scroll.getVerticalScrollBar().getMaximum())
+					{
+						scroll.getVerticalScrollBar().setValue(iNewValue);
+					}
+					else
+					{
+						scroll.getVerticalScrollBar().setValue(scroll.getVerticalScrollBar().getMaximum());
+					}
+				}
+				else if (evt.getWheelRotation() == -1)
+				{
+					int iScrollAmount = evt.getScrollAmount();
+					int iNewValue = scroll.getVerticalScrollBar().getValue()
+							- scroll.getVerticalScrollBar().getBlockIncrement() * iScrollAmount;
+					if (iNewValue <= scroll.getVerticalScrollBar().getMaximum())
+					{
+						scroll.getVerticalScrollBar().setValue(iNewValue);
+					}
+					else
+					{
+						scroll.getVerticalScrollBar().setValue(scroll.getVerticalScrollBar().getMaximum());
+					}
+				}
+			}
+		});
 	}
 	
 	public void loadComponent()
@@ -57,10 +104,16 @@ public class DownloadFilm extends DefaultGui
 		homePage.setToolTipText("Home");
 		this.add(homePage);
 		
-		panel.setBounds(20 - 8, 80, FRAME_WIDTH - 40, FRAME_HEIGHT - 100);
-		panel.init();
+		Dimension dim = new Dimension(this.getWidth() - 80, this.getHeight() - 100);
 		
-		this.add(panel);
+		panel.setSize(dim);
+		panel.setPreferredSize(dim);
+		panel.init();
+		scroll.setViewportView(panel);
+		scroll.setBounds(20, 60, this.getWidth() - 40, this.getHeight() - 80);
+		scroll.setPreferredSize(new Dimension(this.getWidth() - 40, this.getHeight() - 100));
+		
+		this.add(scroll);
 	}
 	
 	Runnable BackGui = new Runnable()

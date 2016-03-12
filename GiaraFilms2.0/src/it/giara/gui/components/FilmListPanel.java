@@ -1,18 +1,24 @@
 package it.giara.gui.components;
 
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseWheelEvent;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 import it.giara.analyze.enums.MainType;
 import it.giara.gui.DefaultGui;
 import it.giara.gui.utils.AbstractFilmList;
 import it.giara.gui.utils.ColorUtils;
 import it.giara.gui.utils.ImageUtils;
+import it.giara.utils.FunctionsUtils;
+import it.giara.utils.ThreadManager;
 
 public class FilmListPanel extends JPanel
 {
@@ -32,6 +38,7 @@ public class FilmListPanel extends JPanel
 	private ImageButton ArrowUp, ArrowDown;
 	
 	DownloadList allFile;
+	JScrollPane scroll;
 	DefaultGui gui;
 	
 	public FilmListPanel(AbstractFilmList l, MainType t, DefaultGui gui)
@@ -68,6 +75,48 @@ public class FilmListPanel extends JPanel
 				RunDown);
 				
 		allFile = new DownloadList(list.allFile, gui);
+		scroll = new JScrollPane(allFile);
+		scroll.setBorder(BorderFactory.createEtchedBorder());
+		scroll.setFocusable(true);
+		scroll.setOpaque(false);
+		scroll.setBackground(ColorUtils.Trasparent);
+		scroll.getVerticalScrollBar().setUnitIncrement(10);
+		scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		
+		allFile.addMouseWheelListener(new MouseAdapter()
+		{
+			public void mouseWheelMoved(MouseWheelEvent evt)
+			{
+				if (evt.getWheelRotation() == 1)
+				{
+					int iScrollAmount = evt.getScrollAmount();
+					int iNewValue = scroll.getVerticalScrollBar().getValue()
+							+ scroll.getVerticalScrollBar().getBlockIncrement() * iScrollAmount;
+					if (iNewValue <= scroll.getVerticalScrollBar().getMaximum())
+					{
+						scroll.getVerticalScrollBar().setValue(iNewValue);
+					}
+					else
+					{
+						scroll.getVerticalScrollBar().setValue(scroll.getVerticalScrollBar().getMaximum());
+					}
+				}
+				else if (evt.getWheelRotation() == -1)
+				{
+					int iScrollAmount = evt.getScrollAmount();
+					int iNewValue = scroll.getVerticalScrollBar().getValue()
+							- scroll.getVerticalScrollBar().getBlockIncrement() * iScrollAmount;
+					if (iNewValue <= scroll.getVerticalScrollBar().getMaximum())
+					{
+						scroll.getVerticalScrollBar().setValue(iNewValue);
+					}
+					else
+					{
+						scroll.getVerticalScrollBar().setValue(scroll.getVerticalScrollBar().getMaximum());
+					}
+				}
+			}
+		});
 		
 		init();
 		
@@ -191,9 +240,15 @@ public class FilmListPanel extends JPanel
 				
 			case NULL:
 			{
-				allFile.setBounds(10, 50, this.getWidth() - 20, this.getHeight() - 60);
+				
+				allFile.setBounds(0, 0, this.getWidth() - 20, this.getHeight() - 60);
+				allFile.setPreferredSize(new Dimension(this.getWidth() - 20, this.getHeight() - 60));
 				allFile.init();
-				this.add(allFile);
+				
+				scroll.setBounds(10, 50, this.getWidth() - 20, this.getHeight() - 60);
+				scroll.setPreferredSize(new Dimension(this.getWidth() - 20, this.getHeight() - 60));
+				
+				this.add(scroll);
 			}
 			
 			default:
@@ -210,13 +265,36 @@ public class FilmListPanel extends JPanel
 		init();
 	}
 	
+	int updateN = 0;
+	boolean thUpdateRunning = false;
+	
 	public void updateFromList(MainType type)
 	{
 		film.setText("<html><h3>Film    " + list.films.size() + "</html>");
 		serietv.setText("<html><h3>SerieTv    " + list.series.size() + "</html>");
 		unknowfile.setText("<html><h3>Tutti i File    " + list.allFile.size() + "</html>");
-		
-		if (type.equals(show))
+		if (type.equals(show) && type.equals(MainType.NULL))
+		{
+			updateN++;
+			if (!thUpdateRunning && updateN > 0)
+			{
+				Runnable run = new Runnable()
+				{
+					@Override
+					public void run()
+					{
+						FunctionsUtils.sleep(1000);
+						allFile.init();
+						updateN = 0;
+						thUpdateRunning = false;
+					}
+				};
+				thUpdateRunning = true;
+				ThreadManager.submitCacheTask(run);
+			}
+			
+		}
+		else if (type.equals(show))
 		{
 			init();
 			this.repaint();
@@ -231,6 +309,7 @@ public class FilmListPanel extends JPanel
 			show = MainType.Film;
 			offset = 0;
 			updateFromList(MainType.Film);
+			repaint();
 		}
 	};
 	
@@ -242,6 +321,7 @@ public class FilmListPanel extends JPanel
 			show = MainType.SerieTV;
 			offset = 0;
 			updateFromList(MainType.SerieTV);
+			repaint();
 		}
 	};
 	
@@ -253,6 +333,8 @@ public class FilmListPanel extends JPanel
 			show = MainType.NULL;
 			offset = 0;
 			updateFromList(MainType.NULL);
+			init();
+			repaint();
 		}
 	};
 	

@@ -31,7 +31,6 @@ public class NewsPanel extends JPanel
 		{
 			Runnable r = new Runnable()
 			{
-				
 				@Override
 				public void run()
 				{

@@ -1,5 +1,6 @@
 package it.giara.gui.components;
 
+import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,7 +30,6 @@ public class DownloadList extends JScrollPane
 	// HashMap<Integer,[boolean,HashMap<Integer, boolean>]>
 	HashMap<Integer, Object[]> SerieTree = new HashMap<Integer, Object[]>();
 	int offset = 0;
-	private ImageButton ArrowUp, ArrowDown;
 	private BufferedImage download, download_over, plus, plus_over, minus, minus_over;
 	private DefaultGui gui;
 	boolean serie = false;
@@ -50,15 +50,10 @@ public class DownloadList extends JScrollPane
 	public DownloadList(DefaultGui g)
 	{
 		gui = g;
-		setLayout(null);
-		setOpaque(false);
-		setBackground(ColorUtils.Back);
+		this.setLayout(null);
+		this.setOpaque(true);
+		this.setBackground(ColorUtils.Back);
 		
-		ArrowUp = new ImageButton(ImageUtils.getImage("gui/arrow_up.png"), ImageUtils.getImage("gui/arrow_up_over.png"),
-				ImageUtils.getImage("gui/arrow_up_over.png"), RunUp);
-		ArrowDown = new ImageButton(ImageUtils.getImage("gui/arrow_down.png"),
-				ImageUtils.getImage("gui/arrow_down_over.png"), ImageUtils.getImage("gui/arrow_down_over.png"),
-				RunDown);
 		download = ImageUtils.getImage("gui/download.png");
 		download_over = ImageUtils.getImage("gui/download_over.png");
 		plus = ImageUtils.getImage("gui/plus.png");
@@ -76,15 +71,11 @@ public class DownloadList extends JScrollPane
 		
 		if (!serie)
 		{
+			
 			for (int l = 0; l < fileList.size(); l++)
 			{
 				final String file = fileList.get(l)[0];
 				final String size = fileList.get(l)[1];
-				if (n < offset || 10 + (n - offset) * 40 > this.getHeight())
-				{
-					n++;
-					continue;
-				}
 				
 				JLabel name = new JLabel();
 				name.setText("<html><h3>" + size + "&nbsp;&nbsp;&nbsp;&nbsp;" + file + "</html>");
@@ -168,6 +159,7 @@ public class DownloadList extends JScrollPane
 							SerieTree.get(serieN)[0] = false;
 							init();
 							repaint();
+							
 						}
 					});
 					minusSerie.setBounds(15, 11 + (n - 1 - offset) * 40, 28, 28);
@@ -183,6 +175,7 @@ public class DownloadList extends JScrollPane
 							SerieTree.get(serieN)[0] = true;
 							init();
 							repaint();
+							
 						}
 					});
 					plusSerie.setBounds(15, 11 + (n - 1 - offset) * 40, 28, 28);
@@ -220,6 +213,7 @@ public class DownloadList extends JScrollPane
 								((HashMap<Integer, Boolean>) SerieTree.get(serieN)[1]).put(episodeN, false);
 								init();
 								repaint();
+								
 							}
 						});
 						minusSerie.setBounds(35, 11 + (n - 1 - offset) * 40, 28, 28);
@@ -235,6 +229,7 @@ public class DownloadList extends JScrollPane
 								((HashMap<Integer, Boolean>) SerieTree.get(serieN)[1]).put(episodeN, true);
 								init();
 								repaint();
+								
 							}
 						});
 						plusSerie.setBounds(35, 11 + (n - 1 - offset) * 40, 28, 28);
@@ -246,11 +241,6 @@ public class DownloadList extends JScrollPane
 					{
 						final String file = Arrfile[0];
 						final String size = Arrfile[1];
-						if (n < offset || 10 + (n - offset) * 40 > this.getHeight())
-						{
-							n++;
-							continue;
-						}
 						
 						JLabel name = new JLabel();
 						name.setText("<html><h3>" + size + "&nbsp;&nbsp;&nbsp;&nbsp;" + file + "</html>");
@@ -283,40 +273,12 @@ public class DownloadList extends JScrollPane
 				}
 			}
 		}
-		ArrowUp.setBounds(this.getWidth() - 37, 10, 32, 32);
-		ArrowUp.setVisible(offset > 0);
-		this.add(ArrowUp);
 		
-		ArrowDown.setBounds(this.getWidth() - 37, this.getHeight() - 42, 32, 32);
-		ArrowDown.setVisible(n > (this.getHeight() - 10) / 40 + offset);
-		this.add(ArrowDown);
+		Dimension dim = new Dimension(this.getWidth(), n * 40 + 5);
+		
+		this.setPreferredSize(dim);
+		this.setSize(dim);
 		
 	}
-	
-	Runnable RunUp = new Runnable()
-	{
-		@Override
-		public void run()
-		{
-			offset -= 2;
-			if (offset < 0)
-				offset = 0;
-			init();
-			repaint();
-		}
-		
-	};
-	
-	Runnable RunDown = new Runnable()
-	{
-		@Override
-		public void run()
-		{
-			offset += 2;
-			init();
-			repaint();
-		}
-		
-	};
 	
 }
