@@ -21,11 +21,12 @@ import it.giara.tmdb.schede.TMDBScheda;
 public class NewsButton extends JLabel implements MouseListener
 {
 	private static final long serialVersionUID = 1L;
-	public BufferedImage Image;
+	public BufferedImage Image, Star;
 	public boolean isOver = false;
 	TMDBScheda film;
 	JLabel text = new JLabel();
 	JLabel back = new JLabel();
+	JLabel vote = new JLabel();
 	int Type = 0;
 	
 	public NewsButton(TMDBScheda f, int type) // type 1 w185 type 2 w500
@@ -36,19 +37,19 @@ public class NewsButton extends JLabel implements MouseListener
 		this.setOpaque(false);
 		this.setLayout(null);
 		this.addMouseListener(this);
-		
+		Star = ImageUtils.getImage("star_full_black.png");
 		if (Type == 1)
 			back.setIcon(ImageUtils.getIcon(film.initHome_w185(this)));
 		else if (Type == 2)
 			back.setIcon(ImageUtils.getIcon(film.initHome_w500(this)));
 			
-		String Stext = "<html><h2>" + film.title + "</html>";
+		String Stext = "<html><h2>" + film.title;
 		
 		if (film.title.length() > 8)
-			Stext = "<html><h4>" + film.title + "</html>";
+			Stext = "<html><h4>" + film.title;
 			
 		if (film.title.length() > 16)
-			Stext = "<html><h4>" + film.title + "</html>";
+			Stext = "<html><h4>" + film.title;
 			
 		if (film.title.length() > 24)
 		{
@@ -61,15 +62,24 @@ public class NewsButton extends JLabel implements MouseListener
 				newTitle += p[j] + " ";
 			}
 			newTitle = newTitle.trim();
-			Stext = "<html><h4>" + newTitle + "</html>";
+			Stext = "<html><h4>" + newTitle;
 		}
 		
+		String[] year = f.relese.split("-");
+		if (year.length == 3)
+			Stext += "<br> <h3> <center>" + year[0]+"</center>";
+		Stext += "</html>";
+		
 		text = new JLabel(Stext);
-		text.setBounds(0, 0, this.getWidth(), this.getHeight());
+		text.setBounds(0, 0, this.getWidth(), this.getHeight() / 2);
 		text.setHorizontalAlignment(JLabel.CENTER);
-		text.setOpaque(false);
-		text.setVisible(false);
+		text.setVerticalAlignment(JLabel.CENTER);
 		text.setForeground(ColorUtils.DarkText);
+		
+		vote = new JLabel("<html><h3>"+film.vote+"/10"+"</html>");
+		vote.setHorizontalAlignment(JLabel.CENTER);
+		vote.setForeground(ColorUtils.DarkText);
+		vote.setBounds(0, 0, this.getWidth(), 30);
 		
 		back.setBounds(0, 0, this.getWidth(), this.getHeight());
 		this.add(back);
@@ -79,7 +89,8 @@ public class NewsButton extends JLabel implements MouseListener
 	{
 		this.removeAll();
 		
-		text.setBounds(0, 0, this.getWidth(), this.getHeight());
+		text.setBounds(0, 0, this.getWidth(), this.getHeight() / 2);
+		vote.setBounds(0, 0, this.getWidth(), 30);
 		
 		back.setBounds(0, 0, this.getWidth(), this.getHeight());
 		this.add(back);
@@ -105,7 +116,7 @@ public class NewsButton extends JLabel implements MouseListener
 	@Override
 	public void mouseExited(MouseEvent e)
 	{
-		isOver = false;	
+		isOver = false;
 		repaint();
 	}
 	
@@ -140,6 +151,12 @@ public class NewsButton extends JLabel implements MouseListener
 			
 			g2.fill(new RoundRectangle2D.Float(0, 0, this.getWidth(), this.getHeight(), 6, 6));
 			text.paint(g);
+			
+			g.drawImage(Star, getWidth()/2-10, getHeight()-60, 20, 20, null);
+			g.translate(0, getHeight()-40);
+			vote.paint(g);
+			g.translate(0, -(getHeight()-40));
+			
 		}
 	}
 	
