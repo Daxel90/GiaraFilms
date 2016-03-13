@@ -17,18 +17,25 @@ public class TEst
 {
 	public static void main(String[] args)
 	{
-//		ThreadManager.submitCacheTask(new InitializeRunnable(null));
+		// ThreadManager.submitCacheTask(new InitializeRunnable(null));
 		
-		SQL.connect();
+		// SQL.connect();
+		//
+		// SQLQuery.DbClear();
+		//
+		// Settings.init();
+		// ListLoader.loadSources();
+		// ServerQuery.load150News();
 		
-		SQLQuery.DbClear();
+		FileInfo f = new FileInfo("Crouching.Tiger.Hidden.Dragon.Sword.of.Destiny.2016.iTALiAN.NETFLiX-RiP.XviD-21K.avi", false);
+		f.parseTags();
 		
-		Settings.init();
-		ListLoader.loadSources();
-//		ServerQuery.load150News();
-		
-//		FileInfo f = new FileInfo("X.MEN.2000.ITALIAN.DVDrip.By.Oce@n.avi");
-//		Log.log(Log.DEBUG, f.year);
+		Log.log(Log.DEBUG, f.video);
+		Log.log(Log.DEBUG, f.audio);
+		for (int x = 0; x < f.tags.size(); x++)
+			Log.log(Log.DEBUG, f.tags.get(x));
+			
+		// Log.log(Log.DEBUG, f.year);
 		// ServerQuery.sendScheda(SQLQuery.readScheda(674, MainType.Film));
 		// Log.log(Log.DEBUG, ServerQuery.requestScheda(676, MainType.Film));
 		
@@ -38,8 +45,8 @@ public class TEst
 		
 		for (final SourceChan s : ListLoader.sources)
 		{
-			Log.log(Log.DEBUG, s.server+"      "+s.chan+"              "+s.getStatus());
-
+			Log.log(Log.DEBUG, s.server + "      " + s.chan + "              " + s.getStatus());
+			
 		}
 		
 	}

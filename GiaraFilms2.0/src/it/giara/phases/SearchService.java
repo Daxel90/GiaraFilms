@@ -86,7 +86,7 @@ public class SearchService
 									@Override
 									public void run()
 									{
-										FileInfo f = new FileInfo(s2);
+										FileInfo f = new FileInfo(s2, true);
 										
 										switch (f.type)
 										{

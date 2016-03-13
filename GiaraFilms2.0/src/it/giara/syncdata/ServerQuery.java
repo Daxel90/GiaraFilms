@@ -379,7 +379,8 @@ public class ServerQuery
 				
 				if(type.equals(MainType.SerieTV))
 				{
-					FileInfo f = new FileInfo(part[1]);
+					FileInfo f = new FileInfo(part[1], false);
+					f.paraseTVSeriesEpisode();
 					SQLQuery.writeEpisodeInfo(id, Integer.parseInt(part[3]), f.episode, f.series);
 				}
 				

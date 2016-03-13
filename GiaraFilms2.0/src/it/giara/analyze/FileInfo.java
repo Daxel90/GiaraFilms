@@ -1,9 +1,13 @@
 package it.giara.analyze;
 
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import it.giara.analyze.enums.AddictionalTags;
 import it.giara.analyze.enums.MainType;
+import it.giara.analyze.enums.QualityAudio;
+import it.giara.analyze.enums.QualityVideo;
 import it.giara.utils.Log;
 import it.giara.utils.StringUtils;
 
@@ -18,15 +22,22 @@ public class FileInfo
 	public int series = 1;
 	public int episode = -1;
 	
-	public FileInfo(String s)
+	// Tags
+	public QualityVideo video = QualityVideo.NULL;
+	public QualityAudio audio = QualityAudio.NULL;
+	public ArrayList<AddictionalTags> tags = new ArrayList<AddictionalTags>();
+	
+	public FileInfo(String s, boolean autoParse)
 	{
 		Filename = s.trim().toLowerCase();
 		
-		if (Filename.endsWith(".avi") || Filename.endsWith(".mkv") || Filename.endsWith(".mp4"))
-			Video();
-		else if (Filename.endsWith(".rar") || Filename.endsWith(".zip") || Filename.endsWith(".tar"))
-			Archive();
-			
+		if (autoParse)
+		{
+			if (Filename.endsWith(".avi") || Filename.endsWith(".mkv") || Filename.endsWith(".mp4"))
+				Video();
+			else if (Filename.endsWith(".rar") || Filename.endsWith(".zip") || Filename.endsWith(".tar"))
+				Archive();
+		}
 	}
 	
 	private void Video()
@@ -60,12 +71,12 @@ public class FileInfo
 					isFilm = false;
 					break;
 				}
-				else if(!markTvSerie && s.matches(".*ep.*"))
+				else if (!markTvSerie && s.matches(".*ep.*"))
 				{
 					markTvSerie = true;
 				}
 				
-				else if(markTvSerie && s.matches(".*(\\d+).*"))
+				else if (markTvSerie && s.matches(".*(\\d+).*"))
 				{
 					TVSeries();
 					isFilm = false;
@@ -103,7 +114,7 @@ public class FileInfo
 	
 	private void Archive()
 	{
-		//TODO Features
+		// TODO Features
 	}
 	
 	// FUNCTION
@@ -147,7 +158,7 @@ public class FileInfo
 		}
 		if (title.length() > 0)
 			title = title.substring(1);
-		
+			
 		title = title.replace("_", " ").replace("-", " ");
 		Log.log(Log.FILEINFO, "Film: " + title);
 	}
@@ -175,14 +186,14 @@ public class FileInfo
 				{
 					break;
 				}
-				else if(!markTvSerie && s.matches(".*ep.*"))
+				else if (!markTvSerie && s.matches(".*ep.*"))
 				{
 					markTvSerie = true;
 					lastPartLength = s.length();
 				}
-				else if(markTvSerie && s.matches(".*(\\d+).*"))
+				else if (markTvSerie && s.matches(".*(\\d+).*"))
 				{
-					title = title.substring(0, title.length()-lastPartLength-1);
+					title = title.substring(0, title.length() - lastPartLength - 1);
 					break;
 				}
 				else
@@ -277,7 +288,7 @@ public class FileInfo
 						series = Integer.parseInt(m.group(1));
 					}
 				}
-				else if (s.matches(".*e(\\d+).*")&& StringUtils.countAlphabet(s) <= 2)
+				else if (s.matches(".*e(\\d+).*") && StringUtils.countAlphabet(s) <= 2)
 				{
 					Pattern p = Pattern.compile(".*e(\\d+).*");
 					Matcher m = p.matcher(s);
@@ -297,11 +308,11 @@ public class FileInfo
 					}
 					break;
 				}
-				else if(!markTvSerie && s.matches(".*ep.*"))
+				else if (!markTvSerie && s.matches(".*ep.*"))
 				{
 					markTvSerie = true;
 				}
-				else if(markTvSerie && s.matches("(\\d+)"))
+				else if (markTvSerie && s.matches("(\\d+)"))
 				{
 					Pattern p = Pattern.compile("(\\d+)");
 					Matcher m = p.matcher(s);
@@ -314,10 +325,96 @@ public class FileInfo
 				else
 				{
 					markTvSerie = false;
-				}	
+				}
 			}
 		}
 		Log.log(Log.FILEINFO, "TVSeries: " + title + " Serie: " + series + " Episode:" + episode);
 	}
 	
+	public void parseTags()
+	{
+		String[] part = Filename.replace(".", " ").split(" ");
+		float topVideoQuality = 0;
+		float topAudioQuality = 0;
+		for (String s : part)
+		{
+			String t = s.toLowerCase();
+			
+			
+			for (QualityVideo q : QualityVideo.values())
+			{
+				if (q == QualityVideo.NULL)
+					continue;
+				String tag = q.tag.toLowerCase();
+				if (t.contains(tag))
+				{
+					int index = t.indexOf(tag);
+					char[] strdata = t.toCharArray();
+					char pre = '.';
+					char post = '.';
+					if ((strdata.length - 1) > index + tag.length())
+						post = strdata[index + tag.length()];
+					if ((strdata.length - 1) > index - 1 && (index - 1) >= 0)
+						pre = strdata[index - 1];
+						
+					if (!Character.isLetter(pre) && !Character.isLetter(post))
+					{
+						if(topVideoQuality < q.qualita)
+						{
+							topVideoQuality = q.qualita;
+							video = q;
+						}
+					}
+				}
+			}
+			
+			for (QualityAudio q : QualityAudio.values())
+			{
+				if (q == QualityAudio.NULL)
+					continue;
+				String tag = q.tag.toLowerCase();
+				if (t.contains(tag))
+				{
+					int index = t.indexOf(tag);
+					char[] strdata = t.toCharArray();
+					char pre = '.';
+					char post = '.';
+					if ((strdata.length - 1) > index + tag.length())
+						post = strdata[index + tag.length()];
+					if ((strdata.length - 1) > index - 1 && (index - 1) >= 0)
+						pre = strdata[index - 1];
+						
+					if (!Character.isLetter(pre) && !Character.isLetter(post))
+					{
+						if(topAudioQuality < q.qualita)
+						{
+							topAudioQuality = q.qualita;
+							audio = q;
+						}
+					}
+				}
+			}
+			
+			for (AddictionalTags q : AddictionalTags.values())
+			{
+				String tag = q.tag.toLowerCase();
+				if (t.contains(tag))
+				{
+					int index = t.indexOf(tag);
+					char[] strdata = t.toCharArray();
+					char pre = '.';
+					char post = '.';
+					if ((strdata.length - 1) > index + tag.length())
+						post = strdata[index + tag.length()];
+					if ((strdata.length - 1) > index - 1 && (index - 1) >= 0)
+						pre = strdata[index - 1];
+						
+					if (!Character.isLetter(pre) && !Character.isLetter(post))
+					{
+						tags.add(q);
+					}
+				}
+			}
+		}
+	}
 }

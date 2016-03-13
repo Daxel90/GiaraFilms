@@ -57,7 +57,7 @@ public class ScanService implements Runnable
 						@Override
 						public void run()
 						{
-							FileInfo f = new FileInfo(s2);
+							FileInfo f = new FileInfo(s2,true);
 							
 							switch (f.type)
 							{
