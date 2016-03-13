@@ -127,7 +127,7 @@ public class DownloadTVSerie extends DefaultGui
 		panel.setSize(dim);
 		panel.setPreferredSize(dim);
 		panel.init();
-//		scroll.setViewportView(panel);
+
 		scroll.setBounds(20, 60, this.getWidth() - 40, this.getHeight() - 80);
 		scroll.setPreferredSize(new Dimension(this.getWidth() - 40, this.getHeight() - 80));
 		

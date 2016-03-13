@@ -241,8 +241,8 @@ public class FilmListPanel extends JPanel
 			case NULL:
 			{
 				
-				allFile.setBounds(0, 0, this.getWidth() - 20, this.getHeight() - 60);
-				allFile.setPreferredSize(new Dimension(this.getWidth() - 20, this.getHeight() - 60));
+				allFile.setBounds(0, 0, this.getWidth() - 60, this.getHeight() - 60);
+				allFile.setPreferredSize(new Dimension(this.getWidth() - 60, this.getHeight() - 60));
 				allFile.init();
 				
 				scroll.setBounds(10, 50, this.getWidth() - 20, this.getHeight() - 60);

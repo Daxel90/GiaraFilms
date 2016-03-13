@@ -8,6 +8,10 @@ import java.util.Map.Entry;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 
+import it.giara.analyze.FileInfo;
+import it.giara.analyze.enums.AddictionalTags;
+import it.giara.analyze.enums.QualityAudio;
+import it.giara.analyze.enums.QualityVideo;
 import it.giara.download.DownloadManager;
 import it.giara.gui.DefaultGui;
 import it.giara.gui.MainFrame;
@@ -78,8 +82,77 @@ public class DownloadAllEpisode extends DefaultGui
 			if (itt <= offset)
 				continue;
 				
+			FileInfo finfo = new FileInfo(Tag.getKey()+"",false);
+			finfo.parseTags();
+			
+			
+			if (finfo.video != QualityVideo.NULL)
+			{
+				JLabel Vquality = new JLabel();
+				Vquality.setText("" + (int) finfo.video.qualita);
+				Vquality.setBounds(FRAME_WIDTH * 8 / 9-75, 45 + num * (25 + 10 + 20 * line)+2, 20, 20);
+				Vquality.setBackground(ColorUtils.getColorQuality(finfo.video.qualita));
+				Vquality.setToolTipText("Video: " + finfo.video.name() + " " + finfo.video.descrizione);
+				Vquality.setHorizontalAlignment(JLabel.CENTER);
+				Vquality.setOpaque(true);
+				Vquality.setForeground(ColorUtils.Back);
+				this.add(Vquality);
+			}
+			
+			if (finfo.audio != QualityAudio.NULL)
+			{
+				JLabel Aquality = new JLabel();
+				Aquality.setText("" + (int) finfo.audio.qualita);
+				Aquality.setBounds(FRAME_WIDTH * 8 / 9-50, 45 + num * (25 + 10 + 20 * line)+2, 20, 20);
+				Aquality.setBackground(ColorUtils.getColorQuality(finfo.audio.qualita));
+				Aquality.setToolTipText("Audio: " + finfo.audio.name() + " " + finfo.audio.descrizione);
+				Aquality.setHorizontalAlignment(JLabel.CENTER);
+				Aquality.setOpaque(true);
+				Aquality.setForeground(ColorUtils.Back);
+				this.add(Aquality);
+			}
+			
+			if ((finfo.tags.contains(AddictionalTags.ENG) || finfo.tags.contains(AddictionalTags.ENGLiSH)
+					|| finfo.tags.contains(AddictionalTags.ITA) || finfo.tags.contains(AddictionalTags.iTALiAN)
+					|| finfo.tags.contains(AddictionalTags.SUB) || finfo.tags.contains(AddictionalTags.Subbed)))
+			{
+				String text = "";
+				String textTip = "";
+				Color c = ColorUtils.Back;
+				if (finfo.tags.contains(AddictionalTags.ENG) || finfo.tags.contains(AddictionalTags.ENGLiSH))
+				{
+					text = "EN";
+					c = new Color(0, 128, 255);
+					textTip += "Inglese ";
+				}
+				if (finfo.tags.contains(AddictionalTags.ITA) || finfo.tags.contains(AddictionalTags.iTALiAN))
+				{
+					text = "IT";
+					c = new Color(0, 204, 0);
+					textTip += "Italiano ";
+				}
+				if (finfo.tags.contains(AddictionalTags.SUB) || finfo.tags.contains(AddictionalTags.Subbed))
+				{
+					text = "EN";
+					c = new Color(0, 128, 255);
+					textTip += "Sottotitolato ";
+				}
+				
+				JLabel Tags = new JLabel();
+				Tags.setText(text);
+				Tags.setBounds(FRAME_WIDTH * 8 / 9-25, 45 + num * (25 + 10 + 20 * line)+2, 20, 20);
+				Tags.setBackground(c);
+				Tags.setToolTipText("Lingua: " + textTip);
+				Tags.setHorizontalAlignment(JLabel.CENTER);
+				Tags.setOpaque(true);
+				Tags.setForeground(ColorUtils.Back);
+				this.add(Tags);
+			}
+			
+			
+			
 			JLabel tagName = new JLabel();
-			tagName.setBounds(FRAME_WIDTH / 9, 45 + num * (25 + 10 + 20 * line), FRAME_WIDTH * 7 / 9, 25);
+			tagName.setBounds(FRAME_WIDTH / 9, 45 + num * (25 + 10 + 20 * line), FRAME_WIDTH * 7 / 9-80, 25);
 			tagName.setText("<html><h3>" + Tag.getKey() + "</html>");
 			tagName.setHorizontalAlignment(JLabel.CENTER);
 			tagName.setBorder(BorderFactory.createLineBorder(ColorUtils.Separator));
@@ -113,7 +186,7 @@ public class DownloadAllEpisode extends DefaultGui
 					MainFrame.getInstance().setInternalPane(new Download(back));
 				}
 			});
-			downloads.setBounds(FRAME_WIDTH * 8 / 9 - 25, 45 + num * (25 + 10 + 20 * line) + 2, 21, 21);
+			downloads.setBounds(FRAME_WIDTH * 8 / 9 - 25-80, 45 + num * (25 + 10 + 20 * line) + 2, 21, 21);
 			downloads.setToolTipText("Scarica Compilation");
 			this.add(downloads);
 			
@@ -127,6 +200,9 @@ public class DownloadAllEpisode extends DefaultGui
 		ArrowDown.setBounds(this.getWidth() - 57, this.getHeight() - 42, 32, 32);
 		ArrowDown.setVisible(offset < (EpMap.size() - 1));
 		this.add(ArrowDown);
+		
+		if(backGround != null)
+		this.add(backGround);
 	}
 	
 	Runnable BackGui = new Runnable()
