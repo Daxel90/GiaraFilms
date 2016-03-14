@@ -9,6 +9,7 @@ import javax.swing.JScrollPane;
 
 import it.giara.gui.DefaultGui;
 import it.giara.gui.MainFrame;
+import it.giara.gui.components.AnimatedImageButton;
 import it.giara.gui.components.ImageButton;
 import it.giara.gui.utils.ColorUtils;
 import it.giara.gui.utils.ImageUtils;
@@ -32,6 +33,9 @@ public class TVSerieInfoSchede extends DefaultGui
 	JLabel info;
 	ImageButton downloads;
 	
+	public boolean syncRunning = false;
+	AnimatedImageButton sync;
+	
 	public TVSerieInfoSchede(DefaultGui gui, TMDBScheda f)
 	{
 		super();
@@ -39,11 +43,15 @@ public class TVSerieInfoSchede extends DefaultGui
 		scheda = f;
 		if(Settings.getParameter("servercollaborate").equals("1"))
 		{
+			syncRunning = true;
 			Runnable r = new Runnable()
 			{
 				public void run()
 				{
 					ServerQuery.loadFileOfSchede(scheda);
+					syncRunning = false;
+					downloads.setVisible(!syncRunning);
+					sync.setVisible(syncRunning);
 				}
 			};
 			ThreadManager.submitCacheTask(r);
@@ -135,9 +143,15 @@ public class TVSerieInfoSchede extends DefaultGui
 				ImageUtils.getImage("gui/download_over.png"), ImageUtils.getImage("gui/download_over.png"),
 				OpenDownloads);
 		downloads.setBounds((FRAME_WIDTH - 64) / 2, FRAME_HEIGHT - 100, 64, 64);
-		downloads.setVisible(true);
+		downloads.setVisible(!syncRunning);
 		downloads.setToolTipText("Scarica");
 		this.add(downloads);
+		
+		sync = new AnimatedImageButton("SyncBig(n)", 5, null, 500);
+		sync.setBounds((FRAME_WIDTH - 64) / 2, FRAME_HEIGHT - 100, 64, 64);
+		sync.setToolTipText("Sincronizzazione con il server Attedere qualche secondo");
+		sync.setVisible(syncRunning);
+		this.add(sync);
 		
 		if (backGround == null)
 		{
