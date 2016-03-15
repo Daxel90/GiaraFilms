@@ -368,7 +368,7 @@ public class FileSources
 	
 	public Runnable restartDownload = new Runnable()
 	{
-		public void run()
+		public void run() 
 		{
 			if (paused)
 				return;

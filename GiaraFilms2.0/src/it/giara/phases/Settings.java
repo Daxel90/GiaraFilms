@@ -1,6 +1,5 @@
 package it.giara.phases;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.prefs.Preferences;
 
@@ -14,7 +13,7 @@ import it.giara.utils.ThreadManager;
 
 public class Settings
 {
-	public final static int VERSION = 17;
+	public final static int VERSION = 18;
 	private final static int END_PreReleseVersion = Integer.MAX_VALUE;
 	private final static int END_BetaVersion = Integer.MAX_VALUE;
 	private static HashMap<String, String> config = new HashMap<String, String>();
@@ -44,7 +43,7 @@ public class Settings
 				ThreadManager.poolScanServiceSize = 1;
 			else
 				ThreadManager.poolScanServiceSize = n;
-			
+				
 		} catch (NumberFormatException e)
 		{
 			Log.stack(Log.CONFIG, e);
@@ -89,7 +88,7 @@ public class Settings
 			new ChangeLogFrame();
 		}
 		
-		if(Integer.parseInt(Settings.getParameter("DBversion")) < 18)
+		if (Integer.parseInt(Settings.getParameter("DBversion")) < 18)
 		{
 			SQLQuery.DbClear();
 			setParameter("DBversion", "18");

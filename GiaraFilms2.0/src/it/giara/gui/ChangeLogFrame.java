@@ -54,6 +54,7 @@ public class ChangeLogFrame extends JFrame
 		text.setText("<html>"
 				+ "<h2>--------------------" + "<h2>Dev PreRelese 18"
 				+ "<br><h3>\t- Aggiunto Algoritmo riconoscimento qualità Audio e Video e Lingua"
+				+ "<br><h3>\t- Aggiunta Opzione per rimuovere download completati"
 				+ "<br><h3>\t- Migliorato algoritmo di cache"
 				+ "<br><h3>\t- Allineata HomePage News"
 				+ "<br><h3>\t- Aggiunta ScrollBar nella sezione film laterale"
