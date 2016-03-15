@@ -179,7 +179,7 @@ public class TVSerieInfoSchede extends DefaultGui
 			}
 		}
 		this.add(backGround);
-		
+		super.loadComponent();
 	}
 	
 	public void drawRating()

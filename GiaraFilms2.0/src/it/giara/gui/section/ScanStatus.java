@@ -93,6 +93,7 @@ public class ScanStatus extends DefaultGui
 		homePage.setBounds(40, 5, 32, 32);
 		homePage.setToolTipText("Home");
 		this.add(homePage);
+		super.loadComponent();
 	}
 	
 	Runnable BackGui = new Runnable()

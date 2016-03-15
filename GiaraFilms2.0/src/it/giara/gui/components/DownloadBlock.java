@@ -32,7 +32,7 @@ public class DownloadBlock extends JPanel
 		delete_over = ImageUtils.getImage("gui/delete_over.png");
 	}
 	
-	FileSources file;
+	public FileSources file;
 	JProgressBar bar;
 	ImageButton startBt;
 	ImageButton stopBt;

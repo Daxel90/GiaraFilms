@@ -213,6 +213,29 @@ public class Options extends DefaultGui
 		
 		this.add(serverCollaborate);
 		
+		
+		final JCheckBox removeCompleted = new JCheckBox();
+		removeCompleted.setText("Rimuovi Download Completati");
+		removeCompleted.setSelected(Settings.getParameter("removecompleted").equals("1"));
+		removeCompleted.setBounds(50, 250, FRAME_WIDTH / 2, 30);
+		removeCompleted.setToolTipText(
+				"<html>Permette di rimuovere automaticamente i download completati dall' elenco</html>");
+		removeCompleted.addActionListener(new ActionListener()
+		{
+			
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				if (removeCompleted.isSelected())
+					Settings.setParameter("removecompleted", "1");
+				else
+					Settings.setParameter("removecompleted", "0");
+			}
+		});
+		
+		this.add(removeCompleted);
+		
+		super.loadComponent();
 	}
 	
 	Runnable BackGui = new Runnable()

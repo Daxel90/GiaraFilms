@@ -181,6 +181,7 @@ public class FilmInfoSchede extends DefaultGui
 		}
 		this.add(backGround);
 		
+		super.loadComponent();
 	}
 	
 	public void drawRating()

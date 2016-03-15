@@ -104,6 +104,7 @@ public class DownloadTVSerie extends DefaultGui
 	
 	public void loadComponent()
 	{
+		this.removeAll();
 		JLabel sep2 = new JLabel();
 		sep2.setBounds(0, 40, FRAME_WIDTH, 1);
 		sep2.setBorder(BorderFactory.createLineBorder(ColorUtils.Separator));
@@ -132,6 +133,8 @@ public class DownloadTVSerie extends DefaultGui
 		scroll.setPreferredSize(new Dimension(this.getWidth() - 40, this.getHeight() - 80));
 		
 		this.add(scroll);
+		
+		super.loadComponent();
 	}
 	
 	Runnable BackGui = new Runnable()

@@ -55,6 +55,8 @@ public class LoadScreen extends DefaultGui
 		textProgress.setBounds(FRAME_WIDTH / 6, FRAME_HEIGHT * 3 / 4 - 30, FRAME_WIDTH * 2 / 3, 20);
 		textProgress.setVisible(visible);
 		add(textProgress);
+		
+		super.loadComponent();
 	}
 	
 	ActionListener fade = new ActionListener()

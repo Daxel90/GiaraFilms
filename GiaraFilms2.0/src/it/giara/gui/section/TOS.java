@@ -86,7 +86,7 @@ public class TOS extends DefaultGui
 			}
 		});
 		this.add(reject);
-		
+		super.loadComponent();
 	}
 	
 }

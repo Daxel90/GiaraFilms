@@ -8,8 +8,11 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.jibble.pircbot.DccFileTransfer;
 
+import it.giara.gui.MainFrame;
+import it.giara.gui.section.Download;
 import it.giara.http.HTTPFileSources;
 import it.giara.irc.IrcConnection;
+import it.giara.phases.Settings;
 import it.giara.source.ListLoader;
 import it.giara.source.SourceChan;
 import it.giara.sql.SQLQuerySettings;
@@ -296,6 +299,16 @@ public class FileSources
 		fileEnd = true;
 		
 		SQLQuerySettings.removeDownload(filename);
+		
+		if(Settings.getParameter("removecompleted").equals("1"))
+		{
+			DownloadManager.AllFile.remove(filename);
+			if(MainFrame.getInstance().internalPane instanceof Download)
+			{
+				MainFrame.getInstance().internalPane.loadComponent();
+				MainFrame.getInstance().internalPane.repaint();
+			}
+		}
 		
 		Log.log(Log.IRC, "Trasferimento Completato: " + transfer.getFile().getName());
 	}

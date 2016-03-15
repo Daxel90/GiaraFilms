@@ -39,8 +39,11 @@ public class DefaultGui extends JPanel
 		setSize(new Dimension(FRAME_WIDTH, FRAME_HEIGHT));
 		this.removeAll();
 		
-		loadComponent();
-		
+		loadComponent();	
+	}
+	
+	public void loadComponent()
+	{
 		if (backGround == null)
 		{
 			backGround = new JLabel();
@@ -71,13 +74,6 @@ public class DefaultGui extends JPanel
 			}
 		}
 		this.add(backGround);
-		
-		
-	}
-	
-	public void loadComponent()
-	{
-	
 	}
 	
 }

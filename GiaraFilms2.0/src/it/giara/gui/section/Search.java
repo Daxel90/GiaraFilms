@@ -63,7 +63,7 @@ public class Search extends HomePage
 		panel.setBounds(20 - 8, 80, FRAME_WIDTH - 40, FRAME_HEIGHT - 100);
 		// panel.setBorder(BorderFactory.createLineBorder(Color.white));
 		this.add(panel);
-		
+		printBack();
 	}
 	
 	@Override

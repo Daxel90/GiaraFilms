@@ -92,6 +92,7 @@ public class Download extends DefaultGui
 		ArrowDown.setBounds(this.getWidth() - 57, this.getHeight() - 42, 32, 32);
 		ArrowDown.setVisible((x + 1 - offset) > ((this.getHeight() - 40) / 80));
 		this.add(ArrowDown);
+		super.loadComponent();
 	}
 	
 	Runnable BackGui = new Runnable()

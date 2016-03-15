@@ -31,6 +31,7 @@ public class Settings
 		config.put("scanservice", SQLQuerySettings.getCurrentParameter("scanservice", "1"));
 		config.put("scanservicethread", SQLQuerySettings.getCurrentParameter("scanservicethread", "1"));
 		config.put("servercollaborate", SQLQuerySettings.getCurrentParameter("servercollaborate", "1"));
+		config.put("removecompleted", SQLQuerySettings.getCurrentParameter("removecompleted", "0"));
 		config.put("serversync", SQLQuerySettings.getCurrentParameter("serversync", "0")); // Features
 		config.put("lastserversync", SQLQuerySettings.getCurrentParameter("lastserversync", "0")); // Features
 		config.put("tos", SQLQuerySettings.getCurrentParameter("tos", "0"));
@@ -88,30 +89,10 @@ public class Settings
 			new ChangeLogFrame();
 		}
 		
-		if (Integer.parseInt(Settings.getParameter("DBversion")) < 10)
-		{
-			new File(DirUtils.getWorkingDirectory(), "FileDatabase.db").delete();
-			SQLQuerySettings.TableFix1();
-			setParameter("DBversion", "10");
-		}
-		
-		if (Integer.parseInt(Settings.getParameter("DBversion")) < 15)
+		if(Integer.parseInt(Settings.getParameter("DBversion")) < 18)
 		{
 			SQLQuery.DbClear();
-			setParameter("DBversion", "15");
-		}
-		
-		if (Integer.parseInt(Settings.getParameter("DBversion")) < 16)
-		{
-			SQLQuerySettings.removeParameters("lastdbcheck");
-			Settings.setParameter("servercollaborate", "1");
-			Settings.setParameter("scanservice", "1");
-			setParameter("DBversion", "16");
-		}
-		
-		if(Integer.parseInt(Settings.getParameter("DBversion")) < 17)
-		{
-			SQLQuery.DbClear();
+			setParameter("DBversion", "18");
 		}
 	}
 	

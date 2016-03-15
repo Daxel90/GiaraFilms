@@ -73,13 +73,13 @@ public class HomePage extends DefaultGui
 		});
 		this.add(searchTx);
 		
-		if(news == null)
-		if (Settings.getParameter("servercollaborate").equals("1"))
-		{
-			news = new NewsPanel();
-			news.setVisible(ServerQuery.newsLoaded);
-		}
-		
+		if (news == null)
+			if (Settings.getParameter("servercollaborate").equals("1"))
+			{
+				news = new NewsPanel();
+				news.setVisible(ServerQuery.newsLoaded);
+			}
+			
 		ImageButton search = new ImageButton(ImageUtils.getImage("gui/search.png"),
 				ImageUtils.getImage("gui/search_over.png"), ImageUtils.getImage("gui/search_clicked.png"), RunSearch);
 		search.setBounds(FRAME_WIDTH - 50, 5, 32, 32);
@@ -123,6 +123,13 @@ public class HomePage extends DefaultGui
 		}
 		
 		this.content();
+		if (!(this instanceof Search))
+			printBack();
+	}
+	
+	public void printBack()
+	{
+		super.loadComponent();
 	}
 	
 	public void content()

@@ -201,8 +201,7 @@ public class DownloadAllEpisode extends DefaultGui
 		ArrowDown.setVisible(offset < (EpMap.size() - 1));
 		this.add(ArrowDown);
 		
-		if(backGround != null)
-		this.add(backGround);
+		super.loadComponent();
 	}
 	
 	Runnable BackGui = new Runnable()
