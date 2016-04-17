@@ -22,6 +22,7 @@ public class Log
 	public static LogType DOWNLOAD = LogType.DOWNLOAD;
 	public static LogType SCANSERVICE = LogType.SCANSERVICE;
 	public static LogType TMDB = LogType.TMDB;
+	public static LogType TMDBApi = LogType.TMDBApi;
 	public static LogType BACKEND = LogType.BACKEND;
 	
 	public static void log(LogType l, Object o)
@@ -74,5 +75,5 @@ public class Log
 
 enum LogType
 {
-	NETWORK, DEBUG, INFO, CONFIG, FILEINFO, FILMINFO, DB, GUI, ERROR, IMAGE, IRC, DOWNLOAD, SCANSERVICE, TMDB, BACKEND
+	NETWORK, DEBUG, INFO, CONFIG, FILEINFO, FILMINFO, DB, GUI, ERROR, IMAGE, IRC, DOWNLOAD, SCANSERVICE, TMDB, BACKEND,TMDBApi
 }
