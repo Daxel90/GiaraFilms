@@ -26,7 +26,7 @@ public class RecoverDownload
 				for (String[] s : list)
 				{
 					if(Integer.parseInt(s[2]) != 1)
-						DownloadManager.AllFile.get(s[0]).restart();;
+						DownloadManager.AllFile.get(s[0]).restart();
 				}
 				
 			}

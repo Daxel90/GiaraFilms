@@ -4,6 +4,7 @@ import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Map.Entry;
+import java.util.TreeMap;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
@@ -68,7 +69,10 @@ public class Download extends DefaultGui
 		this.add(homePage);
 		
 		int x = -1;
-		for (Entry<String, FileSources> data : DownloadManager.AllFile.entrySet())
+		
+		TreeMap<String, FileSources> map = new TreeMap<String, FileSources>(DownloadManager.AllFile);
+		
+		for (Entry<String, FileSources> data : map.entrySet())
 		{
 			x++;
 			if (x < offset)

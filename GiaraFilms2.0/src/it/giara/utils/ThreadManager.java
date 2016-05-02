@@ -4,23 +4,29 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+
+import org.apache.commons.lang3.concurrent.BasicThreadFactory;
+
 public class ThreadManager
 {
 	public static ExecutorService CachedExecutor;
 	
-	public static ExecutorService PoolExecutorSearch; // this pool is for Loading List File
-	public static ExecutorService PoolExecutorSearchIndicizer; //this pool run file indicizer during Search
+	public static ExecutorService PoolExecutorSearch; // this pool is for
+														// Loading List File
+	public static ExecutorService PoolExecutorSearchIndicizer; // this pool run
+																// file
+																// indicizer
+																// during Search
 	
 	public static ExecutorService PoolScanServiceExecutor;
 	
 	public static ExecutorService SystemPoolExecutor;
-	public static ScheduledExecutorService  ScheduledExecutorService ; //scheduleThreadPool
+	public static ScheduledExecutorService ScheduledExecutorService; // scheduleThreadPool
 	
 	public static int poolScanServiceWait = 0;
 	
-	
 	public static int poolSearchWait = 0;
-	public static int SearchPoolSize = 5;				//SearchThreads need to be very fast
+	public static int SearchPoolSize = 5; // SearchThreads need to be very fast
 	public static int SearchIndicizerPoolSize = 15;
 	
 	public static int poolScanServiceSize = 2;
@@ -29,7 +35,9 @@ public class ThreadManager
 	
 	static
 	{
-		CachedExecutor = Executors.newCachedThreadPool();
+		BasicThreadFactory factory = new BasicThreadFactory.Builder().namingPattern("Cached Executor-%d").build();
+		
+		CachedExecutor = Executors.newCachedThreadPool(factory);
 		ScheduledExecutorService = Executors.newScheduledThreadPool(SchedulePoolSize);
 		SystemPoolExecutor = Executors.newFixedThreadPool(poolScanServiceSize);
 	}
@@ -48,12 +56,10 @@ public class ThreadManager
 		CachedExecutor.submit(task);
 	}
 	
-	
 	public static void submitSystemTask(Runnable task)
 	{
 		SystemPoolExecutor.submit(task);
 	}
-	
 	
 	// insert task without checking poolWait, create medium priority
 	public static void submitPoolScanServiceTask(final Runnable task)
@@ -88,8 +94,7 @@ public class ThreadManager
 		ScheduledExecutorService.schedule(task, second, TimeUnit.SECONDS);
 	}
 	
-	
-	//SEARCH SECTION
+	// SEARCH SECTION
 	
 	public static int getPoolSearchWait()
 	{

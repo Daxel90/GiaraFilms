@@ -56,6 +56,7 @@ public class SourceChan
 				
 			} catch (Exception e)
 			{
+				e.printStackTrace();
 				return "OFFLINE";
 			}
 			return "OFFLINE";
