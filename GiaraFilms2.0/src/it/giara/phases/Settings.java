@@ -13,7 +13,7 @@ import it.giara.utils.ThreadManager;
 
 public class Settings
 {
-	public final static int VERSION = 19;
+	public final static int VERSION = 20;
 	private final static int END_PreReleseVersion = Integer.MAX_VALUE;
 	private final static int END_BetaVersion = Integer.MAX_VALUE;
 	private static HashMap<String, String> config = new HashMap<String, String>();

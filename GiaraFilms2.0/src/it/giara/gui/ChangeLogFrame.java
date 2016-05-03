@@ -52,6 +52,8 @@ public class ChangeLogFrame extends JFrame
 		text.setOpaque(false);
 		text.setContentType("text/html");
 		text.setText("<html>"
+				+ "<h2>--------------------" + "<h2>Dev PreRelese 20"
+				+ "<br><h3>\t- Effettuato Fix per i download contemporanei"
 				+ "<h2>--------------------" + "<h2>Dev PreRelese 19"
 				+ "<br><h3>\t- Risolto Grave problema utilizzo CPU"
 				+ "<br><h3>\t- Ordinati in ordine alfabetico i download"
@@ -108,7 +110,7 @@ public class ChangeLogFrame extends JFrame
 				+ "<h2>--------------------" + "<h2>Dev PreRelese 7"
 				+ "<br><h3>\t- Fix del Fix Pausa Download (Dev6)"
 				+ "<br><h3>\t- Apportate piccole modifice alle gui"
-				+ "<br><h3>\t- Appicati fix sul Database"
+				+ "<br><h3>\t- Applicati fix sul Database"
 				+ "<br><h3>\t- Aggiunto tempo rimanente per i download"
 				+ "<h2>--------------------" + "<h2>Dev PreRelese 6"
 				+ "<br><h3>\t- Aggiunta dimensione dei file nelle liste"
