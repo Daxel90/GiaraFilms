@@ -71,10 +71,9 @@ public class DownloadHandler
 	
 	public static void DownloadCreate(String filename, FileSources fs)
 	{
-		if(Integer.parseInt(Settings.getParameter("downloadlimitN")) != 1)
+		if(Integer.parseInt(Settings.getParameter("downloadlimit")) != 1)
 			return;
 		
-		Log.log(Log.IRC, "Creo Download: " + filename);
 		Log.log(Log.DEBUG, fs.paused + " - " + fs.waitLoalDownload + " - prima " + CurrentDownloading);
 		if (CurrentDownloading >= Integer.parseInt(Settings.getParameter("downloadlimitN")))
 		{
@@ -89,7 +88,7 @@ public class DownloadHandler
 	
 	public static void DownloadStart(String filename, FileSources fs)
 	{
-		if(Integer.parseInt(Settings.getParameter("downloadlimitN")) != 1)
+		if(Integer.parseInt(Settings.getParameter("downloadlimit")) != 1)
 			return;
 		
 		Log.log(Log.IRC, "Start Download: " + filename);
@@ -106,7 +105,7 @@ public class DownloadHandler
 	
 	public static void DownloadRestart(String filename, FileSources fs)
 	{
-		if(Integer.parseInt(Settings.getParameter("downloadlimitN")) != 1)
+		if(Integer.parseInt(Settings.getParameter("downloadlimit")) != 1)
 			return;
 		
 		Log.log(Log.IRC, "Start Download: " + filename);
@@ -124,7 +123,7 @@ public class DownloadHandler
 	
 	public static void DownloadPause(String filename, FileSources file)
 	{
-		if(Integer.parseInt(Settings.getParameter("downloadlimitN")) != 1)
+		if(Integer.parseInt(Settings.getParameter("downloadlimit")) != 1)
 			return;
 		
 		Log.log(Log.IRC, "Pause download: " + filename);

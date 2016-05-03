@@ -235,6 +235,78 @@ public class Options extends DefaultGui
 		
 		this.add(removeCompleted);
 		
+		//----
+		
+		final JTextField maxDownloadN = new JTextField();
+		maxDownloadN.setText(Settings.getParameter("downloadlimitN"));
+		maxDownloadN.setBounds(FRAME_WIDTH / 2, 295, 30, 20);
+		maxDownloadN.addKeyListener(new KeyListener()
+		{
+			public void keyTyped(KeyEvent e)
+			{}
+			
+			public void keyPressed(KeyEvent e)
+			{}
+			
+			public void keyReleased(KeyEvent e)
+			{
+				try
+				{
+					if (maxDownloadN.getText().equals(""))
+						return;
+					int n = Integer.parseInt(maxDownloadN.getText());
+					if (n <= 0 || n > 100)
+					{
+						maxDownloadN.setText(Settings.getParameter("downloadlimitN"));
+					}
+					else
+					{
+						Settings.setParameter("downloadlimitN", "" + n);
+					}
+				} catch (NumberFormatException ex)
+				{
+					maxDownloadN.setText(Settings.getParameter("downloadlimitN"));
+				}
+			}
+		});
+		
+		this.add(maxDownloadN);
+		
+		final JLabel maxDownloadlabel = new JLabel();
+		maxDownloadlabel.setText("Numero Download contemporanei");
+		maxDownloadlabel.setBounds(FRAME_WIDTH / 2 + 35, 290, FRAME_WIDTH / 2, 30);
+		maxDownloadlabel
+				.setToolTipText("<html>Numero di downlaod contemporanei "
+						+ "</html>");
+		this.add(maxDownloadlabel);
+		
+		final JCheckBox maxDownload = new JCheckBox();
+		maxDownload.setText("Limita Download Contemporanei (richiede riavvio)");
+		maxDownload.setSelected(Settings.getParameter("downloadlimit").equals("1"));
+		maxDownload.setBounds(50, 290, FRAME_WIDTH / 2, 30);
+		maxDownload.setToolTipText(
+				"<html>Questa funzione permette di limitare i download contemporanei</html>");
+		maxDownload.addActionListener(new ActionListener()
+		{
+			
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				if (maxDownload.isSelected())
+					Settings.setParameter("downloadlimit", "1");
+				else
+					Settings.setParameter("downloadlimit", "0");
+					
+				maxDownloadN.setVisible(maxDownload.isSelected());
+				maxDownloadlabel.setVisible(maxDownload.isSelected());
+			}
+		});
+		maxDownloadlabel.setVisible(maxDownload.isSelected());
+		maxDownloadN.setVisible(maxDownload.isSelected());
+		
+		this.add(maxDownload);
+		
+		
 		super.loadComponent();
 	}
 	

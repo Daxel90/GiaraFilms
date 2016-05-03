@@ -13,7 +13,7 @@ import it.giara.utils.ThreadManager;
 
 public class Settings
 {
-	public final static int VERSION = 18;
+	public final static int VERSION = 19;
 	private final static int END_PreReleseVersion = Integer.MAX_VALUE;
 	private final static int END_BetaVersion = Integer.MAX_VALUE;
 	private static HashMap<String, String> config = new HashMap<String, String>();
@@ -37,8 +37,7 @@ public class Settings
 		
 		config.put("downloadlimit", SQLQuerySettings.getCurrentParameter("downloadlimit", "0"));
 		config.put("downloadlimitN", SQLQuerySettings.getCurrentParameter("downloadlimitN", "4"));
-		config.put("downloadlimitN", "2");
-		config.put("downloadlimit", "0");
+		
 		try
 		{
 			int n = Integer.parseInt(getParameter("scanservicethread"));
