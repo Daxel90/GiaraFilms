@@ -52,6 +52,10 @@ public class ChangeLogFrame extends JFrame
 		text.setOpaque(false);
 		text.setContentType("text/html");
 		text.setText("<html>"
+				+ "<h2>--------------------" + "<h2>Dev PreRelese 19"
+				+ "<br><h3>\t- Risolto Grave problema utilizzo CPU"
+				+ "<br><h3>\t- Ordinati in ordine alfabetico i download"
+				+ "<br><h3>\t- Aggiunto possibilità di sceglier numero download contemporanei"
 				+ "<h2>--------------------" + "<h2>Dev PreRelese 18"
 				+ "<br><h3>\t- Aggiunto Algoritmo riconoscimento qualità Audio e Video e Lingua"
 				+ "<br><h3>\t- Aggiunta Opzione per rimuovere download completati"

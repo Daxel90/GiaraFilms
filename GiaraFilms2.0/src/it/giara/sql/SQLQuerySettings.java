@@ -2,8 +2,7 @@ package it.giara.sql;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 
 import it.giara.utils.Log;
 
@@ -63,24 +62,26 @@ public class SQLQuerySettings
 		return 0;
 	}
 	
-	public synchronized static List<String[]> getCurrentDownloads()
+	public synchronized static HashMap<String, String[]> getCurrentDownloads()
 	{
-		List<String[]> download = new ArrayList<String[]>();
+		
+		HashMap<String, String[]> ris = new HashMap<String, String[]>();
 		
 		ResultSet r = SQL.FetchDataSettings("SELECT * FROM `Downloads` WHERE 1");
 		try
 		{
 			while (r.next())
 			{
-				download.add(new String[] { SQL.unescape(r.getString("FileName")), SQL.unescape(r.getString("FileDirectory")),
+				ris.put(SQL.unescape(r.getString("FileName")), new String[] { SQL.unescape(r.getString("FileDirectory")),
 						"" + r.getInt("status") });
+
 			}
 		} catch (SQLException e)
 		{
 			Log.stack(Log.DB, e);
 		}
 		
-		return download;
+		return ris;
 	}
 	
 	public synchronized static void addParameters(String key, String Value)

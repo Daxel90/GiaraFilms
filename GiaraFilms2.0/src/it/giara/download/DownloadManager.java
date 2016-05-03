@@ -18,15 +18,15 @@ public class DownloadManager
 	{
 		FileSources sources = DownloadManager.getFileSources(FileName, paused);
 		
-		sources.waitUntilAllBotListAreLoaded();
-		
 		sources.requestDownload(new File(file));
 	}
 	
 	public static void downloadFile(String FileName)
 	{
 		FileSources sources = DownloadManager.getFileSources(FileName, false);
+		
 		sources.requestDownload();
+		
 	}
 	
 	public static void downloadCollection(HashMap<Integer, String> collection)
@@ -49,9 +49,13 @@ public class DownloadManager
 		final FileSources result = new FileSources(filename);
 		result.paused = paused;
 		
-		if (paused)
+		DownloadHandler.DownloadCreate(filename, result);
+		
+		if (result.paused || result.waitLoalDownload)
+		{
 			return result;
-			
+		}
+		
 		result.loadList();
 		
 		return result;

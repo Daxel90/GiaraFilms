@@ -133,6 +133,7 @@ public class DownloadFilm extends DefaultGui
 		@Override
 		public void run()
 		{
+			if(Search.searchService != null)
 			Search.searchService.StopService();
 			MainFrame.getInstance().setInternalPane(new HomePage());
 		}

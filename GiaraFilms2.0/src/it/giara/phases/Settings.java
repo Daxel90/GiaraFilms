@@ -35,6 +35,10 @@ public class Settings
 		config.put("lastserversync", SQLQuerySettings.getCurrentParameter("lastserversync", "0")); // Features
 		config.put("tos", SQLQuerySettings.getCurrentParameter("tos", "0"));
 		
+		config.put("downloadlimit", SQLQuerySettings.getCurrentParameter("downloadlimit", "0"));
+		config.put("downloadlimitN", SQLQuerySettings.getCurrentParameter("downloadlimitN", "4"));
+		config.put("downloadlimitN", "2");
+		config.put("downloadlimit", "0");
 		try
 		{
 			int n = Integer.parseInt(getParameter("scanservicethread"));

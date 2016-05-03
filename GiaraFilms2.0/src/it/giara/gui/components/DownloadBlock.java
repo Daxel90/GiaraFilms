@@ -117,6 +117,9 @@ public class DownloadBlock extends JPanel
 		if (file.fileEnd)
 			bar.setString("Download Completato");
 			
+		if (file.waitLoalDownload)
+			bar.setString("Raggiunto limite download contemporanei impostato");
+		
 		if (file.paused)
 			bar.setString("Download In Pausa");
 			

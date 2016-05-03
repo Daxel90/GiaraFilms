@@ -9,9 +9,9 @@ import org.jibble.pircbot.IrcException;
 import org.jibble.pircbot.NickAlreadyInUseException;
 import org.jibble.pircbot.PircBot;
 
+import it.giara.download.DownloadHandler;
 import it.giara.download.DownloadManager;
 import it.giara.download.FileSources;
-import it.giara.utils.ErrorHandler;
 import it.giara.utils.Log;
 
 public class IrcConnection extends PircBot
@@ -51,7 +51,7 @@ public class IrcConnection extends PircBot
 		
 		if (!connect)
 		{
-			ErrorHandler.FailServerConnect("Impossibile connettersi al server " + server);
+			DownloadHandler.FailServerConnect("Impossibile connettersi al server " + server);
 		}
 	}
 	
@@ -119,21 +119,21 @@ public class IrcConnection extends PircBot
 		
 		if (sources == null)
 		{
-			ErrorHandler
+			DownloadHandler
 					.noRequestFileFromThisBot("Non è stato richiesto nessun file da questo bot: " + transfer.getNick());
 			transfer.close();
 			return;
 		}
 		else if (!sources.filename.trim().contains(transfer.getFile().getName().trim()))
 		{
-			ErrorHandler.BotSendWrongFile(sources.filename.trim(), transfer.getFile().getName().trim());
+			DownloadHandler.BotSendWrongFile(sources.filename.trim(), transfer.getFile().getName().trim());
 			transfer.close();
 			sources.botResponse = 0;
 			return;
 		}
 		if (sources.downloading == true)
 		{
-			ErrorHandler.alreadyInDownload(transfer.getFile().getName().trim());
+			DownloadHandler.alreadyInDownload(transfer.getFile().getName().trim());
 			transfer.close();
 			return;
 		}

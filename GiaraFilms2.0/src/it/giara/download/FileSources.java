@@ -17,7 +17,6 @@ import it.giara.source.ListLoader;
 import it.giara.source.SourceChan;
 import it.giara.sql.SQLQuerySettings;
 import it.giara.utils.DirUtils;
-import it.giara.utils.ErrorHandler;
 import it.giara.utils.FunctionsUtils;
 import it.giara.utils.Log;
 import it.giara.utils.ThreadManager;
@@ -39,6 +38,8 @@ public class FileSources
 	public boolean endAskFile = false;
 	
 	public boolean AtLeastOneBotOccupated = false;
+	
+	public boolean waitLoalDownload = false;
 	
 	public ArrayList<SourceChan> alreadyAskChannel = new ArrayList<SourceChan>();
 	
@@ -63,6 +64,10 @@ public class FileSources
 	
 	public void loadList()
 	{
+		if (paused  || waitLoalDownload)
+			return;
+		
+		Log.log(Log.DEBUG, "Carico Liste");
 		loadingBotList = ListLoader.sources.size();
 		
 		Runnable run = new Runnable()
@@ -102,7 +107,7 @@ public class FileSources
 		{
 //			Log.log(Log.DEBUG, "Bot: " + totalBot + "  " + filename);
 			FunctionsUtils.sleep(1000);
-			if (paused)
+			if (paused || waitLoalDownload)
 				return;
 		}
 	}
@@ -115,23 +120,25 @@ public class FileSources
 	
 	public void requestDownload()
 	{
-		if (paused)
-			return;
+		
 			
 		if (saveFile == null)
 			saveFile = new File(DirUtils.getDownloadDirectory(),
 					filename.replace(":", " ").replace("*", "").replace("?", "").replace("<", "").replace(">", ""));
-					
+		
 		SQLQuerySettings.addDownload(filename, saveFile.getAbsolutePath());
+		
+		if (paused  || waitLoalDownload)
+			return;
 		
 		waitUntilthereAreAtLeastOneBot();
 		
-		if (paused)
+		if (paused  || waitLoalDownload)
 			return;
 			
 		if (totalBot <= 0)
 		{
-			ErrorHandler.fileNotAvailable(filename);
+			DownloadHandler.fileNotAvailable(filename);
 			endAskFile = true;
 			if (botResponse < 1 && endAskFile && !downloading && xdcc == null)
 			{
@@ -250,7 +257,7 @@ public class FileSources
 		RemoveFileFromWaitingList();
 		transfer.filesources = this;
 		
-		if (paused)
+		if (paused  || waitLoalDownload)
 		{
 			Log.log(Log.IRC, "IN PAUSA:\t" + transfer.getFile().toString() + " " + transfer.getSize() + " bytes");
 			transfer.close();
@@ -292,7 +299,7 @@ public class FileSources
 			xdcc = null;
 			downloading = false;
 			FunctionsUtils.sleep(4000);
-			if (!paused)
+			if (!paused  || waitLoalDownload)
 				restart();
 			return;
 		}
@@ -311,7 +318,7 @@ public class FileSources
 			}
 		}
 		
-		Log.log(Log.IRC, "Trasferimento Completato: " + transfer.getFile().getName());
+		DownloadHandler.DownloadComplete(transfer.getFile().getName());
 	}
 	
 	public void resetData()
@@ -341,12 +348,19 @@ public class FileSources
 		paused = true;
 		resetData();
 		SQLQuerySettings.setStatus(filename, 1);
+		DownloadHandler.DownloadPause(filename, this);
 	}
 	
 	public void restart()
 	{
 		paused = false;
 		resetData();
+		SQLQuerySettings.setStatus(filename, 0);
+		DownloadHandler.DownloadRestart(filename,this);
+		
+		if(this.waitLoalDownload)
+			return;
+		
 		loadList();
 		Runnable run = new Runnable()
 		{
@@ -357,7 +371,6 @@ public class FileSources
 			}
 		};
 		ThreadManager.submitCacheTask(run);
-		SQLQuerySettings.setStatus(filename, 0);
 	}
 	
 	public void delete()
@@ -371,7 +384,7 @@ public class FileSources
 	{
 		public void run()
 		{
-			if (paused)
+			if (paused  || waitLoalDownload)
 				return;
 			if (downloading)
 				return;
