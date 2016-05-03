@@ -47,6 +47,7 @@ public class DownloadHandler
 				return;
 		
 		Log.log(Log.IRC, "Complete download: " + filename);
+		CurrentDownloading--;
 		
 		if (CurrentDownloading < Integer.parseInt(Settings.getParameter("downloadlimitN")))
 		{
@@ -69,6 +70,15 @@ public class DownloadHandler
 		}
 	}
 	
+	public static void TransmissionFailed(String filename)
+	{
+		if(Integer.parseInt(Settings.getParameter("downloadlimitN")) != 1)
+				return;
+		
+		Log.log(Log.IRC, "TransmissionFailed: " + filename);
+		CurrentDownloading--;
+	}
+	
 	public static void DownloadCreate(String filename, FileSources fs)
 	{
 		if(Integer.parseInt(Settings.getParameter("downloadlimit")) != 1)
@@ -84,23 +94,6 @@ public class DownloadHandler
 		if (!fs.paused && CurrentDownloading < Integer.parseInt(Settings.getParameter("downloadlimitN")))
 			CurrentDownloading++;
 		Log.log(Log.DEBUG, fs.paused + " - " + fs.waitLoalDownload + " -dopo " + CurrentDownloading);
-	}
-	
-	public static void DownloadStart(String filename, FileSources fs)
-	{
-		if(Integer.parseInt(Settings.getParameter("downloadlimit")) != 1)
-			return;
-		
-		Log.log(Log.IRC, "Start Download: " + filename);
-		Log.log(Log.DEBUG, fs.paused + " - " + fs.waitLoalDownload + " - " + CurrentDownloading);
-		if (CurrentDownloading >= Integer.parseInt(Settings.getParameter("downloadlimitN")))
-		{
-			fs.waitLoalDownload = true;
-			Log.log(Log.DEBUG,"set waiting");
-		}
-		
-		if(!fs.paused && !fs.waitLoalDownload)
-		CurrentDownloading++;
 	}
 	
 	public static void DownloadRestart(String filename, FileSources fs)
