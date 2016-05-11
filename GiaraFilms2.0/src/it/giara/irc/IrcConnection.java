@@ -102,7 +102,7 @@ public class IrcConnection extends PircBot
 				DownloadManager.BotRequest.get(sourceNick).botResponse = 0;
 				DownloadManager.BotRequest.get(sourceNick).onWaitingList = true;
 			}
-			Log.log(Log.IRC, "Il Bot ti ha messo in lista" + sourceNick);
+			DownloadHandler.BotSetInList(sourceNick);
 		}
 		else if (notice.contains("Ti sto inviando il pack"))
 		{

@@ -39,15 +39,26 @@ public class DownloadHandler
 		// TODO
 	}
 	
+	public static void BotSetInList(String BotName)
+	{
+		if (Integer.parseInt(Settings.getParameter("downloadlimit")) != 1)
+			return;
+			
+		Log.log(Log.DEBUG, "CD:" + CurrentDownloading + " Il Bot ti ha messo in lista: " + BotName);
+		CurrentDownloading--;
+		Log.log(Log.DEBUG, "CD:" + CurrentDownloading);
+	}
+	
 	static int CurrentDownloading = 0;
 	
 	public static void DownloadComplete(String filename)
 	{
-		if(Integer.parseInt(Settings.getParameter("downloadlimitN")) != 1)
-				return;
-		
-		Log.log(Log.IRC, "Complete download: " + filename);
+		if (Integer.parseInt(Settings.getParameter("downloadlimit")) != 1)
+			return;
+			
+		Log.log(Log.DEBUG, "CD:" + CurrentDownloading + " Complete download: " + filename);
 		CurrentDownloading--;
+		Log.log(Log.DEBUG, "CD:" + CurrentDownloading);
 		
 		if (CurrentDownloading < Integer.parseInt(Settings.getParameter("downloadlimitN")))
 		{
@@ -58,7 +69,7 @@ public class DownloadHandler
 				FileSources fs = data.getValue();
 				if (fs.waitLoalDownload)
 				{
-					Log.log(Log.DEBUG, "Avvio" + fs.filename);
+					Log.log(Log.DEBUG, "CD:" + CurrentDownloading + " Avvio" + fs.filename);
 					fs.waitLoalDownload = false;
 					if (!fs.paused)
 					{
@@ -68,63 +79,75 @@ public class DownloadHandler
 				}
 			}
 		}
+		Log.log(Log.DEBUG, "CD:" + CurrentDownloading);
 	}
 	
 	public static void TransmissionFailed(String filename)
 	{
-		if(Integer.parseInt(Settings.getParameter("downloadlimitN")) != 1)
-				return;
-		
-		Log.log(Log.IRC, "TransmissionFailed: " + filename);
+		if (Integer.parseInt(Settings.getParameter("downloadlimit")) != 1)
+			return;
+			
+		Log.log(Log.DEBUG, "CD:" + CurrentDownloading + " TransmissionFailed: " + filename);
 		CurrentDownloading--;
+		Log.log(Log.DEBUG, "CD:" + CurrentDownloading);
 	}
 	
 	public static void DownloadCreate(String filename, FileSources fs)
 	{
-		if(Integer.parseInt(Settings.getParameter("downloadlimit")) != 1)
+		if (Integer.parseInt(Settings.getParameter("downloadlimit")) != 1)
 			return;
+			
+		Log.log(Log.DEBUG, "CD:" + CurrentDownloading + " DownloadCreate: " + filename);
 		
-		Log.log(Log.DEBUG, fs.paused + " - " + fs.waitLoalDownload + " - prima " + CurrentDownloading);
 		if (CurrentDownloading >= Integer.parseInt(Settings.getParameter("downloadlimitN")))
 		{
 			fs.waitLoalDownload = true;
-			Log.log(Log.DEBUG,"set waiting");
+			Log.log(Log.DEBUG, "set waiting");
+		}
+		else if (!fs.paused)
+		{
+			Log.log(Log.DEBUG, "set starting");
 		}
 		
 		if (!fs.paused && CurrentDownloading < Integer.parseInt(Settings.getParameter("downloadlimitN")))
 			CurrentDownloading++;
-		Log.log(Log.DEBUG, fs.paused + " - " + fs.waitLoalDownload + " -dopo " + CurrentDownloading);
+		Log.log(Log.DEBUG, "CD:" + CurrentDownloading);
 	}
 	
 	public static void DownloadRestart(String filename, FileSources fs)
 	{
-		if(Integer.parseInt(Settings.getParameter("downloadlimit")) != 1)
+		if (Integer.parseInt(Settings.getParameter("downloadlimit")) != 1)
 			return;
+			
+		Log.log(Log.DEBUG, "CD:" + CurrentDownloading + " Start Download: " + filename);
 		
-		Log.log(Log.IRC, "Start Download: " + filename);
-		Log.log(Log.DEBUG, fs.paused + " - " + fs.waitLoalDownload + " - " + CurrentDownloading);
 		if (CurrentDownloading >= Integer.parseInt(Settings.getParameter("downloadlimitN")))
 		{
 			fs.waitLoalDownload = true;
-			Log.log(Log.DEBUG,"set waiting");
+			Log.log(Log.DEBUG, "set waiting");
+		}
+		else if (!fs.paused)
+		{
+			Log.log(Log.DEBUG, "set starting");
 		}
 		
-		if(!fs.paused && !fs.waitLoalDownload)
-		CurrentDownloading++;
+		if (!fs.paused && !fs.waitLoalDownload)
+			CurrentDownloading++;
+			
+		Log.log(Log.DEBUG, "CD:" + CurrentDownloading);
 	}
-	
 	
 	public static void DownloadPause(String filename, FileSources file)
 	{
-		if(Integer.parseInt(Settings.getParameter("downloadlimit")) != 1)
+		if (Integer.parseInt(Settings.getParameter("downloadlimit")) != 1)
 			return;
-		
-		Log.log(Log.IRC, "Pause download: " + filename);
+			
+		Log.log(Log.DEBUG, "CD:" + CurrentDownloading + " Pause download: " + filename);
 		
 		if (!file.waitLoalDownload)
 			CurrentDownloading--;
 			
-		Log.log(Log.DEBUG, file.paused + " - " + file.waitLoalDownload + " - " + CurrentDownloading);
+		Log.log(Log.DEBUG, "CD:" + CurrentDownloading);
 		
 		if (CurrentDownloading < Integer.parseInt(Settings.getParameter("downloadlimitN")))
 		{
@@ -136,7 +159,7 @@ public class DownloadHandler
 				FileSources fs = data.getValue();
 				if (fs.waitLoalDownload)
 				{
-					Log.log(Log.DEBUG, "Avvio" + fs.filename);
+					Log.log(Log.DEBUG, "CD:" + CurrentDownloading + " Avvio" + fs.filename);
 					fs.waitLoalDownload = false;
 					if (!fs.paused)
 					{
@@ -146,6 +169,7 @@ public class DownloadHandler
 				}
 			}
 		}
+		Log.log(Log.DEBUG, "CD:" + CurrentDownloading);
 	}
 	
 }

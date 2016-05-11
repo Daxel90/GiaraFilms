@@ -298,8 +298,8 @@ public class FileSources
 		{
 			xdcc = null;
 			downloading = false;
-			DownloadHandler.TransmissionFailed(transfer.getFile().getName());
 			FunctionsUtils.sleep(4000);
+			DownloadHandler.TransmissionFailed(transfer.getFile().getName());
 			if (!paused  || waitLoalDownload)
 				restart();
 			return;
@@ -391,6 +391,7 @@ public class FileSources
 				return;
 			if (xdcc != null)
 				return;
+			DownloadHandler.TransmissionFailed(filename);
 			restart();
 		}
 	};
