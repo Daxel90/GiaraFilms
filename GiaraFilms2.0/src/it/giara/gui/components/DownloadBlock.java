@@ -24,12 +24,12 @@ public class DownloadBlock extends JPanel
 	
 	static
 	{
-		stop = ImageUtils.getImage("gui/stop.png");
-		stop_over = ImageUtils.getImage("gui/stop_over.png");
-		start = ImageUtils.getImage("gui/start.png");
-		start_over = ImageUtils.getImage("gui/start_over.png");
-		delete = ImageUtils.getImage("gui/delete.png");
-		delete_over = ImageUtils.getImage("gui/delete_over.png");
+		stop = ImageUtils.getImage("gui/icon32px/stop.png");
+		stop_over = ImageUtils.getImage("gui/icon32px/stop_over.png");
+		start = ImageUtils.getImage("gui/icon32px/start.png");
+		start_over = ImageUtils.getImage("gui/icon32px/start_over.png");
+		delete = ImageUtils.getImage("gui/icon32px/delete.png");
+		delete_over = ImageUtils.getImage("gui/icon32px/delete_over.png");
 	}
 	
 	public FileSources file;

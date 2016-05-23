@@ -46,10 +46,10 @@ public class HomeListPanel extends JPanel
 		setOpaque(false);
 		setBackground(ColorUtils.Back);
 		
-		ArrowUp = new ImageButton(ImageUtils.getImage("gui/arrow_up.png"), ImageUtils.getImage("gui/arrow_up_over.png"),
-				ImageUtils.getImage("gui/arrow_up_over.png"), RunUp);
-		ArrowDown = new ImageButton(ImageUtils.getImage("gui/arrow_down.png"),
-				ImageUtils.getImage("gui/arrow_down_over.png"), ImageUtils.getImage("gui/arrow_down_over.png"),
+		ArrowUp = new ImageButton(ImageUtils.getImage("gui/icon32px/arrow_up.png"), ImageUtils.getImage("gui/icon32px/arrow_up_over.png"),
+				ImageUtils.getImage("gui/icon32px/arrow_up_over.png"), RunUp);
+		ArrowDown = new ImageButton(ImageUtils.getImage("gui/icon32px/arrow_down.png"),
+				ImageUtils.getImage("gui/icon32px/arrow_down_over.png"), ImageUtils.getImage("gui/icon32px/arrow_down_over.png"),
 				RunDown);
 		
 		textlabel = new JLabel();

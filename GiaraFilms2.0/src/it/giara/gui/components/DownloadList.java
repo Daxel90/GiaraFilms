@@ -60,12 +60,12 @@ public class DownloadList extends JScrollPane
 		this.setOpaque(true);
 		this.setBackground(ColorUtils.Back);
 		
-		download = ImageUtils.getImage("gui/download.png");
-		download_over = ImageUtils.getImage("gui/download_over.png");
-		plus = ImageUtils.getImage("gui/plus.png");
-		plus_over = ImageUtils.getImage("gui/plus_over.png");
-		minus = ImageUtils.getImage("gui/minus.png");
-		minus_over = ImageUtils.getImage("gui/minus_over.png");
+		download = ImageUtils.getImage("gui/icon32px/download.png");
+		download_over = ImageUtils.getImage("gui/icon32px/download_over.png");
+		plus = ImageUtils.getImage("gui/icon32px/plus.png");
+		plus_over = ImageUtils.getImage("gui/icon32px/plus_over.png");
+		minus = ImageUtils.getImage("gui/icon32px/minus.png");
+		minus_over = ImageUtils.getImage("gui/icon32px/minus_over.png");
 	}
 	
 	@SuppressWarnings("unchecked")

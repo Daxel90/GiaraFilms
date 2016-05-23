@@ -68,10 +68,10 @@ public class FilmListPanel extends JPanel
 		serietv.setText("<html><h3>SerieTv    " + list.series.size() + "</html>");
 		unknowfile.setText("<html><h3>Tutti i File    " + list.allFile.size() + "</html>");
 		
-		ArrowUp = new ImageButton(ImageUtils.getImage("gui/arrow_up.png"), ImageUtils.getImage("gui/arrow_up_over.png"),
-				ImageUtils.getImage("gui/arrow_up_over.png"), RunUp);
-		ArrowDown = new ImageButton(ImageUtils.getImage("gui/arrow_down.png"),
-				ImageUtils.getImage("gui/arrow_down_over.png"), ImageUtils.getImage("gui/arrow_down_over.png"),
+		ArrowUp = new ImageButton(ImageUtils.getImage("gui/icon32px/arrow_up.png"), ImageUtils.getImage("gui/icon32px/arrow_up_over.png"),
+				ImageUtils.getImage("gui/icon32px/arrow_up_over.png"), RunUp);
+		ArrowDown = new ImageButton(ImageUtils.getImage("gui/icon32px/arrow_down.png"),
+				ImageUtils.getImage("gui/icon32px/arrow_down_over.png"), ImageUtils.getImage("gui/icon32px/arrow_down_over.png"),
 				RunDown);
 				
 		allFile = new DownloadList(list.allFile, gui);

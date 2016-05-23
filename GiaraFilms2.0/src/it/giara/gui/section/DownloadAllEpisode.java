@@ -36,16 +36,16 @@ public class DownloadAllEpisode extends DefaultGui
 	{
 		super();
 		back = gui;
-		ArrowUp = new ImageButton(ImageUtils.getImage("gui/arrow_up.png"), ImageUtils.getImage("gui/arrow_up_over.png"),
-				ImageUtils.getImage("gui/arrow_up_over.png"), RunUp);
-		ArrowDown = new ImageButton(ImageUtils.getImage("gui/arrow_down.png"),
-				ImageUtils.getImage("gui/arrow_down_over.png"), ImageUtils.getImage("gui/arrow_down_over.png"),
+		ArrowUp = new ImageButton(ImageUtils.getImage("gui/icon32px/arrow_up.png"), ImageUtils.getImage("gui/icon32px/arrow_up_over.png"),
+				ImageUtils.getImage("gui/icon32px/arrow_up_over.png"), RunUp);
+		ArrowDown = new ImageButton(ImageUtils.getImage("gui/icon32px/arrow_down.png"),
+				ImageUtils.getImage("gui/icon32px/arrow_down_over.png"), ImageUtils.getImage("gui/icon32px/arrow_down_over.png"),
 				RunDown);
 		serie = Serie;
 		EpMap = map;
 		nEpisode = nEP;
-		download = ImageUtils.getImage("gui/download.png");
-		download_over = ImageUtils.getImage("gui/download_over.png");
+		download = ImageUtils.getImage("gui/icon32px/download.png");
+		download_over = ImageUtils.getImage("gui/icon32px/download_over.png");
 	}
 	
 	public void loadComponent()
@@ -61,15 +61,15 @@ public class DownloadAllEpisode extends DefaultGui
 		sep2.setBorder(BorderFactory.createLineBorder(ColorUtils.Separator));
 		this.add(sep2);
 		
-		ImageButton backbt = new ImageButton(ImageUtils.getImage("gui/arrow_left.png"),
-				ImageUtils.getImage("gui/arrow_left_over.png"), ImageUtils.getImage("gui/arrow_left_over.png"),
+		ImageButton backbt = new ImageButton(ImageUtils.getImage("gui/icon32px/arrow_left.png"),
+				ImageUtils.getImage("gui/icon32px/arrow_left_over.png"), ImageUtils.getImage("gui/icon32px/arrow_left_over.png"),
 				BackGui);
 		backbt.setBounds(5, 5, 32, 32);
 		backbt.setToolTipText("Indietro");
 		this.add(backbt);
 		
-		ImageButton homePage = new ImageButton(ImageUtils.getImage("gui/home.png"),
-				ImageUtils.getImage("gui/home_over.png"), ImageUtils.getImage("gui/home_over.png"), OpenHomePage);
+		ImageButton homePage = new ImageButton(ImageUtils.getImage("gui/icon32px/home.png"),
+				ImageUtils.getImage("gui/icon32px/home_over.png"), ImageUtils.getImage("gui/icon32px/home_over.png"), OpenHomePage);
 		homePage.setBounds(40, 5, 32, 32);
 		homePage.setToolTipText("Home");
 		this.add(homePage);
@@ -220,6 +220,7 @@ public class DownloadAllEpisode extends DefaultGui
 		@Override
 		public void run()
 		{
+			if (Search.searchService != null)
 			Search.searchService.StopService();
 			MainFrame.getInstance().setInternalPane(new HomePage());
 		}

@@ -41,7 +41,7 @@ public class TVSerieInfoSchede extends DefaultGui
 		super();
 		back = gui;
 		scheda = f;
-		if(Settings.getParameter("servercollaborate").equals("1"))
+		if (Settings.getParameter("servercollaborate").equals("1"))
 		{
 			syncRunning = true;
 			Runnable r = new Runnable()
@@ -72,15 +72,15 @@ public class TVSerieInfoSchede extends DefaultGui
 		title.setHorizontalAlignment(JLabel.CENTER);
 		this.add(title);
 		
-		ImageButton backbt = new ImageButton(ImageUtils.getImage("gui/arrow_left.png"),
-				ImageUtils.getImage("gui/arrow_left_over.png"), ImageUtils.getImage("gui/arrow_left_over.png"),
+		ImageButton backbt = new ImageButton(ImageUtils.getImage("gui/icon32px/arrow_left.png"),
+				ImageUtils.getImage("gui/icon32px/arrow_left_over.png"), ImageUtils.getImage("gui/icon32px/arrow_left_over.png"),
 				BackGui);
 		backbt.setBounds(5, 5, 32, 32);
 		backbt.setToolTipText("Indietro");
 		this.add(backbt);
 		
-		ImageButton homePage = new ImageButton(ImageUtils.getImage("gui/home.png"),
-				ImageUtils.getImage("gui/home_over.png"), ImageUtils.getImage("gui/home_over.png"), OpenHomePage);
+		ImageButton homePage = new ImageButton(ImageUtils.getImage("gui/icon32px/home.png"),
+				ImageUtils.getImage("gui/icon32px/home_over.png"), ImageUtils.getImage("gui/icon32px/home_over.png"), OpenHomePage);
 		homePage.setBounds(40, 5, 32, 32);
 		homePage.setToolTipText("Home");
 		this.add(homePage);
@@ -139,8 +139,8 @@ public class TVSerieInfoSchede extends DefaultGui
 		this.add(info);
 		drawRating();
 		
-		downloads = new ImageButton(ImageUtils.getImage("gui/download.png"),
-				ImageUtils.getImage("gui/download_over.png"), ImageUtils.getImage("gui/download_over.png"),
+		downloads = new ImageButton(ImageUtils.getImage("gui/icon32px/download.png"),
+				ImageUtils.getImage("gui/icon32px/download_over.png"), ImageUtils.getImage("gui/icon32px/download_over.png"),
 				OpenDownloads);
 		downloads.setBounds((FRAME_WIDTH - 64) / 2, FRAME_HEIGHT - 100, 64, 64);
 		downloads.setVisible(!syncRunning);
@@ -243,7 +243,8 @@ public class TVSerieInfoSchede extends DefaultGui
 		@Override
 		public void run()
 		{
-			Search.searchService.StopService();
+			if (Search.searchService != null)
+				Search.searchService.StopService();
 			MainFrame.getInstance().setInternalPane(new HomePage());
 		}
 	};

@@ -80,27 +80,27 @@ public class HomePage extends DefaultGui
 				news.setVisible(ServerQuery.newsLoaded);
 			}
 			
-		ImageButton search = new ImageButton(ImageUtils.getImage("gui/search.png"),
-				ImageUtils.getImage("gui/search_over.png"), ImageUtils.getImage("gui/search_clicked.png"), RunSearch);
+		ImageButton search = new ImageButton(ImageUtils.getImage("gui/icon32px/search.png"),
+				ImageUtils.getImage("gui/icon32px/search_over.png"), ImageUtils.getImage("gui/icon32px/search_over.png"), RunSearch);
 		search.setBounds(FRAME_WIDTH - 50, 5, 32, 32);
 		search.setToolTipText("Cerca");
 		this.add(search);
 		
-		ImageButton options = new ImageButton(ImageUtils.getImage("gui/options.png"),
-				ImageUtils.getImage("gui/options_over.png"), ImageUtils.getImage("gui/options_over.png"), OpenOptions);
+		ImageButton options = new ImageButton(ImageUtils.getImage("gui/icon32px/options.png"),
+				ImageUtils.getImage("gui/icon32px/options_over.png"), ImageUtils.getImage("gui/icon32px/options_over.png"), OpenOptions);
 		options.setBounds(5, 5, 32, 32);
 		options.setToolTipText("Opzioni");
 		this.add(options);
 		
-		ImageButton downloads = new ImageButton(ImageUtils.getImage("gui/download.png"),
-				ImageUtils.getImage("gui/download_over.png"), ImageUtils.getImage("gui/download_over.png"),
+		ImageButton downloads = new ImageButton(ImageUtils.getImage("gui/icon32px/download.png"),
+				ImageUtils.getImage("gui/icon32px/download_over.png"), ImageUtils.getImage("gui/icon32px/download_over.png"),
 				OpenDownloads);
 		downloads.setBounds(40, 5, 32, 32);
 		downloads.setToolTipText("Downloads");
 		this.add(downloads);
 		
-		ImageButton homePage = new ImageButton(ImageUtils.getImage("gui/home.png"),
-				ImageUtils.getImage("gui/home_over.png"), ImageUtils.getImage("gui/home_over.png"), OpenHomePage);
+		ImageButton homePage = new ImageButton(ImageUtils.getImage("gui/icon32px/home.png"),
+				ImageUtils.getImage("gui/icon32px/home_over.png"), ImageUtils.getImage("gui/icon32px/home_over.png"), OpenHomePage);
 		homePage.setBounds(75, 5, 32, 32);
 		homePage.setToolTipText("Home");
 		this.add(homePage);
