@@ -1,19 +1,10 @@
 package it.giara;
 
-import it.giara.analyze.FileInfo;
-import it.giara.analyze.enums.MainType;
-import it.giara.phases.InitializeRunnable;
 import it.giara.phases.Settings;
 import it.giara.source.ListLoader;
 import it.giara.source.SourceChan;
 import it.giara.sql.SQL;
-import it.giara.sql.SQLQuery;
-import it.giara.syncdata.ServerQuery;
-import it.giara.tmdb.api.TmdbApiSearchFilm;
-import it.giara.utils.FunctionsUtils;
-import it.giara.utils.HttpPost;
 import it.giara.utils.Log;
-import it.giara.utils.ThreadManager;
 
 public class TEst
 {

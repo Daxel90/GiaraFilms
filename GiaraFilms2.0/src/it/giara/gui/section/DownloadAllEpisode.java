@@ -18,6 +18,7 @@ import it.giara.gui.MainFrame;
 import it.giara.gui.components.ImageButton;
 import it.giara.gui.utils.ColorUtils;
 import it.giara.gui.utils.ImageUtils;
+import it.giara.utils.FunctionsUtils;
 
 public class DownloadAllEpisode extends DefaultGui
 {
@@ -183,6 +184,7 @@ public class DownloadAllEpisode extends DefaultGui
 				public void run()
 				{
 					DownloadManager.downloadCollection(EpMap.get(Tag.getKey()));
+					FunctionsUtils.sleep(100);
 					MainFrame.getInstance().setInternalPane(new Download(back));
 				}
 			});

@@ -1,12 +1,12 @@
 package it.giara.http;
 
-import it.giara.utils.Log;
-
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
+
+import it.giara.utils.Log;
 
 public class HTTPList
 {

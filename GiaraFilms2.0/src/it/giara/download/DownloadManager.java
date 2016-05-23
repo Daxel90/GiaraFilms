@@ -21,27 +21,34 @@ public class DownloadManager
 		sources.requestDownload(new File(file));
 	}
 	
-	public static void downloadFile(String FileName)
+	public static void downloadFile(String FileName, boolean paused)
 	{
-		FileSources sources = DownloadManager.getFileSources(FileName, false);
+		FileSources sources = DownloadManager.getFileSources(FileName, paused);
 		
 		sources.requestDownload();
 		
 	}
 	
-	public static void downloadCollection(HashMap<Integer, String> collection)
+	public static void downloadCollection(final HashMap<Integer, String> collection)
 	{
-		for (final Entry<Integer, String> file : collection.entrySet())
+		Runnable task = new Runnable()
 		{
-			Runnable task = new Runnable()
+			public void run()
 			{
-				public void run()
+				for (final Entry<Integer, String> file : collection.entrySet())
 				{
-					downloadFile(file.getValue());
+					downloadFile(file.getValue(),true);
 				}
-			};
-			ThreadManager.submitCacheTask(task);
-		}
+				for (final Entry<Integer, String> file : collection.entrySet())
+				{
+					FileSources fs = AllFile.get(file.getValue());
+					fs.paused = false;
+					if (!fs.waitLoalDownload)
+						fs.restart();
+				}
+			}
+		};
+		ThreadManager.submitCacheTask(task);
 	}
 	
 	public static FileSources getFileSources(String filename, boolean paused)

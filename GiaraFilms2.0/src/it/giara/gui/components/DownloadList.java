@@ -186,7 +186,7 @@ public class DownloadList extends JScrollPane
 						{
 							public void run()
 							{
-								DownloadManager.downloadFile(file);
+								DownloadManager.downloadFile(file, false);
 							}
 						};
 						ThreadManager.submitCacheTask(task);
@@ -351,7 +351,7 @@ public class DownloadList extends JScrollPane
 								{
 									public void run()
 									{
-										DownloadManager.downloadFile(file);
+										DownloadManager.downloadFile(file, false);
 									}
 								};
 								ThreadManager.submitCacheTask(task);

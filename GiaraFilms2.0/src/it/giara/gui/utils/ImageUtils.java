@@ -1,7 +1,5 @@
 package it.giara.gui.utils;
 
-import it.giara.utils.Log;
-
 import java.awt.AlphaComposite;
 import java.awt.Font;
 import java.awt.Graphics2D;
@@ -24,6 +22,8 @@ import java.net.URL;
 import javax.imageio.ImageIO;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+
+import it.giara.utils.Log;
 
 public class ImageUtils
 {

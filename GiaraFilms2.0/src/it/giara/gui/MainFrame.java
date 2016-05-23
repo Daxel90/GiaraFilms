@@ -1,9 +1,5 @@
 package it.giara.gui;
 
-import it.giara.gui.section.LoadScreen;
-import it.giara.gui.utils.ColorUtils;
-import it.giara.gui.utils.ImageUtils;
-
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ComponentEvent;
@@ -14,6 +10,10 @@ import java.awt.event.WindowEvent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
+
+import it.giara.gui.section.LoadScreen;
+import it.giara.gui.utils.ColorUtils;
+import it.giara.gui.utils.ImageUtils;
 
 public class MainFrame extends JFrame
 {

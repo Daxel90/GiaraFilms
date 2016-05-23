@@ -5,9 +5,6 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 
-import it.giara.download.BotPackage;
-import it.giara.utils.Log;
-
 public class SourceChan
 {
 	public String server;

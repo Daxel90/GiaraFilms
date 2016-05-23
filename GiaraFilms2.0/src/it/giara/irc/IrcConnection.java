@@ -100,9 +100,10 @@ public class IrcConnection extends PircBot
 			if (DownloadManager.BotRequest.containsKey(sourceNick))
 			{
 				DownloadManager.BotRequest.get(sourceNick).botResponse = 0;
+				if (!DownloadManager.BotRequest.get(sourceNick).onWaitingList)
+					DownloadHandler.BotSetInList(sourceNick);
 				DownloadManager.BotRequest.get(sourceNick).onWaitingList = true;
 			}
-			DownloadHandler.BotSetInList(sourceNick);
 		}
 		else if (notice.contains("Ti sto inviando il pack"))
 		{
