@@ -45,7 +45,8 @@ public class DownloadHandler
 			return;
 			
 		Log.log(Log.DEBUG, "CD:" + CurrentDownloading + " Il Bot ti ha messo in lista: " + BotName);
-		CurrentDownloading--;
+		if (CurrentDownloading > 0)
+			CurrentDownloading--;
 		Log.log(Log.DEBUG, "CD:" + CurrentDownloading);
 	}
 	
@@ -57,7 +58,8 @@ public class DownloadHandler
 			return;
 			
 		Log.log(Log.DEBUG, "CD:" + CurrentDownloading + " Complete download: " + filename);
-		CurrentDownloading--;
+		if (CurrentDownloading > 0)
+			CurrentDownloading--;
 		Log.log(Log.DEBUG, "CD:" + CurrentDownloading);
 		
 		if (CurrentDownloading < Integer.parseInt(Settings.getParameter("downloadlimitN")))
@@ -88,7 +90,8 @@ public class DownloadHandler
 			return;
 			
 		Log.log(Log.DEBUG, "CD:" + CurrentDownloading + " TransmissionFailed: " + filename);
-		CurrentDownloading--;
+		if (CurrentDownloading > 0)
+			CurrentDownloading--;
 		Log.log(Log.DEBUG, "CD:" + CurrentDownloading);
 	}
 	
@@ -144,7 +147,7 @@ public class DownloadHandler
 			
 		Log.log(Log.DEBUG, "CD:" + CurrentDownloading + " Pause download: " + filename);
 		
-		if (!file.waitLoalDownload)
+		if (!file.waitLoalDownload && CurrentDownloading > 0)
 			CurrentDownloading--;
 			
 		Log.log(Log.DEBUG, "CD:" + CurrentDownloading);
