@@ -138,8 +138,8 @@ public class FilmInfoSchede extends DefaultGui
 		this.add(info);
 		drawRating();
 		
-		downloads = new ImageButton(ImageUtils.getImage("gui/icon32px/download.png"),
-				ImageUtils.getImage("gui/icon32px/download_over.png"), ImageUtils.getImage("gui/icon32px/download_over.png"),
+		downloads = new ImageButton(ImageUtils.getImage("gui/icon64px/download.png"),
+				ImageUtils.getImage("gui/icon64px/download_over.png"), ImageUtils.getImage("gui/icon64px/download_over.png"),
 				OpenDownloads);
 		downloads.setBounds((FRAME_WIDTH - 64) / 2, FRAME_HEIGHT - 100, 64, 64);
 		downloads.setToolTipText("Scarica");
@@ -193,7 +193,7 @@ public class FilmInfoSchede extends DefaultGui
 			else
 				star.setBounds(20 + (20 * x), FRAME_HEIGHT / 2 + 95, 20, 20);
 				
-			star.setIcon(ImageUtils.getIcon("star_full.png"));
+			star.setIcon(ImageUtils.getIcon("gui/icon20px/star_full.png"));
 			this.add(star);
 		}
 		if (x + 0.5f >= scheda.vote)
@@ -203,7 +203,7 @@ public class FilmInfoSchede extends DefaultGui
 				star.setBounds(20 + (20 * x), (int) ((FRAME_WIDTH / 4) * 1.49) + 95, 20, 20);
 			else
 				star.setBounds(20 + (20 * x), FRAME_HEIGHT / 2 + 95, 20, 20);
-			star.setIcon(ImageUtils.getIcon("star_half.png"));
+			star.setIcon(ImageUtils.getIcon("gui/icon20px/star_half.png"));
 			this.add(star);
 			x++;
 		}
@@ -214,7 +214,7 @@ public class FilmInfoSchede extends DefaultGui
 				star.setBounds(20 + (20 * x), (int) ((FRAME_WIDTH / 4) * 1.49) + 95, 20, 20);
 			else
 				star.setBounds(20 + (20 * x), FRAME_HEIGHT / 2 + 95, 20, 20);
-			star.setIcon(ImageUtils.getIcon("star_empty.png"));
+			star.setIcon(ImageUtils.getIcon("gui/icon20px/star_empty.png"));
 			this.add(star);
 		}
 		this.repaint();

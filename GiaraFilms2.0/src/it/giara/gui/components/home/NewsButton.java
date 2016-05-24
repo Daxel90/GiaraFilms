@@ -37,7 +37,7 @@ public class NewsButton extends JLabel implements MouseListener
 		this.setOpaque(false);
 		this.setLayout(null);
 		this.addMouseListener(this);
-		Star = ImageUtils.getImage("star_full_black.png");
+		Star = ImageUtils.getImage("gui/icon20px/star_full_black.png");
 		if (Type == 1)
 			back.setIcon(ImageUtils.getIcon(film.initHome_w185(this)));
 		else if (Type == 2)

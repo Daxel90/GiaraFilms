@@ -42,7 +42,7 @@ public class FilmButton extends JLabel implements MouseListener
 		else
 			Cover = film.poster_w140;
 		
-		Star = ImageUtils.getImage("star_full_black.png");
+		Star = ImageUtils.getImage("gui/icon20px/star_full_black.png");
 			
 		this.addMouseListener(this);
 		this.setOpaque(false);
