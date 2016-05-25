@@ -18,12 +18,12 @@ import it.giara.tmdb.schede.TMDBScheda;
 import it.giara.utils.FunctionsUtils;
 import it.giara.utils.Log;
 
-public class TmdbApiSearchFilm
+public class TmdbApiSearchTVSerie
 {
 	public TMDBScheda scheda;
 	double matchName = -1;
 	
-	public TmdbApiSearchFilm(String search, int year)
+	public TmdbApiSearchTVSerie(String search, int year)
 	{
 		Log.log(Log.FILMINFO, search);
 		scheda = new TMDBScheda();
@@ -43,7 +43,7 @@ public class TmdbApiSearchFilm
 	private void getFileInfo(String title, int year) throws IOException, JSONException
 	{
 		int responsecode = 429;
-		String url = "http://api.themoviedb.org/3/search/movie/?api_key=b7ea4084f5b8c30f6ae8038649bc26f3&language=it&query="
+		String url = "http://api.themoviedb.org/3/search/tv/?api_key=b7ea4084f5b8c30f6ae8038649bc26f3&language=it&query="
 				+ URLEncoder.encode(title, "UTF-8");
 				
 		while (responsecode == 429) // 429 is the code of query limit reach
@@ -82,8 +82,8 @@ public class TmdbApiSearchFilm
 				{
 					JSONObject film = json.getJSONArray("results").getJSONObject(k);
 					
-					double m = MatchStringAlghorithm.compareStrings(film.optString("title"), title);
-					String data = film.optString("release_date");
+					double m = MatchStringAlghorithm.compareStrings(film.optString("name"), title);
+					String data = film.optString("first_air_date");
 					int filmyear = -1;
 					if (!data.equals("") && data != null && data.contains("-"))
 					{
@@ -93,8 +93,8 @@ public class TmdbApiSearchFilm
 					if (year >= 1900 && year <= 2020 && filmyear == year && matchName < m)
 					{
 						scheda.ID = film.getInt("id");
-						scheda.title = film.optString("title");
-						scheda.relese = film.optString("release_date");
+						scheda.title = film.optString("name");
+						scheda.relese = film.optString("first_air_date");
 						scheda.poster = film.optString("poster_path");
 						scheda.back = film.optString("backdrop_path");
 						scheda.desc = film.optString("overview");
@@ -119,8 +119,8 @@ public class TmdbApiSearchFilm
 					{
 						matchName = m;
 						scheda.ID = film.getInt("id");
-						scheda.title = film.optString("title");
-						scheda.relese = film.optString("release_date");
+						scheda.title = film.optString("name");
+						scheda.relese = film.optString("first_air_date");
 						scheda.poster = film.optString("poster_path");
 						scheda.back = film.optString("backdrop_path");
 						scheda.desc = film.optString("overview");
@@ -155,7 +155,7 @@ public class TmdbApiSearchFilm
 			Log.log(Log.TMDBApi, "FallBack in Inglese");
 			
 			responsecode = 429;
-			url = "http://api.themoviedb.org/3/movie/" + scheda.ID
+			url = "http://api.themoviedb.org/3/tv/" + scheda.ID
 					+ "?api_key=b7ea4084f5b8c30f6ae8038649bc26f3&language=en";
 			while (responsecode == 429) // 429 is the code of query limit reach
 			{

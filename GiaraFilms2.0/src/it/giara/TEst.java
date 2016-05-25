@@ -2,8 +2,8 @@ package it.giara;
 
 import it.giara.phases.Settings;
 import it.giara.source.ListLoader;
-import it.giara.source.SourceChan;
 import it.giara.sql.SQL;
+import it.giara.tmdb.api.TmdbApiSearchTVSerie;
 import it.giara.utils.Log;
 
 public class TEst
@@ -12,12 +12,12 @@ public class TEst
 	{
 		// ThreadManager.submitCacheTask(new InitializeRunnable(null));
 		
-		 SQL.connect();
+		SQL.connect();
 		//
-//		 SQLQuery.DbClear();
+		// SQLQuery.DbClear();
 		//
-		 Settings.init();
-		 ListLoader.loadSources();
+		Settings.init();
+		ListLoader.loadSources();
 		// ServerQuery.load150News();
 		
 		// FileInfo f = new
@@ -44,13 +44,18 @@ public class TEst
 		//
 		// ServerQuery.loadUntil(Integer.parseInt(Settings.getParameter("lastserversync")));
 		
-		 for (final SourceChan s : ListLoader.sources)
-		 {
-		 Log.log(Log.DEBUG, s.getStatus()+"  "+s.server + " " + s.chan );
+		// for (final SourceChan s : ListLoader.sources)
+		// {
+		// Log.log(Log.DEBUG, s.getStatus()+" "+s.server + " " + s.chan );
+		//
+		// }
 		
-		 }
+		TmdbApiSearchTVSerie film = new TmdbApiSearchTVSerie("breaking bad", -1);
 		
-//			TmdbApiSearchFilm film = new TmdbApiSearchFilm("x - men", -1);
+		if (film.scheda != null)
+		{
+			Log.log(Log.DEBUG, film.scheda.toString());
+		}
 		
 	}
 }
