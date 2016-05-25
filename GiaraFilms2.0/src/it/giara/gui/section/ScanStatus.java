@@ -42,7 +42,7 @@ public class ScanStatus extends DefaultGui
 		this.add(sep2);
 		
 		JLabel title = new JLabel();
-		title.setBounds(FRAME_WIDTH / 6, 60 - 35, FRAME_WIDTH * 2 / 3, 80);
+		title.setBounds(FRAME_WIDTH / 6, 2, FRAME_WIDTH * 2 / 3, 40);
 		title.setText("<html><h1>Scansione File</html>");
 		title.setHorizontalAlignment(JLabel.CENTER);
 		this.add(title);

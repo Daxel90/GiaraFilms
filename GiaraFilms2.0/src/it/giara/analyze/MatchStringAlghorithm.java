@@ -48,6 +48,10 @@ public class MatchStringAlghorithm
 	private static String[] letterPairs(String str)
 	{
 		int numPairs = str.length() - 1;
+		
+		if (numPairs < 0)
+			numPairs = 0;
+			
 		String[] pairs = new String[numPairs];
 		for (int i = 0; i < numPairs; i++)
 		{
