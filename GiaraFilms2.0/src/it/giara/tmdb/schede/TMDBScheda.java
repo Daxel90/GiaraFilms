@@ -103,9 +103,9 @@ public class TMDBScheda
 		return poster_w140;
 	}
 	
-	public BufferedImage initPoster_original(final JLabel label)
+	public BufferedImage initPoster_w500(final JLabel label)
 	{
-		final String link = "http://image.tmdb.org/t/p/original";
+		final String link = "http://image.tmdb.org/t/p/w500";
 		if (poster_original == null)
 		{
 			final File f = new File(DirUtils.getCacheDir() + File.separator + "image",
