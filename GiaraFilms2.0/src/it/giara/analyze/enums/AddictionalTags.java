@@ -6,7 +6,7 @@ public enum AddictionalTags
 	LiMiTED("LiMiTED"), UNRATED("UNRATED"), STV("STV"), INTERNAL("INTERNAL"), PROPER("PROPER"),
 	REPACK("REPACK"), Extended("Extended"), CriMiNaL("CriMiNaL"), iNCOMiNG("iNCOMiNG"), WWCB("WWCB"),
 	SUPERSPANK("SUPERSPANK"), NHD("NHD"), Subbed("Subbed"), x264("x264"), ENG("ENG"), NovaRip("NovaRip"),
-	ENGLiSH("ENGLiSH"), SUB("SUB");
+	ENGLiSH("ENGLiSH"), SUB("SUB"), DivX("DivX");
 	
 	public String tag;
 	

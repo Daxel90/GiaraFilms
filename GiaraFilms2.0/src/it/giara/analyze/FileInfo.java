@@ -43,7 +43,7 @@ public class FileInfo
 	private void Video()
 	{
 		Log.log(Log.FILEINFO, Filename);
-		String n = Filename.replace(".", " ");
+		String n = Filename.replace(".", " ").replace("-", " ").replace("_", " ");
 		while (n.contains("  "))
 		{
 			n = n.replace("  ", " ");
@@ -51,48 +51,53 @@ public class FileInfo
 		
 		String[] prt = n.split(" ");
 		
-		boolean isFilm = false;
 		boolean markTvSerie = false;
+		boolean serieTVAnalized = false;
 		for (String s : prt)
 		{
+			Log.log(Log.FILEINFO, "part:" + s);
+			
 			// ANALISI PER SERIE TV
 			if (StringUtils.containsDigit(s) || (s.contains("x") || s.contains("e") || s.contains("s")))
 			{
+				Log.log(Log.FILEINFO, "tvserie analisi");
 				if (s.matches(".*(\\d+)x(\\d+).*") || s.matches(".*s(\\d+)e(\\d+).*")
 						|| s.matches(".*s(\\d+)ep(\\d+).*"))
 				{
+					Log.log(Log.FILEINFO, "Match1");
 					TVSeries();
-					isFilm = false;
+					serieTVAnalized = true;
 					break;
 				}
 				if ((s.matches(".*e(\\d+).*") || s.matches(".*ep(\\d+).*")) && StringUtils.countAlphabet(s) <= 3)
 				{
+					Log.log(Log.FILEINFO, "Match2");
 					TVSeries();
-					isFilm = false;
+					serieTVAnalized = true;
 					break;
 				}
-				else if (!markTvSerie && s.matches(".*ep.*"))
+				else if (!markTvSerie && s.matches("(.*[^a-zA-Z]ep[^a-zA-Z].*)|(^ep[^a-zA-Z].*)|(.*[^a-zA-Z]ep$)"))
 				{
+					Log.log(Log.FILEINFO, "Match3");
 					markTvSerie = true;
 				}
 				
 				else if (markTvSerie && s.matches(".*(\\d+).*"))
 				{
+					Log.log(Log.FILEINFO, "Match4");
 					TVSeries();
-					isFilm = false;
+					serieTVAnalized = true;
 					break;
 				}
 				else
 				{
+					Log.log(Log.FILEINFO, "Match5");
 					markTvSerie = false;
 				}
 			}
-			else if (StringUtils.containTag(s, false))
-			{
-				isFilm = true;
-			}
+			
 		}
-		if (isFilm)
+		if (!serieTVAnalized)
 			Film();
 			
 	}
@@ -121,7 +126,7 @@ public class FileInfo
 	public void paraseFilmTitle()
 	{
 		title = "";
-		String[] part = Filename.replace(".", " ").split(" ");
+		String[] part = Filename.replace(".", " ").replace("-", " ").replace("_", " ").split(" ");
 		int i = 0;
 		for (String t : part)
 		{
@@ -138,7 +143,7 @@ public class FileInfo
 				if (flag)
 				{
 					year = Integer.parseInt(t);
-					if (year <= 2017)
+					if (year <= 2018)
 						break;
 				}
 			}
@@ -159,14 +164,13 @@ public class FileInfo
 		if (title.length() > 0)
 			title = title.substring(1);
 			
-		title = title.replace("_", " ").replace("-", " ");
 		Log.log(Log.FILEINFO, "Film: " + title);
 	}
 	
 	public void paraseTVSeriesTitle()
 	{
 		title = "";
-		String[] part = Filename.replace(".", " ").split(" ");
+		String[] part = Filename.replace(".", " ").replace("-", " ").replace("_", " ").split(" ");
 		int i = 0;
 		boolean markTvSerie = false;
 		int lastPartLength = 0;
@@ -186,7 +190,7 @@ public class FileInfo
 				{
 					break;
 				}
-				else if (!markTvSerie && s.matches(".*ep.*"))
+				else if (!markTvSerie && s.matches("(.*[^a-zA-Z]ep[^a-zA-Z].*)|(^ep[^a-zA-Z].*)|(.*[^a-zA-Z]ep$)"))
 				{
 					markTvSerie = true;
 					lastPartLength = s.length();
@@ -238,7 +242,7 @@ public class FileInfo
 	
 	public void paraseTVSeriesEpisode()
 	{
-		String[] part = Filename.replace(".", " ").split(" ");
+		String[] part = Filename.replace(".", " ").replace("-", " ").replace("_", " ").split(" ");
 		
 		boolean markTvSerie = false;
 		
@@ -308,7 +312,7 @@ public class FileInfo
 					}
 					break;
 				}
-				else if (!markTvSerie && s.matches(".*ep.*"))
+				else if (!markTvSerie && s.matches("(.*[^a-zA-Z]ep[^a-zA-Z].*)|(^ep[^a-zA-Z].*)|(.*[^a-zA-Z]ep$)"))
 				{
 					markTvSerie = true;
 				}
@@ -333,13 +337,12 @@ public class FileInfo
 	
 	public void parseTags()
 	{
-		String[] part = Filename.replace(".", " ").split(" ");
+		String[] part = Filename.replace(".", " ").replace("-", " ").replace("_", " ").split(" ");
 		float topVideoQuality = 0;
 		float topAudioQuality = 0;
 		for (String s : part)
 		{
 			String t = s.toLowerCase();
-			
 			
 			for (QualityVideo q : QualityVideo.values())
 			{
@@ -359,7 +362,7 @@ public class FileInfo
 						
 					if (!Character.isLetter(pre) && !Character.isLetter(post))
 					{
-						if(topVideoQuality < q.qualita)
+						if (topVideoQuality < q.qualita)
 						{
 							topVideoQuality = q.qualita;
 							video = q;
@@ -386,7 +389,7 @@ public class FileInfo
 						
 					if (!Character.isLetter(pre) && !Character.isLetter(post))
 					{
-						if(topAudioQuality < q.qualita)
+						if (topAudioQuality < q.qualita)
 						{
 							topAudioQuality = q.qualita;
 							audio = q;
