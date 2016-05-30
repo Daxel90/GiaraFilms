@@ -76,7 +76,7 @@ public class FileInfo
 					serieTVAnalized = true;
 					break;
 				}
-				else if (!markTvSerie && s.matches("(.*[^a-zA-Z]ep[^a-zA-Z].*)|(^ep[^a-zA-Z].*)|(.*[^a-zA-Z]ep$)"))
+				else if (!markTvSerie && s.matches("(.*[^a-zA-Z]ep[^a-zA-Z].*)|(^ep[^a-zA-Z].*)|(.*[^a-zA-Z]ep$)|(^ep$)"))
 				{
 					Log.log(Log.FILEINFO, "Match3");
 					markTvSerie = true;
@@ -190,7 +190,7 @@ public class FileInfo
 				{
 					break;
 				}
-				else if (!markTvSerie && s.matches("(.*[^a-zA-Z]ep[^a-zA-Z].*)|(^ep[^a-zA-Z].*)|(.*[^a-zA-Z]ep$)"))
+				else if (!markTvSerie && s.matches("(.*[^a-zA-Z]ep[^a-zA-Z].*)|(^ep[^a-zA-Z].*)|(.*[^a-zA-Z]ep$)|(^ep$)"))
 				{
 					markTvSerie = true;
 					lastPartLength = s.length();
@@ -312,7 +312,7 @@ public class FileInfo
 					}
 					break;
 				}
-				else if (!markTvSerie && s.matches("(.*[^a-zA-Z]ep[^a-zA-Z].*)|(^ep[^a-zA-Z].*)|(.*[^a-zA-Z]ep$)"))
+				else if (!markTvSerie && s.matches("(.*[^a-zA-Z]ep[^a-zA-Z].*)|(^ep[^a-zA-Z].*)|(.*[^a-zA-Z]ep$)|(^ep$)"))
 				{
 					markTvSerie = true;
 				}
