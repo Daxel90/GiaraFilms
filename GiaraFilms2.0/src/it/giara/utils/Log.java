@@ -27,11 +27,11 @@ public class Log
 	
 	public static void log(LogType l, Object o)
 	{
-		if (!l.equals(TMDB) && !l.equals(NET) && !l.equals(FILEINFO) && !l.equals(DOWNLOAD) && !l.equals(SCANSERVICE)
-				&& !l.equals(FILMINFO))
+		if (!l.equals(TMDB) && !l.equals(NET) && !l.equals(TMDBApi) && !l.equals(FILEINFO) && !l.equals(DOWNLOAD)
+				&& !l.equals(SCANSERVICE) && !l.equals(FILMINFO))
 		{
 			System.out.println(o);
-			if(o != null)
+			if (o != null)
 				writeLog(o.toString());
 		}
 	}
@@ -52,7 +52,7 @@ public class Log
 	{
 		if (!Settings.prop.getBoolean("Savelog", false))
 			return;
-		
+			
 		FileWriter fWriter = null;
 		BufferedWriter writer = null;
 		try
@@ -75,5 +75,6 @@ public class Log
 
 enum LogType
 {
-	NETWORK, DEBUG, INFO, CONFIG, FILEINFO, FILMINFO, DB, GUI, ERROR, IMAGE, IRC, DOWNLOAD, SCANSERVICE, TMDB, BACKEND,TMDBApi
+	NETWORK, DEBUG, INFO, CONFIG, FILEINFO, FILMINFO, DB, GUI, ERROR, IMAGE, IRC, DOWNLOAD, SCANSERVICE, TMDB, BACKEND,
+	TMDBApi
 }

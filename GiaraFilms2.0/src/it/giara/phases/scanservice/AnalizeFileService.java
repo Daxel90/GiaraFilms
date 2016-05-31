@@ -1,0 +1,92 @@
+package it.giara.phases.scanservice;
+
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Queue;
+
+import it.giara.analyze.FileInfo;
+import it.giara.analyze.enums.MainType;
+import it.giara.sql.SQLQueryScanService;
+import it.giara.syncdata.NewServerQuery;
+import it.giara.tmdb.api.TmdbApiSearchFilm;
+import it.giara.tmdb.api.TmdbApiSearchTVSerie;
+import it.giara.tmdb.schede.TMDBScheda;
+import it.giara.utils.Log;
+import it.giara.utils.ThreadManager;
+
+public class AnalizeFileService implements Runnable
+{
+	public static boolean running = false;
+	
+	public static Queue<String> pending = new LinkedList<String>();
+	
+	@Override
+	public void run()
+	{
+		Log.log(Log.INFO, "GiaraFilms start AnalizeFileService");
+		running = true;
+		
+		while (!pending.isEmpty())
+		{
+			String fileName = pending.poll();
+			FileInfo fI = new FileInfo(fileName, true);
+			
+			int cache = SQLQueryScanService.getCacheSearch(fI.title, fI.type, fI.year);
+			
+			if (cache == -2)
+			{
+				NewServerQuery.updateFileInfo(fI.title, cache);
+				continue;
+			}
+			else if (cache == -1)
+			{
+				TMDBScheda scheda = null;
+				
+				if (fI.type.equals(MainType.Film))
+				{
+					TmdbApiSearchFilm tmdb = new TmdbApiSearchFilm(fI.title, fI.year);
+					scheda = tmdb.scheda;
+				}
+				else if (fI.type.equals(MainType.SerieTV))
+				{
+					TmdbApiSearchTVSerie tmdb = new TmdbApiSearchTVSerie(fI.title, fI.year);
+					scheda = tmdb.scheda;
+				}
+				
+				if (scheda == null)
+				{
+					SQLQueryScanService.writeCacheSearch(fI.title, fI.type, -1, fI.year);
+					NewServerQuery.updateFileInfo(fI.title, -1);
+					continue;
+				}
+				int schedaID = scheda.ID;
+				
+				SQLQueryScanService.writeCacheSearch(fI.title, fI.type, schedaID, fI.year);
+				
+				NewServerQuery.uploadSchede(scheda);
+				NewServerQuery.updateFileInfo(fI.title, schedaID);
+			}
+			else
+			{
+				NewServerQuery.updateFileInfo(fI.title, cache);
+			}
+			
+		}
+		running = false;
+	}
+	
+	public static void addFile(String filename)
+	{
+		pending.add(filename);
+		if (!running)
+		{
+			running = true;
+			ThreadManager.submitCacheTask(new AnalizeFileService());
+		}
+	}
+	
+	// LOCAL TEMP CACHE
+	// type,year,search,schedaID
+	public static HashMap<Integer, HashMap<Integer, HashMap<String, Integer>>> LocalCache = new HashMap<Integer, HashMap<Integer, HashMap<String, Integer>>>();
+	
+}

@@ -95,7 +95,7 @@ public class ServerQuery
 	
 	public static void sendFileInfo(String fileName, String size, int IdScheda, MainType t)
 	{
-		
+		 
 		if(IdScheda == -1)
 			return;
 		
