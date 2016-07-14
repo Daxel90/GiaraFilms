@@ -56,12 +56,11 @@ public class LoadFileService implements Runnable
 				
 				data.add(obj);
 				
-				if (data.size() == 20)
+				if (data.size() == 30)
 				{
 					NewServerQuery.uploadFiles(data);
 					data.clear();
 				}
-				
 			}
 			
 			NewServerQuery.uploadFiles(data);

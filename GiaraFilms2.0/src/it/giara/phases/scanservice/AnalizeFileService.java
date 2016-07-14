@@ -1,6 +1,5 @@
 package it.giara.phases.scanservice;
 
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -33,12 +32,12 @@ public class AnalizeFileService implements Runnable
 			
 			int cache = SQLQueryScanService.getCacheSearch(fI.title, fI.type, fI.year);
 			
-			if (cache == -2)
+			if (cache == -1)
 			{
 				NewServerQuery.updateFileInfo(fI.title, cache);
 				continue;
 			}
-			else if (cache == -1)
+			else if (cache == -2)
 			{
 				TMDBScheda scheda = null;
 				
@@ -56,7 +55,7 @@ public class AnalizeFileService implements Runnable
 				if (scheda == null)
 				{
 					SQLQueryScanService.writeCacheSearch(fI.title, fI.type, -1, fI.year);
-					NewServerQuery.updateFileInfo(fI.title, -1);
+					NewServerQuery.updateFileInfo(fI.Filename, -1);
 					continue;
 				}
 				int schedaID = scheda.ID;
@@ -64,11 +63,11 @@ public class AnalizeFileService implements Runnable
 				SQLQueryScanService.writeCacheSearch(fI.title, fI.type, schedaID, fI.year);
 				
 				NewServerQuery.uploadSchede(scheda);
-				NewServerQuery.updateFileInfo(fI.title, schedaID);
+				NewServerQuery.updateFileInfo(fI.Filename, schedaID);
 			}
 			else
 			{
-				NewServerQuery.updateFileInfo(fI.title, cache);
+				NewServerQuery.updateFileInfo(fI.Filename, cache);
 			}
 			
 		}
@@ -84,9 +83,5 @@ public class AnalizeFileService implements Runnable
 			ThreadManager.submitCacheTask(new AnalizeFileService());
 		}
 	}
-	
-	// LOCAL TEMP CACHE
-	// type,year,search,schedaID
-	public static HashMap<Integer, HashMap<Integer, HashMap<String, Integer>>> LocalCache = new HashMap<Integer, HashMap<Integer, HashMap<String, Integer>>>();
 	
 }

@@ -111,7 +111,7 @@ public class TmdbApiSearchTVSerie
 							scheda.genre_ids[i] = iterator.next().intValue();
 						}
 						scheda.vote = film.optDouble("vote_average");
-						scheda.type = MainType.Film;
+						scheda.type = MainType.SerieTV;
 						break;
 					}
 					
@@ -137,7 +137,7 @@ public class TmdbApiSearchTVSerie
 							scheda.genre_ids[i] = iterator.next().intValue();
 						}
 						scheda.vote = film.optDouble("vote_average");
-						scheda.type = MainType.Film;
+						scheda.type = MainType.SerieTV;
 					}
 				}
 				
@@ -153,6 +153,7 @@ public class TmdbApiSearchTVSerie
 		if (scheda.desc == null || (scheda.desc != null && scheda.desc.trim().equals("")))
 		{
 			Log.log(Log.TMDBApi, "FallBack in Inglese");
+			scheda.fallback_desc = 1;
 			
 			responsecode = 429;
 			url = "http://api.themoviedb.org/3/tv/" + scheda.ID

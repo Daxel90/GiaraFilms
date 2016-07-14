@@ -153,6 +153,7 @@ public class TmdbApiSearchFilm
 		if (scheda.desc == null || (scheda.desc != null && scheda.desc.trim().equals("")))
 		{
 			Log.log(Log.TMDBApi, "FallBack in Inglese");
+			scheda.fallback_desc = 1;
 			
 			responsecode = 429;
 			url = "http://api.themoviedb.org/3/movie/" + scheda.ID

@@ -30,6 +30,7 @@ public class SQL
 			stmt = c.createStatement();
 			Log.log(Log.DB, "Accedo al Database File");
 			SQLQuery.initTable();
+			SQLQueryScanService.initScanServiceTable();
 			
 		} catch (Exception e)
 		{

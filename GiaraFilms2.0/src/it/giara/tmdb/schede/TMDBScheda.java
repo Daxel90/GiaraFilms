@@ -31,6 +31,7 @@ public class TMDBScheda
 	public int[] genre_ids;
 	public double vote;
 	public MainType type = MainType.NULL;
+	public int fallback_desc = 0;
 	
 	public BufferedImage poster_w140 = null;
 	public BufferedImage poster_original = null;
@@ -396,6 +397,7 @@ public class TMDBScheda
 			json.put("genre_ids", getGeneriIDs());
 			json.put("vote", vote);
 			json.put("type", type.ID);
+			json.put("fallback", fallback_desc);
 		} catch (Exception e)
 		{
 			Log.stack(Log.BACKEND, e);
@@ -417,11 +419,11 @@ public class TMDBScheda
 			this.setGeneriIDs(json.getString("genre_ids"));
 			vote = json.getDouble("vote");
 			type = MainType.getMainTypeByID(json.getInt("type"));
+			fallback_desc = json.getInt("fallback");
 		} catch (Exception e)
 		{
 			Log.stack(Log.BACKEND, e);
 		}
-		
 	}
 	
 	@Override
