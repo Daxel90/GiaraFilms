@@ -18,9 +18,9 @@ import it.giara.gui.components.home.NewsPanel;
 import it.giara.gui.utils.AbstractFilmList;
 import it.giara.gui.utils.ColorUtils;
 import it.giara.gui.utils.ImageUtils;
-import it.giara.phases.ScanService;
 import it.giara.phases.Settings;
-import it.giara.syncdata.ServerQuery;
+import it.giara.phases.scanservice.LoadFileService;
+import it.giara.syncdata.NewServerQuery;
 
 public class HomePage extends DefaultGui
 {
@@ -77,7 +77,7 @@ public class HomePage extends DefaultGui
 			if (Settings.getParameter("servercollaborate").equals("1"))
 			{
 				news = new NewsPanel();
-				news.setVisible(ServerQuery.newsLoaded);
+				news.setVisible(NewServerQuery.newsLoaded);
 			}
 			
 		ImageButton user = new ImageButton(ImageUtils.getImage("gui/icon32px/user.png"),
@@ -127,7 +127,7 @@ public class HomePage extends DefaultGui
 			if (loadingHomePage == null)
 				loadingHomePage = new AnimatedImageButton("loading(n)", 9, null, CheckHome, 100);
 				
-			loadingHomePage.setVisible(!ServerQuery.newsLoaded);
+			loadingHomePage.setVisible(!NewServerQuery.newsLoaded);
 			loadingHomePage.setBounds((FRAME_WIDTH - 256) / 2, (FRAME_HEIGHT - 128) / 2, 256, 128);
 			this.add(loadingHomePage);
 		}
@@ -238,7 +238,7 @@ public class HomePage extends DefaultGui
 		@Override
 		public void run()
 		{
-			if (ScanService.scanning)
+			if (LoadFileService.running)
 				sync.setVisible(true);
 			else
 				sync.setVisible(false);
@@ -250,7 +250,7 @@ public class HomePage extends DefaultGui
 		@Override
 		public void run()
 		{
-			if (ServerQuery.newsLoaded)
+			if (NewServerQuery.newsLoaded)
 			{
 				loadingHomePage.setVisible(false);
 				news.setVisible(true);

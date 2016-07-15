@@ -2,8 +2,8 @@ package it.giara.phases;
 
 import it.giara.analyze.enums.MainType;
 import it.giara.gui.utils.AbstractFilmList;
-import it.giara.sql.SQLQuery;
-import it.giara.syncdata.ServerQuery;
+import it.giara.sql.SQLQueryScanService;
+import it.giara.syncdata.NewServerQuery;
 import it.giara.tmdb.GenereType;
 import it.giara.utils.ThreadManager;
 
@@ -35,17 +35,17 @@ public class ListRequest
 		if (genre != null)
 		{
 			if (Settings.getParameter("servercollaborate").equals("1"))
-				ServerQuery.loadSchedeList(genre, type, list, running);
+				NewServerQuery.loadSchedeList(genre, type, list, running);
 				
 			else
-				SQLQuery.loadSchedeList(genre, type, list);
+				SQLQueryScanService.loadSchedeList(genre, type, list);
 		}
 		else
 		{
 			if (Settings.getParameter("servercollaborate").equals("1"))
-				ServerQuery.loadAllSchedeList(type, list, running);
+				NewServerQuery.loadAllSchedeList(type, list, running);
 			else
-				SQLQuery.loadAllSchedeList(type, list);
+				SQLQueryScanService.loadAllSchedeList(type, list);
 		}
 		
 	}

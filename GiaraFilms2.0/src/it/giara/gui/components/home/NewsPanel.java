@@ -5,8 +5,8 @@ import javax.swing.JPanel;
 
 import it.giara.analyze.enums.MainType;
 import it.giara.gui.utils.ColorUtils;
-import it.giara.sql.SQLQuery;
-import it.giara.syncdata.ServerQuery;
+import it.giara.sql.SQLQueryScanService;
+import it.giara.syncdata.NewServerQuery;
 import it.giara.tmdb.schede.TMDBScheda;
 import it.giara.utils.FunctionsUtils;
 import it.giara.utils.ThreadManager;
@@ -27,15 +27,14 @@ public class NewsPanel extends JPanel
 		setOpaque(false);
 		setBackground(ColorUtils.Back);
 		
-		if (!ServerQuery.newsLoaded)
+		if (!NewServerQuery.newsLoaded)
 		{
 			Runnable r = new Runnable()
 			{
 				@Override
 				public void run()
 				{
-					ServerQuery.load150News();
-					
+					NewServerQuery.load150News();
 				}
 			};
 			ThreadManager.submitCacheTask(r);
@@ -109,17 +108,17 @@ public class NewsPanel extends JPanel
 				if (scheme[y][x] == 0)
 					break;
 					
-				TMDBScheda scheda = SQLQuery.readScheda(ServerQuery.news[nScheda], MainType.Film);
+				TMDBScheda scheda = SQLQueryScanService.readScheda(NewServerQuery.news[nScheda], MainType.Film);
 				while (scheda == null || scheda.back.equals("") || scheda.poster.equals(""))
 				{
 					nScheda++;
 					if (nScheda > 149)
 						return;
-					scheda = SQLQuery.readScheda(ServerQuery.news[nScheda], MainType.Film);
+					scheda = SQLQueryScanService.readScheda(NewServerQuery.news[nScheda], MainType.Film);
 				}
 				
-				NewsButton sep3 = new NewsButton(SQLQuery.readScheda(ServerQuery.news[nScheda], MainType.Film),
-						scheme[y][x]);
+				NewsButton sep3 = new NewsButton(
+						SQLQueryScanService.readScheda(NewServerQuery.news[nScheda], MainType.Film), scheme[y][x]);
 				sep3.setBorder(BorderFactory.createLineBorder(ColorUtils.Separator));
 				if (scheme[y][x] == 1)
 				{

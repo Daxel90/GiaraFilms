@@ -7,6 +7,7 @@ import it.giara.http.HTTPList;
 import it.giara.source.ListLoader;
 import it.giara.source.SourceChan;
 import it.giara.sql.SQLQuery;
+import it.giara.sql.SQLQueryScanService;
 import it.giara.tmdb.http.TMDBSearchFilm;
 import it.giara.tmdb.http.TMDBSearchTVSerie;
 import it.giara.tmdb.schede.TMDBScheda;
@@ -72,7 +73,7 @@ public class SearchService
 								if (IDScheda == -1)
 									continue;
 									
-								TMDBScheda scheda = SQLQuery.readScheda(IDScheda,
+								TMDBScheda scheda = SQLQueryScanService.readScheda(IDScheda,
 										MainType.getMainTypeByID(SQLQuery.getFileType(s2)));
 										
 								if (scheda != null)
@@ -104,7 +105,7 @@ public class SearchService
 														SQLQuery.writeCacheSearch(f.title, f.type, -1, f.year);
 														break;
 													}
-													int schedaID = SQLQuery.writeScheda(httpF.scheda, true);
+													int schedaID = SQLQueryScanService.writeScheda(httpF.scheda);
 													
 													list.addScheda(httpF.scheda);
 													
@@ -130,7 +131,7 @@ public class SearchService
 														SQLQuery.writeCacheSearch(f.title, f.type, -1, f.year);
 														break;
 													}
-													int schedaSTV = SQLQuery.writeScheda(httpF.scheda, true);
+													int schedaSTV = SQLQueryScanService.writeScheda(httpF.scheda);
 													
 													SQLQuery.writeCacheSearch(f.title, f.type, schedaSTV, f.year);
 													int FileId = SQLQuery.writeFile(s2, size, schedaSTV, f.type, true);

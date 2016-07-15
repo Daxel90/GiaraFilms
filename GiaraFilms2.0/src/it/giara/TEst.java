@@ -1,16 +1,33 @@
 package it.giara;
 
+import java.io.IOException;
+import java.util.List;
+
+import it.giara.analyze.FileInfo;
 import it.giara.phases.Settings;
+import it.giara.phases.scanservice.LoadFileService;
 import it.giara.source.ListLoader;
 import it.giara.sql.SQL;
+import it.giara.syncdata.NewServerQuery;
 import it.giara.tmdb.api.TmdbApiSearchTVSerie;
+import it.giara.utils.GZIPCompression;
 import it.giara.utils.Log;
+import it.giara.utils.MultipartUtility;
 
 public class TEst
 {
 	public static void main(String[] args)
 	{
 		// ThreadManager.submitCacheTask(new InitializeRunnable(null));
+		/*
+		 * String s =
+		 * "Fast.And.Furious.Solo.Parti.Originali.2009.iTALiAN.DVDRip.XviD-Republic.CD2.avi";
+		 * 
+		 * FileInfo fI = new FileInfo(s,true);
+		 * 
+		 * 
+		 * if(1==1) return;
+		 */
 		
 		SQL.connect();
 		//
@@ -50,12 +67,19 @@ public class TEst
 		//
 		// }
 		
-		TmdbApiSearchTVSerie film = new TmdbApiSearchTVSerie("breaking bad", -1);
+//		new LoadFileService().run();
 		
-		if (film.scheda != null)
-		{
-			Log.log(Log.DEBUG, film.scheda.toString());
-		}
+		NewServerQuery.load150News();
+		
+		// TmdbApiSearchTVSerie film = new TmdbApiSearchTVSerie("breaking bad",
+		// -1);
+		
+		// if (film.scheda != null)
+		// {
+		// Log.log(Log.DEBUG, film.scheda.toString());
+		// }
+		//
+
 		
 	}
 }
