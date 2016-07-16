@@ -6,14 +6,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import it.giara.analyze.enums.MainType;
-import it.giara.gui.utils.AbstractFilmList;
-import it.giara.phases.Settings;
-import it.giara.syncdata.ServerQuery;
-import it.giara.tmdb.GenereType;
-import it.giara.tmdb.schede.TMDBScheda;
 import it.giara.utils.FunctionsUtils;
 import it.giara.utils.Log;
-import it.giara.utils.ThreadManager;
 
 public class SQLQuery
 {
@@ -27,12 +21,6 @@ public class SQLQuery
 				+ "`Size` TEXT, " + "`IdScheda`	INTEGER NOT NULL, " + "`Type`	INTEGER NOT NULL, "
 				+ "`LastUpdate`	INTEGER NOT NULL" + ");";
 		SQL.ExecuteQuery(query);
-		
-		String query2 = "CREATE TABLE IF NOT EXISTS `Schede` (" + "`ID`	INTEGER NOT NULL PRIMARY KEY, "
-				+ "`Title`	TEXT NOT NULL UNIQUE, " + "`Relese`	TEXT, " + "`Poster`	TEXT, " + "`Back`	TEXT, "
-				+ "`Desc`	TEXT, " + "`GenID`	TEXT, " + "`Vote`	REAL, " + "`Type`	INTEGER NOT NULL, "
-				+ "`LastUpdate`	INTEGER NOT NULL" + ");";
-		SQL.ExecuteQuery(query2);
 		
 		String query5 = "CREATE TABLE IF NOT EXISTS `CacheSearch` ("
 				+ "`ID`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, " + "`Search`	TEXT NOT NULL UNIQUE, "
@@ -51,17 +39,6 @@ public class SQLQuery
 	public synchronized static int writeFile(final String fileName, final String size, final int IdScheda,
 			final MainType t, boolean collaborate)
 	{
-		if (Settings.getParameter("servercollaborate").equals("1") && collaborate)
-		{
-			ThreadManager.submitSystemTask(new Runnable()
-			{
-				@Override
-				public void run()
-				{
-					ServerQuery.sendFileInfo(fileName, size, IdScheda, t);
-				}
-			});
-		}
 		
 		SQL.ExecuteQuery("INSERT OR IGNORE INTO `Files`(`FileName`, `Size`, `IdScheda`, `Type`, `LastUpdate`) VALUES ('"
 				+ SQL.escape(fileName) + "', '" + SQL.escape(size) + "', " + IdScheda + ", " + t.ID + ", "

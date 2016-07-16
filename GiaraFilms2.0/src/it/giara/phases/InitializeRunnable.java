@@ -57,18 +57,19 @@ public class InitializeRunnable implements Runnable
 		RecoverDownload.asyncRestartDownload();
 		if (screen != null)
 			screen.bar.setValue(4);
+		if (screen != null)
+		{
+			screen.textProgress.setText("Verifica Completata");
+			screen.bar.setValue(5);
+		}
+		
 		if (Settings.getParameter("scanservice").equals("1"))
 		{
 			if (screen != null)
 				screen.textProgress.setText("Avvio ScanService");
 			ThreadManager.submitCacheTask(new LoadFileService());
 		}
-		if (screen != null)
-		{
-			screen.textProgress.setText("Verifica Completata");
-			screen.bar.setValue(5);
-		}
-		FunctionsUtils.sleep(500);
+		
 		if (Settings.getParameter("tos").equals("1"))
 			MainFrame.getInstance().setInternalPane(new HomePage());
 		else

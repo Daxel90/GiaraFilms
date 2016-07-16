@@ -16,7 +16,8 @@ import it.giara.utils.ThreadManager;
 public class AnalizeFileService implements Runnable
 {
 	public static boolean running = false;
-	
+	public static int checkRequest = 0;
+	public static int checked = 0;
 	public static Queue<String> pending = new LinkedList<String>();
 	
 	@Override
@@ -69,6 +70,7 @@ public class AnalizeFileService implements Runnable
 			{
 				NewServerQuery.updateFileInfo(fI.Filename, cache);
 			}
+			checked++;
 			
 		}
 		running = false;
@@ -76,6 +78,7 @@ public class AnalizeFileService implements Runnable
 	
 	public static void addFile(String filename)
 	{
+		checkRequest++;
 		pending.add(filename);
 		if (!running)
 		{

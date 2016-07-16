@@ -119,49 +119,6 @@ public class Options extends DefaultGui
 		
 		this.add(log);
 		
-		final JTextField scanServiceThread = new JTextField();
-		scanServiceThread.setText(Settings.getParameter("scanservicethread"));
-		scanServiceThread.setBounds(FRAME_WIDTH / 2, 175, 30, 20);
-		scanServiceThread.addKeyListener(new KeyListener()
-		{
-			public void keyTyped(KeyEvent e)
-			{}
-			
-			public void keyPressed(KeyEvent e)
-			{}
-			
-			public void keyReleased(KeyEvent e)
-			{
-				try
-				{
-					if (scanServiceThread.getText().equals(""))
-						return;
-					int n = Integer.parseInt(scanServiceThread.getText());
-					if (n <= 0 || n > 100)
-					{
-						scanServiceThread.setText(Settings.getParameter("scanservicethread"));
-					}
-					else
-					{
-						Settings.setParameter("scanservicethread", "" + n);
-					}
-				} catch (NumberFormatException ex)
-				{
-					scanServiceThread.setText(Settings.getParameter("scanservicethread"));
-				}
-			}
-		});
-		
-		this.add(scanServiceThread);
-		
-		final JLabel scanServiceThreadlabel = new JLabel();
-		scanServiceThreadlabel.setText("Numero Thread ScanService");
-		scanServiceThreadlabel.setBounds(FRAME_WIDTH / 2 + 35, 170, FRAME_WIDTH / 2, 30);
-		scanServiceThreadlabel
-				.setToolTipText("<html>Numero di processi paralleli dedicati allo ScanService Min 1, Max 99 <br>"
-						+ "RIDURRE IL NUMERO SE SI VERIFICANO RALLENTAMENTI</html>");
-		this.add(scanServiceThreadlabel);
-		
 		final JCheckBox scanService = new JCheckBox();
 		scanService.setText("ScanService (richiede riavvio)");
 		scanService.setSelected(Settings.getParameter("scanservice").equals("1"));
@@ -182,13 +139,10 @@ public class Options extends DefaultGui
 				else
 					Settings.setParameter("scanservice", "0");
 					
-				scanServiceThread.setVisible(scanService.isSelected());
-				scanServiceThreadlabel.setVisible(scanService.isSelected());
+			
 			}
 		});
-		scanServiceThreadlabel.setVisible(scanService.isSelected());
-		scanServiceThread.setVisible(scanService.isSelected());
-		
+
 		this.add(scanService);
 		
 		final JCheckBox serverCollaborate = new JCheckBox();

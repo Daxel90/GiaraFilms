@@ -7,21 +7,25 @@ import it.giara.http.HTTPList;
 import it.giara.source.ListLoader;
 import it.giara.source.SourceChan;
 import it.giara.syncdata.NewServerQuery;
+import it.giara.utils.FunctionsUtils;
 import it.giara.utils.Log;
 
 public class LoadFileService implements Runnable
 {
 	public static boolean running = false;
 	public static boolean downloadingList = false;
+	
 	public static int NList = 0;
-	public static int LStatus = 0;
+	public static int FileSize = 0;
+	public static int FileStatus = 0;
+	public static int TotalFile = 0;
 	
 	@Override
 	public void run()
 	{
+//		FunctionsUtils.sleep(3000);
 		Log.log(Log.INFO, "GiaraFilms start LoadFileService");
 		running = true;
-		
 		for (SourceChan s : ListLoader.sources)
 		{
 			downloadingList = true;
@@ -30,11 +34,14 @@ public class LoadFileService implements Runnable
 			Log.log(Log.SCANSERVICE, search.file.size());
 			downloadingList = false;
 			
+			FileSize = search.file.size();
+			
 			ArrayList<Object[]> data = new ArrayList<Object[]>();
+			
 			for (int k = 0; k < search.file.size(); k++)
 			{
-				
-				LStatus = k;
+				TotalFile++;
+				FileStatus = k;
 				String s2 = search.file.get(k);
 				String size = search.sizeList.get(k);
 				
@@ -65,8 +72,9 @@ public class LoadFileService implements Runnable
 			
 			NewServerQuery.uploadFiles(data);
 			data.clear();
-			
 		}
+		running = false;
+		Log.log(Log.INFO, "GiaraFilms finish LoadFileService");
 		
 	}
 	

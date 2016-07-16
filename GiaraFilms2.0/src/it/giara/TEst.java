@@ -1,18 +1,9 @@
 package it.giara;
 
-import java.io.IOException;
-import java.util.List;
-
-import it.giara.analyze.FileInfo;
 import it.giara.phases.Settings;
-import it.giara.phases.scanservice.LoadFileService;
 import it.giara.source.ListLoader;
 import it.giara.sql.SQL;
 import it.giara.syncdata.NewServerQuery;
-import it.giara.tmdb.api.TmdbApiSearchTVSerie;
-import it.giara.utils.GZIPCompression;
-import it.giara.utils.Log;
-import it.giara.utils.MultipartUtility;
 
 public class TEst
 {
@@ -69,7 +60,7 @@ public class TEst
 		
 //		new LoadFileService().run();
 		
-		NewServerQuery.load150News();
+		NewServerQuery.load100News();
 		
 		// TmdbApiSearchTVSerie film = new TmdbApiSearchTVSerie("breaking bad",
 		// -1);

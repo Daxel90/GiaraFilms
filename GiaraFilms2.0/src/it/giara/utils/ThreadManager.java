@@ -23,13 +23,11 @@ public class ThreadManager
 	public static ExecutorService SystemPoolExecutor;
 	public static ScheduledExecutorService ScheduledExecutorService; // scheduleThreadPool
 	
-	public static int poolScanServiceWait = 0;
 	
 	public static int poolSearchWait = 0;
 	public static int SearchPoolSize = 5; // SearchThreads need to be very fast
 	public static int SearchIndicizerPoolSize = 15;
 	
-	public static int poolScanServiceSize = 2;
 	public static int SystemPoolSize = 10;
 	public static int SchedulePoolSize = 2;
 	
@@ -39,12 +37,11 @@ public class ThreadManager
 		
 		CachedExecutor = Executors.newCachedThreadPool(factory);
 		ScheduledExecutorService = Executors.newScheduledThreadPool(SchedulePoolSize);
-		SystemPoolExecutor = Executors.newFixedThreadPool(poolScanServiceSize);
+		SystemPoolExecutor = Executors.newFixedThreadPool(SystemPoolSize);
 	}
 	
 	public static void init()
 	{
-		PoolScanServiceExecutor = Executors.newFixedThreadPool(poolScanServiceSize);
 		
 		PoolExecutorSearch = Executors.newFixedThreadPool(SearchPoolSize);
 		PoolExecutorSearchIndicizer = Executors.newFixedThreadPool(SearchIndicizerPoolSize);
@@ -59,33 +56,6 @@ public class ThreadManager
 	public static void submitSystemTask(Runnable task)
 	{
 		SystemPoolExecutor.submit(task);
-	}
-	
-	// insert task without checking poolWait, create medium priority
-	public static void submitPoolScanServiceTask(final Runnable task)
-	{
-		poolScanServiceWait++;
-		Runnable runnable = new Runnable()
-		{
-			@Override
-			public void run()
-			{
-				try
-				{
-					task.run();
-				} finally
-				{
-					poolScanServiceWait--;
-				}
-			}
-		};
-		
-		PoolScanServiceExecutor.submit(runnable);
-	}
-	
-	public static int getPoolScanServiceWait()
-	{
-		return poolScanServiceWait;
 	}
 	
 	// ScheduleTask
@@ -112,7 +82,11 @@ public class ThreadManager
 				try
 				{
 					task.run();
-				} finally
+				} catch (Exception e)
+				{
+					Log.stack(Log.ERROR, e);
+				} 
+				finally
 				{
 					poolSearchWait--;
 				}

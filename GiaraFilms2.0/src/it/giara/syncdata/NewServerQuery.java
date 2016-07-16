@@ -71,6 +71,7 @@ public class NewServerQuery
 			jsonData.put("files", jsonArray);
 		} catch (JSONException e)
 		{
+			Log.stack(Log.ERROR, e);
 			e.printStackTrace();
 		}
 		
@@ -85,7 +86,7 @@ public class NewServerQuery
 					"http://giaratest.altervista.org/giarafilms/backend/new_backend.php", "UTF-8");
 			multipart.addFormField("action", "1");
 			multipart.addByteArrayPart("data", gzipData);
-			Log.log(Log.DEBUG, gzipData.length);
+//			Log.log(Log.DEBUG, gzipData.length);
 			List<String> response = multipart.finish();
 			
 			for (String line : response)
@@ -118,7 +119,7 @@ public class NewServerQuery
 					"http://giaratest.altervista.org/giarafilms/backend/new_backend.php", "UTF-8");
 			multipart.addFormField("action", "2");
 			multipart.addByteArrayPart("data", gzipData);
-			Log.log(Log.DEBUG, gzipData.length);
+//			Log.log(Log.DEBUG, gzipData.length);
 			List<String> response = multipart.finish();
 			
 			for (String line : response)
@@ -203,9 +204,9 @@ public class NewServerQuery
 	
 	// ACTION 5
 	public static boolean newsLoaded = false;
-	public static int[] news = new int[150];
+	public static int[] news = new int[100];
 	
-	public static void load150News()
+	public static void load100News()
 	{
 		try
 		{
@@ -251,9 +252,9 @@ public class NewServerQuery
 	{
 		try
 		{
-			String data = "action=6&type="+t.ID+"&genre="+g.Id;
+			String data = "action=6&type="+t.ID+"&genre_ids="+g.Id;
 			
-			URL url = new URL("http://giaratest.altervista.org/giarafilms/backend/backend.php");
+			URL url = new URL("http://giaratest.altervista.org/giarafilms/backend/new_backend.php");
 			URLConnection conn;
 			conn = url.openConnection();
 			conn.setDoOutput(true);
@@ -286,14 +287,15 @@ public class NewServerQuery
 			Log.stack(Log.BACKEND, e);
 		}
 	}
-	
+
+	//ACTION 7
 	public static void loadAllSchedeList(MainType t, AbstractFilmList l, ListRequest.MyBoolean running)
 	{
 		try
 		{
 			String data = "action=7&type="+t.ID;
 			
-			URL url = new URL("http://giaratest.altervista.org/giarafilms/backend/backend.php");
+			URL url = new URL("http://giaratest.altervista.org/giarafilms/backend/new_backend.php");
 			URLConnection conn;
 			conn = url.openConnection();
 			conn.setDoOutput(true);
@@ -325,14 +327,15 @@ public class NewServerQuery
 			Log.stack(Log.BACKEND, e);
 		}
 	}
-	
+
+	//ACTION 8
 	public static void loadFileOfSchede(TMDBScheda scheda)
 	{
 		try
 		{
 			String data = "action=8&scheda_id=" + scheda.ID+"&type="+scheda.type.ID;
 			
-			URL url = new URL("http://giaratest.altervista.org/giarafilms/backend/backend.php");
+			URL url = new URL("http://giaratest.altervista.org/giarafilms/backend/new_backend.php");
 			URLConnection conn;
 			conn = url.openConnection();
 			conn.setDoOutput(true);
@@ -370,6 +373,7 @@ public class NewServerQuery
 		}
 	}
 
+	
 	
 	
 }

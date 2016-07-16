@@ -14,7 +14,7 @@ import it.giara.gui.components.ImageButton;
 import it.giara.gui.utils.ColorUtils;
 import it.giara.gui.utils.ImageUtils;
 import it.giara.phases.Settings;
-import it.giara.syncdata.ServerQuery;
+import it.giara.syncdata.NewServerQuery;
 import it.giara.tmdb.schede.TMDBScheda;
 import it.giara.utils.FunctionsUtils;
 import it.giara.utils.ThreadManager;
@@ -48,7 +48,7 @@ public class TVSerieInfoSchede extends DefaultGui
 			{
 				public void run()
 				{
-					ServerQuery.loadFileOfSchede(scheda);
+					NewServerQuery.loadFileOfSchede(scheda);
 					syncRunning = false;
 					downloads.setVisible(!syncRunning);
 					sync.setVisible(syncRunning);
@@ -73,14 +73,15 @@ public class TVSerieInfoSchede extends DefaultGui
 		this.add(title);
 		
 		ImageButton backbt = new ImageButton(ImageUtils.getImage("gui/icon32px/arrow_left.png"),
-				ImageUtils.getImage("gui/icon32px/arrow_left_over.png"), ImageUtils.getImage("gui/icon32px/arrow_left_over.png"),
-				BackGui);
+				ImageUtils.getImage("gui/icon32px/arrow_left_over.png"),
+				ImageUtils.getImage("gui/icon32px/arrow_left_over.png"), BackGui);
 		backbt.setBounds(5, 5, 32, 32);
 		backbt.setToolTipText("Indietro");
 		this.add(backbt);
 		
 		ImageButton homePage = new ImageButton(ImageUtils.getImage("gui/icon32px/home.png"),
-				ImageUtils.getImage("gui/icon32px/home_over.png"), ImageUtils.getImage("gui/icon32px/home_over.png"), OpenHomePage);
+				ImageUtils.getImage("gui/icon32px/home_over.png"), ImageUtils.getImage("gui/icon32px/home_over.png"),
+				OpenHomePage);
 		homePage.setBounds(40, 5, 32, 32);
 		homePage.setToolTipText("Home");
 		this.add(homePage);
@@ -94,8 +95,8 @@ public class TVSerieInfoSchede extends DefaultGui
 			cover.setBounds(20, 80, (int) ((FRAME_HEIGHT / 2) * 0.67), FRAME_HEIGHT / 2);
 			
 		cover.setBorder(BorderFactory.createEtchedBorder());
-		cover.setIcon(ImageUtils.getIcon(
-				ImageUtils.scaleImage(scheda.initPoster_w500(cover), cover.getWidth(), cover.getHeight())));
+		cover.setIcon(ImageUtils
+				.getIcon(ImageUtils.scaleImage(scheda.initPoster_w500(cover), cover.getWidth(), cover.getHeight())));
 				
 		add(cover);
 		
@@ -140,8 +141,8 @@ public class TVSerieInfoSchede extends DefaultGui
 		drawRating();
 		
 		downloads = new ImageButton(ImageUtils.getImage("gui/icon64px/download.png"),
-				ImageUtils.getImage("gui/icon64px/download_over.png"), ImageUtils.getImage("gui/icon64px/download_over.png"),
-				OpenDownloads);
+				ImageUtils.getImage("gui/icon64px/download_over.png"),
+				ImageUtils.getImage("gui/icon64px/download_over.png"), OpenDownloads);
 		downloads.setBounds((FRAME_WIDTH - 64) / 2, FRAME_HEIGHT - 100, 64, 64);
 		downloads.setVisible(!syncRunning);
 		downloads.setToolTipText("Scarica");

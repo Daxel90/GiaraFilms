@@ -14,7 +14,7 @@ import it.giara.gui.components.ImageButton;
 import it.giara.gui.utils.ColorUtils;
 import it.giara.gui.utils.ImageUtils;
 import it.giara.phases.Settings;
-import it.giara.syncdata.ServerQuery;
+import it.giara.syncdata.NewServerQuery;
 import it.giara.tmdb.schede.TMDBScheda;
 import it.giara.utils.FunctionsUtils;
 import it.giara.utils.ThreadManager;
@@ -48,7 +48,7 @@ public class FilmInfoSchede extends DefaultGui
 			{
 				public void run()
 				{
-					ServerQuery.loadFileOfSchede(scheda);
+					NewServerQuery.loadFileOfSchede(scheda);
 					syncRunning = false;
 					downloads.setVisible(!syncRunning);
 					sync.setVisible(syncRunning);

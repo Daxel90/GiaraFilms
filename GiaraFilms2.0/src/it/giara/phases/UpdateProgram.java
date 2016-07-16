@@ -125,7 +125,6 @@ public class UpdateProgram
 			}
 		} catch (Exception e)
 		{
-			
 			Log.stack(Log.ERROR, e);
 		}
 	}

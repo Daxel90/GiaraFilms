@@ -19,7 +19,7 @@ public class MainClass
 			FontUtils.initUIFont();
 		} catch (Exception e)
 		{
-			e.printStackTrace();
+			Log.stack(Log.ERROR, e);
 		}
 		Log.log(Log.INFO, "GiaraFilms 2.0");
 		

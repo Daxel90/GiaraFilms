@@ -238,10 +238,10 @@ public class HomePage extends DefaultGui
 		@Override
 		public void run()
 		{
-			if (LoadFileService.running)
-				sync.setVisible(true);
-			else
-				sync.setVisible(false);
+			if (sync != null)
+			{				
+				sync.setVisible(LoadFileService.running);			
+			}
 		}
 	};
 	

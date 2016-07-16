@@ -96,6 +96,7 @@ public class ImageUtils
 			return image;
 		} catch (final Exception e)
 		{
+			Log.stack(Log.GUI, e);
 			// Log.stack(e);
 		}
 		return null;

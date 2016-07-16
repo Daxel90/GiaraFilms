@@ -34,7 +34,7 @@ public class NewsPanel extends JPanel
 				@Override
 				public void run()
 				{
-					NewServerQuery.load150News();
+					NewServerQuery.load100News();
 				}
 			};
 			ThreadManager.submitCacheTask(r);
@@ -112,7 +112,7 @@ public class NewsPanel extends JPanel
 				while (scheda == null || scheda.back.equals("") || scheda.poster.equals(""))
 				{
 					nScheda++;
-					if (nScheda > 149)
+					if (nScheda >= 100)
 						return;
 					scheda = SQLQueryScanService.readScheda(NewServerQuery.news[nScheda], MainType.Film);
 				}

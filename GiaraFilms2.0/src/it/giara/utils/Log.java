@@ -67,7 +67,9 @@ public class Log
 			writer.newLine();
 			writer.close();
 		} catch (Exception e)
-		{}
+		{
+			e.printStackTrace();
+		}
 		
 	}
 	

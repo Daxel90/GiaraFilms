@@ -8,8 +8,6 @@ import it.giara.gui.MainFrame;
 import it.giara.sql.SQLQuery;
 import it.giara.sql.SQLQuerySettings;
 import it.giara.utils.DirUtils;
-import it.giara.utils.Log;
-import it.giara.utils.ThreadManager;
 
 public class Settings
 {
@@ -37,23 +35,6 @@ public class Settings
 		
 		config.put("downloadlimit", SQLQuerySettings.getCurrentParameter("downloadlimit", "0"));
 		config.put("downloadlimitN", SQLQuerySettings.getCurrentParameter("downloadlimitN", "4"));
-		
-		try
-		{
-			int n = Integer.parseInt(getParameter("scanservicethread"));
-			
-			if (n <= 0)
-				ThreadManager.poolScanServiceSize = 1;
-			else
-				ThreadManager.poolScanServiceSize = n;
-				
-		} catch (NumberFormatException e)
-		{
-			Log.stack(Log.CONFIG, e);
-			ThreadManager.poolScanServiceSize = 1;
-			setParameter("scanservicethread", "1");
-			config.put("scanservicethread", "1");
-		}
 		
 		if (MainFrame.getInstance() != null)
 			MainFrame.getInstance().setTitle(getTitle(VERSION));
