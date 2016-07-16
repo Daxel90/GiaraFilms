@@ -7,7 +7,6 @@ import it.giara.http.HTTPList;
 import it.giara.source.ListLoader;
 import it.giara.source.SourceChan;
 import it.giara.syncdata.NewServerQuery;
-import it.giara.utils.FunctionsUtils;
 import it.giara.utils.Log;
 
 public class LoadFileService implements Runnable
@@ -19,18 +18,22 @@ public class LoadFileService implements Runnable
 	public static int FileSize = 0;
 	public static int FileStatus = 0;
 	public static int TotalFile = 0;
+	public static boolean loadingList = false;
 	
 	@Override
 	public void run()
 	{
-//		FunctionsUtils.sleep(3000);
 		Log.log(Log.INFO, "GiaraFilms start LoadFileService");
 		running = true;
 		for (SourceChan s : ListLoader.sources)
 		{
 			downloadingList = true;
 			NList++;
+			
+			loadingList = true;
 			HTTPList search = new HTTPList(s.link, ".");
+			
+			loadingList = false;
 			Log.log(Log.SCANSERVICE, search.file.size());
 			downloadingList = false;
 			

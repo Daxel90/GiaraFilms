@@ -28,6 +28,7 @@ public class AnalizeFileService implements Runnable
 		
 		while (!pending.isEmpty())
 		{
+			checked++;
 			String fileName = pending.poll();
 			FileInfo fI = new FileInfo(fileName, true);
 			
@@ -70,7 +71,6 @@ public class AnalizeFileService implements Runnable
 			{
 				NewServerQuery.updateFileInfo(fI.Filename, cache);
 			}
-			checked++;
 			
 		}
 		running = false;
