@@ -5,7 +5,7 @@ import java.util.Queue;
 
 import it.giara.analyze.FileInfo;
 import it.giara.analyze.enums.MainType;
-import it.giara.sql.SQLQueryScanService;
+import it.giara.sql.SQLQuery;
 import it.giara.syncdata.NewServerQuery;
 import it.giara.tmdb.api.TmdbApiSearchFilm;
 import it.giara.tmdb.api.TmdbApiSearchTVSerie;
@@ -32,7 +32,7 @@ public class AnalizeFileService implements Runnable
 			String fileName = pending.poll();
 			FileInfo fI = new FileInfo(fileName, true);
 			
-			int cache = SQLQueryScanService.getCacheSearch(fI.title, fI.type, fI.year);
+			int cache = SQLQuery.getCacheSearch(fI.title, fI.type, fI.year);
 			
 			if (cache == -1)
 			{
@@ -56,13 +56,13 @@ public class AnalizeFileService implements Runnable
 				
 				if (scheda == null)
 				{
-					SQLQueryScanService.writeCacheSearch(fI.title, fI.type, -1, fI.year);
+					SQLQuery.writeCacheSearch(fI.title, fI.type, -1, fI.year);
 					NewServerQuery.updateFileInfo(fI.Filename, -1);
 					continue;
 				}
 				int schedaID = scheda.ID;
 				
-				SQLQueryScanService.writeCacheSearch(fI.title, fI.type, schedaID, fI.year);
+				SQLQuery.writeCacheSearch(fI.title, fI.type, schedaID, fI.year);
 				
 				NewServerQuery.uploadSchede(scheda);
 				NewServerQuery.updateFileInfo(fI.Filename, schedaID);

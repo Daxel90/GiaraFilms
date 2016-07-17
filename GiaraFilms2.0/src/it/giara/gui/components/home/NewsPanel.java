@@ -5,7 +5,7 @@ import javax.swing.JPanel;
 
 import it.giara.analyze.enums.MainType;
 import it.giara.gui.utils.ColorUtils;
-import it.giara.sql.SQLQueryScanService;
+import it.giara.sql.SQLQuery;
 import it.giara.syncdata.NewServerQuery;
 import it.giara.tmdb.schede.TMDBScheda;
 import it.giara.utils.FunctionsUtils;
@@ -108,17 +108,17 @@ public class NewsPanel extends JPanel
 				if (scheme[y][x] == 0)
 					break;
 					
-				TMDBScheda scheda = SQLQueryScanService.readScheda(NewServerQuery.news[nScheda], MainType.Film);
+				TMDBScheda scheda = SQLQuery.readScheda(NewServerQuery.news[nScheda], MainType.Film);
 				while (scheda == null || scheda.back.equals("") || scheda.poster.equals(""))
 				{
 					nScheda++;
 					if (nScheda >= 100)
 						return;
-					scheda = SQLQueryScanService.readScheda(NewServerQuery.news[nScheda], MainType.Film);
+					scheda = SQLQuery.readScheda(NewServerQuery.news[nScheda], MainType.Film);
 				}
 				
-				NewsButton sep3 = new NewsButton(
-						SQLQueryScanService.readScheda(NewServerQuery.news[nScheda], MainType.Film), scheme[y][x]);
+				NewsButton sep3 = new NewsButton(SQLQuery.readScheda(NewServerQuery.news[nScheda], MainType.Film),
+						scheme[y][x]);
 				sep3.setBorder(BorderFactory.createLineBorder(ColorUtils.Separator));
 				if (scheme[y][x] == 1)
 				{

@@ -19,7 +19,6 @@ import it.giara.gui.utils.AbstractFilmList;
 import it.giara.phases.ListRequest;
 import it.giara.phases.scanservice.AnalizeFileService;
 import it.giara.sql.SQLQuery;
-import it.giara.sql.SQLQueryScanService;
 import it.giara.tmdb.GenereType;
 import it.giara.tmdb.schede.TMDBScheda;
 import it.giara.utils.GZIPCompression;
@@ -86,7 +85,7 @@ public class NewServerQuery
 					"http://giaratest.altervista.org/giarafilms/backend/new_backend.php", "UTF-8");
 			multipart.addFormField("action", "1");
 			multipart.addByteArrayPart("data", gzipData);
-//			Log.log(Log.DEBUG, gzipData.length);
+			// Log.log(Log.DEBUG, gzipData.length);
 			List<String> response = multipart.finish();
 			
 			for (String line : response)
@@ -119,7 +118,7 @@ public class NewServerQuery
 					"http://giaratest.altervista.org/giarafilms/backend/new_backend.php", "UTF-8");
 			multipart.addFormField("action", "2");
 			multipart.addByteArrayPart("data", gzipData);
-//			Log.log(Log.DEBUG, gzipData.length);
+			// Log.log(Log.DEBUG, gzipData.length);
 			List<String> response = multipart.finish();
 			
 			for (String line : response)
@@ -236,7 +235,7 @@ public class NewServerQuery
 				JSONObject json = new JSONObject(part[1]);
 				TMDBScheda scheda = new TMDBScheda();
 				scheda.setJson(json);
-				news[n] = SQLQueryScanService.writeScheda(scheda);
+				news[n] = SQLQuery.writeScheda(scheda);
 			}
 			wr.close();
 			rd.close();
@@ -246,13 +245,13 @@ public class NewServerQuery
 			Log.stack(Log.BACKEND, e);
 		}
 	}
-
-	//ACTION 6
+	
+	// ACTION 6
 	public static void loadSchedeList(GenereType g, MainType t, AbstractFilmList l, ListRequest.MyBoolean running)
 	{
 		try
 		{
-			String data = "action=6&type="+t.ID+"&genre_ids="+g.Id;
+			String data = "action=6&type=" + t.ID + "&genre_ids=" + g.Id;
 			
 			URL url = new URL("http://giaratest.altervista.org/giarafilms/backend/new_backend.php");
 			URLConnection conn;
@@ -275,7 +274,7 @@ public class NewServerQuery
 				JSONObject json = new JSONObject(part[1]);
 				TMDBScheda scheda = new TMDBScheda();
 				scheda.setJson(json);
-				SQLQueryScanService.writeScheda(scheda);
+				SQLQuery.writeScheda(scheda);
 				l.addScheda(scheda);
 				
 			}
@@ -287,13 +286,13 @@ public class NewServerQuery
 			Log.stack(Log.BACKEND, e);
 		}
 	}
-
-	//ACTION 7
+	
+	// ACTION 7
 	public static void loadAllSchedeList(MainType t, AbstractFilmList l, ListRequest.MyBoolean running)
 	{
 		try
 		{
-			String data = "action=7&type="+t.ID;
+			String data = "action=7&type=" + t.ID;
 			
 			URL url = new URL("http://giaratest.altervista.org/giarafilms/backend/new_backend.php");
 			URLConnection conn;
@@ -316,7 +315,7 @@ public class NewServerQuery
 				JSONObject json = new JSONObject(part[1]);
 				TMDBScheda scheda = new TMDBScheda();
 				scheda.setJson(json);
-				SQLQueryScanService.writeScheda(scheda);
+				SQLQuery.writeScheda(scheda);
 				l.addScheda(scheda);
 			}
 			wr.close();
@@ -327,13 +326,13 @@ public class NewServerQuery
 			Log.stack(Log.BACKEND, e);
 		}
 	}
-
-	//ACTION 8
+	
+	// ACTION 8
 	public static void loadFileOfSchede(TMDBScheda scheda)
 	{
 		try
 		{
-			String data = "action=8&scheda_id=" + scheda.ID+"&type="+scheda.type.ID;
+			String data = "action=8&scheda_id=" + scheda.ID + "&type=" + scheda.type.ID;
 			
 			URL url = new URL("http://giaratest.altervista.org/giarafilms/backend/new_backend.php");
 			URLConnection conn;
@@ -355,13 +354,12 @@ public class NewServerQuery
 				MainType type = MainType.getMainTypeByID(Integer.parseInt(part[4]));
 				int id = SQLQuery.writeFile(part[1], part[2], Integer.parseInt(part[3]), type, false);
 				
-				if(type.equals(MainType.SerieTV))
+				if (type.equals(MainType.SerieTV))
 				{
 					FileInfo f = new FileInfo(part[1], false);
 					f.paraseTVSeriesEpisode();
 					SQLQuery.writeEpisodeInfo(id, Integer.parseInt(part[3]), f.episode, f.series);
 				}
-				
 				
 			}
 			wr.close();
@@ -372,8 +370,5 @@ public class NewServerQuery
 			Log.stack(Log.BACKEND, e);
 		}
 	}
-
-	
-	
 	
 }
