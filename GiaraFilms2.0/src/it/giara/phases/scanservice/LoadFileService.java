@@ -6,6 +6,7 @@ import it.giara.analyze.FileInfo;
 import it.giara.http.HTTPList;
 import it.giara.source.ListLoader;
 import it.giara.source.SourceChan;
+import it.giara.sql.SQLQuery;
 import it.giara.syncdata.NewServerQuery;
 import it.giara.utils.Log;
 
@@ -53,6 +54,13 @@ public class LoadFileService implements Runnable
 					continue;
 				}
 				
+				if(SQLQuery.uploaded_file_cache(s2))
+				{
+					continue;
+				}
+				
+				SQLQuery.write_file_cache(s2);
+				
 				FileInfo fI = new FileInfo(s2, true);
 				fI.parseTags();
 				
@@ -65,7 +73,7 @@ public class LoadFileService implements Runnable
 				obj[1] = size;
 				
 				data.add(obj);
-				
+				 
 				if (data.size() == 30)
 				{
 					NewServerQuery.uploadFiles(data);

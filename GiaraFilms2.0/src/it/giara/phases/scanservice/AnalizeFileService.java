@@ -32,7 +32,7 @@ public class AnalizeFileService implements Runnable
 			String fileName = pending.poll();
 			FileInfo fI = new FileInfo(fileName, true);
 			
-			int cache = SQLQuery.getCacheSearch(fI.title, fI.type, fI.year);
+			int cache = SQLQuery.get_new_cache(fI.title, fI.type, fI.year);
 			
 			if (cache == -1)
 			{
@@ -56,13 +56,15 @@ public class AnalizeFileService implements Runnable
 				
 				if (scheda == null)
 				{
-					SQLQuery.writeCacheSearch(fI.title, fI.type, -1, fI.year);
+					SQLQuery.write_update_new_cache(fI.title, fI.type, -1, fI.year);
+					SQLQuery.write_update_new_cache_search(fI.title, fI.type, -1, fI.year);
 					NewServerQuery.updateFileInfo(fI.Filename, -1);
 					continue;
 				}
 				int schedaID = scheda.ID;
 				
-				SQLQuery.writeCacheSearch(fI.title, fI.type, schedaID, fI.year);
+				SQLQuery.write_update_new_cache(fI.title, fI.type, schedaID, fI.year);
+				SQLQuery.write_update_new_cache_search(fI.title, fI.type, schedaID, fI.year);
 				
 				NewServerQuery.uploadSchede(scheda);
 				NewServerQuery.updateFileInfo(fI.Filename, schedaID);

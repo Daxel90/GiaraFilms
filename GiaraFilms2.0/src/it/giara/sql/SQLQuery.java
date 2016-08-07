@@ -25,16 +25,12 @@ public class SQLQuery
 				+ "`LastUpdate`	INTEGER NOT NULL" + ");";
 		SQL.ExecuteQuery(query);
 		
-		String query5 = "CREATE TABLE IF NOT EXISTS `CacheSearch` ("
-				+ "`ID`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, " + "`Search`	TEXT NOT NULL UNIQUE, "
-				+ "`Type`	INTEGER, " + "`IdResult`	INTEGER, " + "`Year`	INTEGER, "
-				+ "`LastUpdate`	INTEGER NOT NULL" + ");";
-		SQL.ExecuteQuery(query5);
-		
 		String query6 = "CREATE TABLE IF NOT EXISTS `EpisodeInfo` (" + "`IdFile`	INTEGER UNIQUE, "
 				+ "`IdScheda`	INTEGER, " + "`Episode`	INTEGER, " + "`Serie`	INTEGER, " + "`LastUpdate`	INTEGER"
 				+ ");";
 		SQL.ExecuteQuery(query6);
+		
+		// new tables
 		
 		String query1 = "CREATE TABLE IF NOT EXISTS `new_cache` ("
 				+ "`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, " + "`search`	TEXT NOT NULL UNIQUE, "
@@ -44,142 +40,225 @@ public class SQLQuery
 		
 		String query2 = "CREATE TABLE IF NOT EXISTS `new_schede` (`scheda_id`	INTEGER NOT NULL,`title`	TEXT NOT NULL UNIQUE,`release_date`	TEXT,`poster`	TEXT,`background`	TEXT,`description`	TEXT,`genre_ids`	TEXT,`vote`	REAL,`type`	INTEGER NOT NULL,`fallback`	INTEGER NOT NULL,`last_update`	INTEGER NOT NULL,PRIMARY KEY(scheda_id));";
 		SQL.ExecuteQuery(query2);
+		
+		String query3 = "CREATE TABLE IF NOT EXISTS `new_cache_search` ("
+				+ "`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, " + "`search`	TEXT NOT NULL UNIQUE, "
+				+ "`type`	INTEGER, " + "`id_result`	INTEGER, " + "`year`	INTEGER, "
+				+ "`last_update`	INTEGER NOT NULL" + ");";
+		SQL.ExecuteQuery(query3);
+		
+		String query4 = "CREATE TABLE IF NOT EXISTS `file_cache` ("
+				+ "`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, " + "`filename`	TEXT NOT NULL UNIQUE, "
+				+ "`lastupload`	INTEGER NOT NULL" + ");";
+		SQL.ExecuteQuery(query4);
 	}
 	
-	// ---Cache---
+	// ----------NEW TABLES----------
 	
-		public synchronized static void writeNewCacheSearch(String search, MainType type, int ID, int year)
+	// ---cache---
+	public synchronized static void write_update_new_cache(String search, MainType type, int ID, int year)
+	{
+		SQL.ExecuteQuery(
+				"INSERT OR REPLACE INTO `new_cache`(`search`, `type`, `id_result`, `year`, `last_update`) VALUES ('"
+						+ SQL.escape(search) + "', " + type.ID + ", " + ID + ", " + year + ", "
+						+ FunctionsUtils.getTime() + ");");
+	}
+	
+	public synchronized static void write_notupdate_new_cache(String search, MainType type, int ID, int year)
+	{
+		SQL.ExecuteQuery(
+				"INSERT OR IGNORE INTO `new_cache`(`search`, `type`, `id_result`, `year`, `last_update`) VALUES ('"
+						+ SQL.escape(search) + "', " + type.ID + ", " + ID + ", " + year + ", "
+						+ FunctionsUtils.getTime() + ");");
+	}
+	
+	// -1 noResult -2 check n exist
+	public synchronized static int get_new_cache(String search, MainType type, int year)
+	{
+		ResultSet r = SQL.FetchData("SELECT * FROM `new_cache` WHERE `search` = '" + SQL.escape(search)
+				+ "' AND type = " + type.ID + " AND year = " + year + " ;");
+		try
+		{
+			if (r.next())
+			{
+				if (r.getInt("id_result") == -1 && r.getInt("last_update") + 60 + 60 + 24 >= FunctionsUtils.getTime())
+				{
+					return -2;
+				}
+				return r.getInt("id_result");
+			}
+		} catch (SQLException e)
+		{
+			Log.stack(Log.DB, e);
+		}
+		return -2;
+	}
+	
+	// ---cache_search---
+	public synchronized static void write_update_new_cache_search(String search, MainType type, int ID, int year)
+	{
+		SQL.ExecuteQuery(
+				"INSERT OR REPLACE INTO `new_cache_search`(`search`, `type`, `id_result`, `year`, `last_update`) VALUES ('"
+						+ SQL.escape(search) + "', " + type.ID + ", " + ID + ", " + year + ", "
+						+ FunctionsUtils.getTime() + ");");
+	}
+	
+	public synchronized static void write_notupdate_new_cache_search(String search, MainType type, int ID, int year)
+	{
+		SQL.ExecuteQuery(
+				"INSERT OR IGNORE INTO `new_cache_search`(`search`, `type`, `id_result`, `year`, `last_update`) VALUES ('"
+						+ SQL.escape(search) + "', " + type.ID + ", " + ID + ", " + year + ", "
+						+ FunctionsUtils.getTime() + ");");
+	}
+	
+	// -1 noResult -2 check n exist
+	public synchronized static int get_new_cache_search(String search, MainType type, int year)
+	{
+		ResultSet r = SQL.FetchData("SELECT * FROM `new_cache_search` WHERE `search` = '" + SQL.escape(search)
+				+ "' AND type = " + type.ID + " AND year = " + year + " ;");
+		try
+		{
+			if (r.next())
+			{
+				if (r.getInt("id_result") == -1 && r.getInt("last_update") + 60 + 60 + 24 >= FunctionsUtils.getTime())
+				{
+					return -2;
+				}
+				return r.getInt("id_result");
+			}
+		} catch (SQLException e)
+		{
+			Log.stack(Log.DB, e);
+		}
+		return -2;
+	}
+	
+	// ---file_cache---
+	public synchronized static void write_file_cache(final String fileName)
+	{
+		SQL.ExecuteQuery("INSERT OR IGNORE INTO `file_cache`(`filename`, `lastupload`) VALUES ('" + SQL.escape(fileName)
+				+ "', " + FunctionsUtils.getTime() + ");");
+	}
+	
+	public synchronized static boolean uploaded_file_cache(String fileName)
+	{
+		ResultSet r = SQL.FetchData("SELECT * FROM `file_cache` WHERE `filename` = '" + SQL.escape(fileName) + "' AND `lastupload` >= "+(FunctionsUtils.getTime()-60*60*24*30)+";");
+		try
+		{
+			if (r.next())
+			{
+				return true;
+			}
+		} catch (SQLException e)
+		{
+			Log.stack(Log.DB, e);
+		}
+		return false;
+	}
+	
+	// -----------------------------
+	
+	// ---Schede Table---
+	
+	public synchronized static int writeScheda(final TMDBScheda i)
+	{
+		if (readScheda(i.ID, i.type) == null)
 		{
 			SQL.ExecuteQuery(
-					"INSERT OR REPLACE INTO `new_cache`(`search`, `type`, `id_result`, `year`, `last_update`) VALUES ('"
-							+ SQL.escape(search) + "', " + type.ID + ", " + ID + ", " + year + ", "
-							+ FunctionsUtils.getTime() + ");");
+					"INSERT OR IGNORE INTO `new_schede`(`scheda_id`, `title`, `release_date`, `poster`, `background`, `description`, `genre_ids`, `vote`, `type`, `fallback`, `last_update`) VALUES "
+							+ "(" + SQL.escape("" + i.ID) + "," + " '" + SQL.escape(i.title) + "'," + " '"
+							+ SQL.escape(i.relese) + "'," + " '" + SQL.escape(i.poster) + "', " + " '"
+							+ SQL.escape(i.back) + "', " + " '" + SQL.escape(i.desc) + "', " + " '"
+							+ SQL.escape(i.getGeneriIDs()) + "', " + i.vote + ", " + i.type.ID + ", " + i.fallback_desc
+							+ ", " + FunctionsUtils.getTime() + ");");
 		}
-		
-		// -1 noResult -2 check n exist
-		public synchronized static int getNewCacheSearch(String search, MainType type, int year)
-		{
-			ResultSet r = SQL.FetchData("SELECT * FROM `new_cache` WHERE `search` = '" + SQL.escape(search)
-					+ "' AND type = " + type.ID + " AND year = " + year + " ;");
-			try
-			{
-				if (r.next())
-				{
-					if (r.getInt("id_result") == -1 && r.getInt("last_update") + 60 + 60 + 24 >= FunctionsUtils.getTime())
-					{
-						return -2;
-					}
-					return r.getInt("id_result");
-				}
-			} catch (SQLException e)
-			{
-				Log.stack(Log.DB, e);
-			}
-			return -2;
-		}
-		
-		// ---Schede Table---
-		
-		public synchronized static int writeScheda(final TMDBScheda i)
-		{
-			if (readScheda(i.ID, i.type) == null)
-			{
-				SQL.ExecuteQuery(
-						"INSERT OR IGNORE INTO `new_schede`(`scheda_id`, `title`, `release_date`, `poster`, `background`, `description`, `genre_ids`, `vote`, `type`, `fallback`, `last_update`) VALUES "
-								+ "(" + SQL.escape("" + i.ID) + "," + " '" + SQL.escape(i.title) + "'," + " '"
-								+ SQL.escape(i.relese) + "'," + " '" + SQL.escape(i.poster) + "', " + " '"
-								+ SQL.escape(i.back) + "', " + " '" + SQL.escape(i.desc) + "', " + " '"
-								+ SQL.escape(i.getGeneriIDs()) + "', " + i.vote + ", " + i.type.ID + ", "
-								+ i.fallback_desc + ", " + FunctionsUtils.getTime() + ");");
-			}
-			return i.ID;
-		}
-		
-		public synchronized static TMDBScheda readScheda(int IdScheda, MainType t)
-		{
-			TMDBScheda scheda = new TMDBScheda();
-			ResultSet r = SQL.FetchData(
-					"SELECT * FROM `new_schede` WHERE `scheda_id` = " + IdScheda + " AND `type` = " + t.ID + ";");
-			try
-			{
-				if (r.next())
-				{
-					scheda.ID = r.getInt("scheda_id");
-					scheda.title = SQL.unescape(r.getString("title"));
-					scheda.relese = SQL.unescape(r.getString("release_date"));
-					scheda.poster = SQL.unescape(r.getString("poster"));
-					scheda.back = SQL.unescape(r.getString("background"));
-					scheda.desc = SQL.unescape(r.getString("description"));
-					scheda.setGeneriIDs(SQL.unescape(r.getString("genre_ids")));
-					scheda.vote = r.getDouble("vote");
-					scheda.type = MainType.getMainTypeByID(r.getInt("type"));
-					scheda.fallback_desc = r.getInt("fallback");
-				}
-				else
-					return null;
-			} catch (SQLException e)
-			{
-				Log.stack(Log.DB, e);
-			}
-			return scheda;
-		}
-		
-		public synchronized static void loadSchedeList(GenereType g, MainType t, AbstractFilmList l)
-		{
-			ResultSet r = SQL.FetchData("SELECT * FROM `new_schede` WHERE `type` = " + t.ID + " AND `genre_ids` LIKE '%"
-					+ g.Id + "%' ORDER BY `release_date` DESC;");
-			try
-			{
-				while (r.next())
-				{
-					TMDBScheda scheda = new TMDBScheda();
-					scheda.ID = r.getInt("scheda_id");
-					scheda.title = SQL.unescape(r.getString("title"));
-					scheda.relese = SQL.unescape(r.getString("release_date"));
-					scheda.poster = SQL.unescape(r.getString("poster"));
-					scheda.back = SQL.unescape(r.getString("background"));
-					scheda.desc = SQL.unescape(r.getString("description"));
-					scheda.setGeneriIDs(SQL.unescape(r.getString("genre_ids")));
-					scheda.vote = r.getDouble("vote");
-					scheda.type = MainType.getMainTypeByID(r.getInt("type"));
-					scheda.fallback_desc = r.getInt("fallback");
-					
-					l.addScheda(scheda);
-				}
-			} catch (SQLException e)
-			{
-				Log.stack(Log.DB, e);
-			}
-		}
-		
-		public synchronized static void loadAllSchedeList(MainType t, AbstractFilmList l)
-		{
-			ResultSet r = SQL
-					.FetchData("SELECT * FROM `new_schede` WHERE `type` = " + t.ID + " ORDER BY `release_date` DESC;");
-			try
-			{
-				while (r.next())
-				{
-					TMDBScheda scheda = new TMDBScheda();
-					scheda.ID = r.getInt("scheda_id");
-					scheda.title = SQL.unescape(r.getString("title"));
-					scheda.relese = SQL.unescape(r.getString("release_date"));
-					scheda.poster = SQL.unescape(r.getString("poster"));
-					scheda.back = SQL.unescape(r.getString("background"));
-					scheda.desc = SQL.unescape(r.getString("description"));
-					scheda.setGeneriIDs(SQL.unescape(r.getString("genre_ids")));
-					scheda.vote = r.getDouble("vote");
-					scheda.type = MainType.getMainTypeByID(r.getInt("type"));
-					scheda.fallback_desc = r.getInt("fallback");
-					
-					l.addScheda(scheda);
-				}
-			} catch (SQLException e)
-			{
-				Log.stack(Log.DB, e);
-			}
-		}
+		return i.ID;
+	}
 	
+	public synchronized static TMDBScheda readScheda(int IdScheda, MainType t)
+	{
+		TMDBScheda scheda = new TMDBScheda();
+		ResultSet r = SQL.FetchData(
+				"SELECT * FROM `new_schede` WHERE `scheda_id` = " + IdScheda + " AND `type` = " + t.ID + ";");
+		try
+		{
+			if (r.next())
+			{
+				scheda.ID = r.getInt("scheda_id");
+				scheda.title = SQL.unescape(r.getString("title"));
+				scheda.relese = SQL.unescape(r.getString("release_date"));
+				scheda.poster = SQL.unescape(r.getString("poster"));
+				scheda.back = SQL.unescape(r.getString("background"));
+				scheda.desc = SQL.unescape(r.getString("description"));
+				scheda.setGeneriIDs(SQL.unescape(r.getString("genre_ids")));
+				scheda.vote = r.getDouble("vote");
+				scheda.type = MainType.getMainTypeByID(r.getInt("type"));
+				scheda.fallback_desc = r.getInt("fallback");
+			}
+			else
+				return null;
+		} catch (SQLException e)
+		{
+			Log.stack(Log.DB, e);
+		}
+		return scheda;
+	}
+	
+	public synchronized static void loadSchedeList(GenereType g, MainType t, AbstractFilmList l)
+	{
+		ResultSet r = SQL.FetchData("SELECT * FROM `new_schede` WHERE `type` = " + t.ID + " AND `genre_ids` LIKE '%"
+				+ g.Id + "%' ORDER BY `release_date` DESC;");
+		try
+		{
+			while (r.next())
+			{
+				TMDBScheda scheda = new TMDBScheda();
+				scheda.ID = r.getInt("scheda_id");
+				scheda.title = SQL.unescape(r.getString("title"));
+				scheda.relese = SQL.unescape(r.getString("release_date"));
+				scheda.poster = SQL.unescape(r.getString("poster"));
+				scheda.back = SQL.unescape(r.getString("background"));
+				scheda.desc = SQL.unescape(r.getString("description"));
+				scheda.setGeneriIDs(SQL.unescape(r.getString("genre_ids")));
+				scheda.vote = r.getDouble("vote");
+				scheda.type = MainType.getMainTypeByID(r.getInt("type"));
+				scheda.fallback_desc = r.getInt("fallback");
+				
+				l.addScheda(scheda);
+			}
+		} catch (SQLException e)
+		{
+			Log.stack(Log.DB, e);
+		}
+	}
+	
+	public synchronized static void loadAllSchedeList(MainType t, AbstractFilmList l)
+	{
+		ResultSet r = SQL
+				.FetchData("SELECT * FROM `new_schede` WHERE `type` = " + t.ID + " ORDER BY `release_date` DESC;");
+		try
+		{
+			while (r.next())
+			{
+				TMDBScheda scheda = new TMDBScheda();
+				scheda.ID = r.getInt("scheda_id");
+				scheda.title = SQL.unescape(r.getString("title"));
+				scheda.relese = SQL.unescape(r.getString("release_date"));
+				scheda.poster = SQL.unescape(r.getString("poster"));
+				scheda.back = SQL.unescape(r.getString("background"));
+				scheda.desc = SQL.unescape(r.getString("description"));
+				scheda.setGeneriIDs(SQL.unescape(r.getString("genre_ids")));
+				scheda.vote = r.getDouble("vote");
+				scheda.type = MainType.getMainTypeByID(r.getInt("type"));
+				scheda.fallback_desc = r.getInt("fallback");
+				
+				l.addScheda(scheda);
+			}
+		} catch (SQLException e)
+		{
+			Log.stack(Log.DB, e);
+		}
+	}
 	
 	// Files Table
 	
@@ -314,39 +393,6 @@ public class SQLQuery
 	
 	// -------------------
 	
-	// CacheSearch Table
-	
-	public synchronized static void writeCacheSearch(String search, MainType type, int ID, int year)
-	{
-		SQL.ExecuteQuery(
-				"INSERT OR REPLACE INTO `CacheSearch`(`Search`, `Type`, `IdResult`, `Year`, `LastUpdate`) VALUES ('"
-						+ SQL.escape(search) + "', " + type.ID + ", " + ID + ", " + year + ", "
-						+ FunctionsUtils.getTime() + ");");
-	}
-	
-	public synchronized static int getCacheSearch(String search, MainType type, int year)
-	{
-		ResultSet r = SQL.FetchData("SELECT * FROM `CacheSearch` WHERE `Search` = '" + SQL.escape(search)
-				+ "' AND Type = " + type.ID + " AND Year = " + year + " ;");
-		try
-		{
-			if (r.next())
-			{
-				if (r.getInt("IdResult") == -1 && r.getInt("LastUpdate") + 60 + 60 + 24 >= FunctionsUtils.getTime())
-				{
-					return -2;
-				}
-				return r.getInt("IdResult");
-			}
-		} catch (SQLException e)
-		{
-			Log.stack(Log.DB, e);
-		}
-		return -1;
-	}
-	
-	// -------------------
-	
 	// EpisodeInfo Table
 	
 	public synchronized static HashMap<Integer, HashMap<Integer, ArrayList<Integer>>> readEpisodeInfoList(int serieID)
@@ -385,58 +431,6 @@ public class SQLQuery
 	
 	// -------------------
 	
-	// General Info Query
-	
-	public synchronized static int getFilmNumber()
-	{
-		ResultSet r = SQL.FetchData("SELECT count(ID) FROM Schede WHERE `Type` = " + MainType.Film.ID + ";");
-		try
-		{
-			if (r.next())
-			{
-				return r.getInt("count(ID)");
-			}
-		} catch (SQLException e)
-		{
-			Log.stack(Log.DB, e);
-		}
-		return -1;
-	}
-	
-	public synchronized static int getFileNumber()
-	{
-		ResultSet r = SQL.FetchData("SELECT count(ID) FROM Files;");
-		try
-		{
-			if (r.next())
-			{
-				return r.getInt("count(ID)");
-			}
-		} catch (SQLException e)
-		{
-			Log.stack(Log.DB, e);
-		}
-		return -1;
-	}
-	
-	public synchronized static int getEpisodeNumbers()
-	{
-		ResultSet r = SQL.FetchData("SELECT count(IdFile) FROM EpisodeInfo;");
-		try
-		{
-			if (r.next())
-			{
-				return r.getInt("count(IdFile)");
-			}
-		} catch (SQLException e)
-		{
-			Log.stack(Log.DB, e);
-		}
-		return -1;
-	}
-	
-	// -------------------
-	
 	// Fix
 	
 	public synchronized static void DbClear()
@@ -445,6 +439,12 @@ public class SQLQuery
 		SQL.ExecuteQuery("DROP TABLE `Schede`");
 		SQL.ExecuteQuery("DROP TABLE `CacheSearch`");
 		SQL.ExecuteQuery("DROP TABLE `EpisodeInfo`");
+		
+		SQL.ExecuteQuery("DROP TABLE `new_cache`");
+		SQL.ExecuteQuery("DROP TABLE `new_schede`");
+		SQL.ExecuteQuery("DROP TABLE `new_cache_search`");
+		SQL.ExecuteQuery("DROP TABLE `file_cache`");
+		
 		initTable();
 	}
 	// -------------------
