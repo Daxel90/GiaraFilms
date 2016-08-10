@@ -87,16 +87,16 @@ public class SearchService
 									public void run()
 									{
 										FileInfo f = new FileInfo(s2, true);
-										
+										Log.log(Log.DEBUG, s2);
 										switch (f.type)
 										{
 											case Film:
 												int cache = SQLQuery.get_new_cache_search(f.title, f.type, f.year);
-												
-												if (cache == -2)
+												Log.log(Log.DEBUG, "Film");
+												if (cache == -1)
 													return;
 													
-												if (cache == -1)
+												if (cache == -2)
 												{
 													TMDBSearchFilm httpF = new TMDBSearchFilm(f.title, f.year);
 													if (httpF.scheda == null)
@@ -118,11 +118,12 @@ public class SearchService
 												break;
 											case SerieTV:
 												int cache2 = SQLQuery.get_new_cache_search(f.title, f.type, f.year);
-												
-												if (cache2 == -2)
+												Log.log(Log.DEBUG, "SerieTV");
+												Log.log(Log.DEBUG, "cache2:"+cache2);
+												if (cache2 == -1)
 													return;
 													
-												if (cache2 == -1)
+												if (cache2 == -2)
 												{
 													TMDBSearchTVSerie httpF = new TMDBSearchTVSerie(f.title);
 													if (httpF.scheda == null)

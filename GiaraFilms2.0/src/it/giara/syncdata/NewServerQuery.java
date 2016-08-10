@@ -1,12 +1,16 @@
 package it.giara.syncdata;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.zip.GZIPInputStream;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -214,12 +218,15 @@ public class NewServerQuery
 			URL url = new URL("http://giaratest.altervista.org/giarafilms/backend/new_backend.php");
 			URLConnection conn;
 			conn = url.openConnection();
+			conn.setRequestProperty("accept-encoding", "gzip, deflate");
 			conn.setDoOutput(true);
 			conn.setDoInput(true);
 			OutputStream wr = conn.getOutputStream();
 			wr.write(data.getBytes("UTF-8"));
 			wr.flush();
-			BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+			
+			BufferedReader rd = GZIPCompression.decompressConnection(conn);
+			
 			String line;
 			while ((line = rd.readLine()) != null)
 			{
@@ -337,12 +344,13 @@ public class NewServerQuery
 			URL url = new URL("http://giaratest.altervista.org/giarafilms/backend/new_backend.php");
 			URLConnection conn;
 			conn = url.openConnection();
+			conn.setRequestProperty("accept-encoding", "gzip, deflate");
 			conn.setDoOutput(true);
 			conn.setDoInput(true);
 			OutputStream wr = conn.getOutputStream();
 			wr.write(data.getBytes("UTF-8"));
 			wr.flush();
-			BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+			BufferedReader rd = GZIPCompression.decompressConnection(conn);
 			String line;
 			while ((line = rd.readLine()) != null)
 			{

@@ -32,7 +32,17 @@ public class LoadFileService implements Runnable
 			NList++;
 			
 			loadingList = true;
-			HTTPList search = new HTTPList(s.link, ".");
+			
+			HTTPList search = null;
+			
+			try
+			{
+				search = new HTTPList(s.link, ".");
+			} catch (Exception e)
+			{
+				e.printStackTrace();
+				continue;
+			}
 			
 			loadingList = false;
 			Log.log(Log.SCANSERVICE, search.file.size());
@@ -54,7 +64,7 @@ public class LoadFileService implements Runnable
 					continue;
 				}
 				
-				if(SQLQuery.uploaded_file_cache(s2))
+				if (SQLQuery.uploaded_file_cache(s2))
 				{
 					continue;
 				}
@@ -64,7 +74,7 @@ public class LoadFileService implements Runnable
 				FileInfo fI = new FileInfo(s2, true);
 				fI.parseTags();
 				
-//				Log.log(Log.DEBUG, fI.type.name()+":"+fI.title);
+				// Log.log(Log.DEBUG, fI.type.name()+":"+fI.title);
 				
 				fI.Filename = s2; // remove lowercase modification;
 				
@@ -73,7 +83,7 @@ public class LoadFileService implements Runnable
 				obj[1] = size;
 				
 				data.add(obj);
-				 
+				
 				if (data.size() == 30)
 				{
 					NewServerQuery.uploadFiles(data);
