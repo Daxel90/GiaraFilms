@@ -290,11 +290,16 @@ public class SQLQuery
 	public synchronized static int write_update_File(final String fileName, final String size, final int IdScheda,
 			final MainType t)
 	{
+		String sql = "INSERT INTO `new_files`(`filename`, `size`, `schede_id`, `type`, `last_update`) VALUES ('"
+				+ SQL.escape(fileName) + "', '" + SQL.escape(size) + "', " + IdScheda + ", " + t.ID + ", "
+				+ FunctionsUtils.getTime() + ");";
 		
-		SQL.ExecuteQuery(
-				"INSERT OR REPLACE INTO `new_files`(`filename`, `size`, `schede_id`, `type`, `last_update`) VALUES ('"
-						+ SQL.escape(fileName) + "', '" + SQL.escape(size) + "', " + IdScheda + ", " + t.ID + ", "
-						+ FunctionsUtils.getTime() + ");");
+		if(existFile(fileName))
+		{
+			sql = "UPDATE `new_files` SET `type`= "+t.ID+" ,`schede_id`= "+IdScheda+" ,`last_update`= "+FunctionsUtils.getTime()+" WHERE `filename` = '"+SQL.escape(fileName)+"'";
+		}
+		
+		SQL.ExecuteQuery(sql);
 						
 		ResultSet r = SQL.FetchData("SELECT * FROM `new_files` WHERE `filename` = '" + SQL.escape(fileName) + "';");
 		try
