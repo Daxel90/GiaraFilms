@@ -55,12 +55,14 @@ public class TEst
 		//
 		// ServerQuery.loadUntil(Integer.parseInt(Settings.getParameter("lastserversync")));
 		
-		for (final SourceChan s : ListLoader.sources)
-		{
-			HTTPList ht = new HTTPList(s.link,".");
-			Log.log(Log.DEBUG,ht.file.size());
-			
-		}
+//		for (final SourceChan s : ListLoader.sources)
+//		{
+//			HTTPList ht = new HTTPList(s.link,".");
+//			Log.log(Log.DEBUG,ht.file.size());
+//			
+//		}
+		
+		NewServerQuery.loadRequestCommand();
 		
 		// new LoadFileService().run();
 		

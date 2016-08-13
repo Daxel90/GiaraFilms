@@ -8,6 +8,7 @@ import it.giara.source.ListLoader;
 import it.giara.source.SourceChan;
 import it.giara.sql.SQLQuery;
 import it.giara.syncdata.NewServerQuery;
+import it.giara.utils.FunctionsUtils;
 import it.giara.utils.Log;
 
 public class LoadFileService implements Runnable
@@ -18,7 +19,9 @@ public class LoadFileService implements Runnable
 	public static int NList = 0;
 	public static int FileSize = 0;
 	public static int FileStatus = 0;
+	
 	public static int TotalFile = 0;
+	public static int newFile = 0;
 	public static boolean loadingList = false;
 	
 	@Override
@@ -26,6 +29,8 @@ public class LoadFileService implements Runnable
 	{
 		Log.log(Log.INFO, "GiaraFilms start LoadFileService");
 		running = true;
+		
+		FunctionsUtils.sleep(4000);
 		for (SourceChan s : ListLoader.sources)
 		{
 			downloadingList = true;
@@ -68,7 +73,7 @@ public class LoadFileService implements Runnable
 				{
 					continue;
 				}
-				
+				newFile++;
 				SQLQuery.write_file_cache(s2);
 				
 				FileInfo fI = new FileInfo(s2, true);

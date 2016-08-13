@@ -10,6 +10,7 @@ import it.giara.syncdata.NewServerQuery;
 import it.giara.tmdb.TMDBScheda;
 import it.giara.tmdb.api.TmdbApiSearchFilm;
 import it.giara.tmdb.api.TmdbApiSearchTVSerie;
+import it.giara.utils.FunctionsUtils;
 import it.giara.utils.Log;
 import it.giara.utils.ThreadManager;
 
@@ -18,6 +19,8 @@ public class AnalizeFileService implements Runnable
 	public static boolean running = false;
 	public static int checkRequest = 0;
 	public static int checked = 0;
+	public static int schede_trovate = 0;
+	public static int schede_non_trovate = 0;
 	public static Queue<String[]> pending = new LinkedList<String[]>();
 	
 	@Override
@@ -38,6 +41,7 @@ public class AnalizeFileService implements Runnable
 			
 			if (cache == -1)
 			{
+				schede_trovate++;
 				NewServerQuery.updateFileInfo(fI.title, cache);
 				SQLQuery.write_update_File(fI.Filename, size, cache, fI.type);
 				continue;
@@ -63,6 +67,7 @@ public class AnalizeFileService implements Runnable
 					SQLQuery.write_update_new_cache_search(fI.title, fI.type, -1, fI.year);
 					NewServerQuery.updateFileInfo(fI.Filename, -1);
 					SQLQuery.write_update_File(fI.Filename, size, -1, fI.type);
+					schede_non_trovate++;
 					continue;
 				}
 				int schedaID = scheda.ID;
@@ -73,21 +78,29 @@ public class AnalizeFileService implements Runnable
 				NewServerQuery.uploadSchede(scheda);
 				NewServerQuery.updateFileInfo(fI.Filename, schedaID);
 				SQLQuery.write_update_File(fI.Filename, size, schedaID, fI.type);
+				schede_trovate++;
 			}
 			else
 			{
 				NewServerQuery.updateFileInfo(fI.Filename, cache);
 				SQLQuery.write_update_File(fI.Filename, size, cache, fI.type);
+				schede_trovate++;
 			}
 			
 		}
 		running = false;
 	}
 	
-	public static void addFile(String filename, String size)
+	public static synchronized void addFile(String filename, String size)
 	{
+		while (checkRequest-checked > 200)
+		{
+			FunctionsUtils.sleep(500);
+		}
+		
 		checkRequest++;
 		pending.add(new String[] { filename, size });
+		
 		if (!running)
 		{
 			running = true;

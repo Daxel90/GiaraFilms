@@ -14,6 +14,7 @@ import it.giara.gui.components.ImageButton;
 import it.giara.gui.utils.ColorUtils;
 import it.giara.gui.utils.ImageUtils;
 import it.giara.phases.scanservice.AnalizeFileService;
+import it.giara.phases.scanservice.ElaborateRequestService;
 import it.giara.phases.scanservice.LoadFileService;
 import it.giara.source.ListLoader;
 
@@ -50,7 +51,7 @@ public class ScanStatus extends DefaultGui
 		this.add(sep2);
 		
 		JLabel listJL = new JLabel();
-		listJL.setBounds(FRAME_WIDTH / 6, (int) (FRAME_HEIGHT * 1f / 4)-40, FRAME_WIDTH * 2 / 3, 30);
+		listJL.setBounds(FRAME_WIDTH / 6, (int) (FRAME_HEIGHT * 1f / 6) - 40, FRAME_WIDTH * 2 / 3, 30);
 		listJL.setText("<html><h3>Scansione Liste</html>");
 		listJL.setHorizontalAlignment(JLabel.CENTER);
 		this.add(listJL);
@@ -59,12 +60,12 @@ public class ScanStatus extends DefaultGui
 		listBar.setMaximum(ListLoader.sources.size());
 		listBar.setValue(LoadFileService.NList);
 		listBar.setStringPainted(true);
-		listBar.setString(LoadFileService.NList+" su "+ListLoader.sources.size());
-		listBar.setBounds(FRAME_WIDTH / 6, (int) (FRAME_HEIGHT * 1f / 4), FRAME_WIDTH * 2 / 3, 20);
+		listBar.setString(LoadFileService.NList + " su " + ListLoader.sources.size());
+		listBar.setBounds(FRAME_WIDTH / 6, (int) (FRAME_HEIGHT * 1f / 6), FRAME_WIDTH * 2 / 3, 20);
 		this.add(listBar);
 		
 		JLabel fileJL = new JLabel();
-		fileJL.setBounds(FRAME_WIDTH / 6, (int) (FRAME_HEIGHT * 2f / 4)-40, FRAME_WIDTH * 2 / 3, 30);
+		fileJL.setBounds(FRAME_WIDTH / 6, (int) (FRAME_HEIGHT * 2f / 6) - 40, FRAME_WIDTH * 2 / 3, 30);
 		fileJL.setText("<html><h3>Caricamento File</html>");
 		fileJL.setHorizontalAlignment(JLabel.CENTER);
 		this.add(fileJL);
@@ -73,9 +74,9 @@ public class ScanStatus extends DefaultGui
 		fileBar.setMaximum(LoadFileService.FileSize);
 		fileBar.setValue(LoadFileService.FileStatus);
 		fileBar.setStringPainted(true);
-		fileBar.setString(LoadFileService.FileStatus+" su "+LoadFileService.FileSize);
-		fileBar.setBounds(FRAME_WIDTH / 6, (int) (FRAME_HEIGHT * 2f / 4), FRAME_WIDTH * 2 / 3, 20);
-		if(LoadFileService.loadingList)
+		fileBar.setString(LoadFileService.FileStatus + " su " + LoadFileService.FileSize);
+		fileBar.setBounds(FRAME_WIDTH / 6, (int) (FRAME_HEIGHT * 2f / 6), FRAME_WIDTH * 2 / 3, 20);
+		if (LoadFileService.loadingList)
 		{
 			fileBar.setString("Caricamento Lista");
 			fileBar.setMaximum(100);
@@ -83,13 +84,23 @@ public class ScanStatus extends DefaultGui
 		}
 		this.add(fileBar);
 		
-		infoJL.setBounds(FRAME_WIDTH / 6, (int) (FRAME_HEIGHT * 3f / 4)-40, FRAME_WIDTH * 2 / 3, 100);
-		infoJL.setText("<html><h3>File Caricati: "+LoadFileService.TotalFile+"<br>"+
-				"File da analizzare: "+AnalizeFileService.pending.size()+"<br>"+
-				"File analizzati: "+AnalizeFileService.checked+"<br>"+"</html>");
+		infoJL.setBounds(FRAME_WIDTH / 6, (int) (FRAME_HEIGHT * 3f / 6) - 40, FRAME_WIDTH * 2 / 3, FRAME_HEIGHT/2);
+		infoJL.setVerticalAlignment(JLabel.TOP);
+		infoJL.setText("<html><h3>"
+				+"---Scan Service Service---<br>"
+				+ "File Trovati: " + LoadFileService.TotalFile + "<br>" 
+				+ "Nuovi File Caricati: " + LoadFileService.newFile + "<br><br>" 
+				+ "---Analize Service---<br>" 
+				+ "File da analizzare: "+ AnalizeFileService.pending.size() + "<br>" 
+				+ "File analizzati: " + AnalizeFileService.checked+ "<br>" 
+				+ "File trovati: " + AnalizeFileService.schede_trovate+ "<br>" 
+				+ "File non trovati: " + AnalizeFileService.schede_non_trovate+ "<br><br>" 
+				+ "---Elaborate Request Service---<br>" 
+				+ "Comandi ricevuti: "+ ElaborateRequestService.command_recived + "<br>" 
+				+ "Comandi di Controllo file: "+ ElaborateRequestService.command_checkfile + "<br>" 
+				+ "Comandi di aggiornamento Scheda: "+ ElaborateRequestService.command_update_schede + "<br>" 
+				+ "</html>");
 		this.add(infoJL);
-		
-		
 		
 		timer = new Timer(500, UpdateStatus);
 		timer.start();
@@ -137,23 +148,34 @@ public class ScanStatus extends DefaultGui
 			listBar.setMaximum(ListLoader.sources.size());
 			listBar.setValue(LoadFileService.NList);
 			listBar.setStringPainted(true);
-			listBar.setString(LoadFileService.NList+" su "+ListLoader.sources.size());
+			listBar.setString(LoadFileService.NList + " su " + ListLoader.sources.size());
 			
 			fileBar.setMaximum(LoadFileService.FileSize);
 			fileBar.setValue(LoadFileService.FileStatus);
 			fileBar.setStringPainted(true);
-			fileBar.setString(LoadFileService.FileStatus+" su "+LoadFileService.FileSize);
+			fileBar.setString(LoadFileService.FileStatus + " su " + LoadFileService.FileSize);
 			
-			if(LoadFileService.loadingList)
+			if (LoadFileService.loadingList)
 			{
 				fileBar.setString("Caricamento Lista");
 				fileBar.setMaximum(100);
 				fileBar.setValue(0);
 			}
 			
-			infoJL.setText("<html><h3>File Caricati: "+LoadFileService.TotalFile+"<br>"+
-					"File da analizzare: "+AnalizeFileService.pending.size()+"<br>"+
-					"File analizzati: "+AnalizeFileService.checked+"<br>"+"</html>");
+			infoJL.setText("<html><h3>"
+					+"---Scan Service Service---<br>"
+					+ "File Trovati: " + LoadFileService.TotalFile + "<br>" 
+					+ "Nuovi File Caricati: " + LoadFileService.newFile + "<br><br>" 
+					+ "---Analize Service---<br>" 
+					+ "File da analizzare: "+ AnalizeFileService.pending.size() + "<br>" 
+					+ "File analizzati: " + AnalizeFileService.checked+ "<br>" 
+					+ "File trovati: " + AnalizeFileService.schede_trovate+ "<br>" 
+					+ "File non trovati: " + AnalizeFileService.schede_non_trovate+ "<br><br>" 
+					+ "---Elaborate Request Service---<br>" 
+					+ "Comandi ricevuti: "+ ElaborateRequestService.command_recived + "<br>" 
+					+ "Comandi di Controllo file: "+ ElaborateRequestService.command_checkfile + "<br>" 
+					+ "Comandi di aggiornamento Scheda: "+ ElaborateRequestService.command_update_schede + "<br>" 
+					+ "</html>");
 		}
 	};
 	

@@ -23,7 +23,6 @@ public class SQL
 	{
 		try
 		{
-			System.out.println(db.getAbsolutePath());
 			Class.forName("org.sqlite.JDBC");
 			c = DriverManager.getConnection("jdbc:sqlite:" + db.getAbsolutePath());
 			c.setAutoCommit(true);
@@ -39,7 +38,6 @@ public class SQL
 		
 		try
 		{
-			System.out.println(settings.getAbsolutePath());
 			Class.forName("org.sqlite.JDBC");
 			cSett = DriverManager.getConnection("jdbc:sqlite:" + settings.getAbsolutePath());
 			cSett.setAutoCommit(true);

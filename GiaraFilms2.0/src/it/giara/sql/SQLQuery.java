@@ -345,8 +345,8 @@ public class SQLQuery
 			Log.stack(Log.DB, e);
 		}
 		
-		result[0] = "";
-		result[1] = "";
+		result[0] = "null";
+		result[1] = "0";
 		return result;
 		
 	}

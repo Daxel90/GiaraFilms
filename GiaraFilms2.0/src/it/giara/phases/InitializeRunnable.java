@@ -4,10 +4,10 @@ import it.giara.gui.MainFrame;
 import it.giara.gui.section.HomePage;
 import it.giara.gui.section.LoadScreen;
 import it.giara.gui.section.TOS;
+import it.giara.phases.scanservice.ElaborateRequestService;
 import it.giara.phases.scanservice.LoadFileService;
 import it.giara.source.ListLoader;
 import it.giara.sql.SQL;
-import it.giara.utils.FunctionsUtils;
 import it.giara.utils.ThreadManager;
 
 public class InitializeRunnable implements Runnable
@@ -68,6 +68,7 @@ public class InitializeRunnable implements Runnable
 			if (screen != null)
 				screen.textProgress.setText("Avvio ScanService");
 			ThreadManager.submitCacheTask(new LoadFileService());
+			ThreadManager.submitCacheTask(new ElaborateRequestService());
 		}
 		
 		if (Settings.getParameter("tos").equals("1"))

@@ -157,7 +157,6 @@ public class NewServerQuery
 					"http://giaratest.altervista.org/giarafilms/backend/new_backend.php", "UTF-8");
 			multipart.addFormField("action", "3");
 			multipart.addByteArrayPart("data", gzipData);
-			Log.log(Log.DEBUG, gzipData.length);
 			List<String> response = multipart.finish();
 			
 			for (String line : response)
@@ -374,5 +373,44 @@ public class NewServerQuery
 			Log.stack(Log.BACKEND, e);
 		}
 	}
+	
+	//ACTION 9
+	
+	public static ArrayList<String>  loadRequestCommand()
+	{
+		ArrayList<String> commands = new ArrayList<String>();
+		try
+		{
+			String data = "action=9";
+			
+			URL url = new URL("http://giaratest.altervista.org/giarafilms/backend/new_backend.php");
+			URLConnection conn;
+			conn = url.openConnection();
+			conn.setRequestProperty("accept-encoding", "gzip, deflate");
+			conn.setDoOutput(true);
+			conn.setDoInput(true);
+			OutputStream wr = conn.getOutputStream();
+			wr.write(data.getBytes("UTF-8"));
+			wr.flush();
+			
+			BufferedReader rd = GZIPCompression.decompressConnection(conn);
+			
+			String line;
+			while ((line = rd.readLine()) != null)
+			{
+				Log.log(Log.BACKEND, line);
+				commands.add(line);
+			}
+			wr.close();
+			rd.close();
+			
+		} catch (Exception e)
+		{
+			Log.stack(Log.BACKEND, e);
+		}
+		
+		return commands;
+	}
+	
 	
 }

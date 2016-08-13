@@ -28,6 +28,8 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.StringTokenizer;
 
+import it.giara.utils.Log;
+
 /**
  * PircBot is a Java framework for writing IRC bots quickly and easily.
  * <p>
@@ -956,7 +958,7 @@ public abstract class PircBot implements ReplyConstants
 	{
 		if (_verbose)
 		{
-			System.out.println(System.currentTimeMillis() + " " + line);
+			Log.log(Log.IRC,System.currentTimeMillis() + " " + line);
 		}
 	}
 	
