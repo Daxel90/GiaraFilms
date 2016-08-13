@@ -18,7 +18,7 @@ public class AnalizeFileService implements Runnable
 	public static boolean running = false;
 	public static int checkRequest = 0;
 	public static int checked = 0;
-	public static Queue<String> pending = new LinkedList<String>();
+	public static Queue<String[]> pending = new LinkedList<String[]>();
 	
 	@Override
 	public void run()
@@ -29,7 +29,9 @@ public class AnalizeFileService implements Runnable
 		while (!pending.isEmpty())
 		{
 			checked++;
-			String fileName = pending.poll();
+			String[] fileData = pending.poll();
+			String fileName = fileData[0];
+			String size = fileData[1];
 			FileInfo fI = new FileInfo(fileName, true);
 			
 			int cache = SQLQuery.get_new_cache(fI.title, fI.type, fI.year);
@@ -37,6 +39,7 @@ public class AnalizeFileService implements Runnable
 			if (cache == -1)
 			{
 				NewServerQuery.updateFileInfo(fI.title, cache);
+				SQLQuery.write_update_File(fI.Filename, size, cache, fI.type);
 				continue;
 			}
 			else if (cache == -2)
@@ -59,6 +62,7 @@ public class AnalizeFileService implements Runnable
 					SQLQuery.write_update_new_cache(fI.title, fI.type, -1, fI.year);
 					SQLQuery.write_update_new_cache_search(fI.title, fI.type, -1, fI.year);
 					NewServerQuery.updateFileInfo(fI.Filename, -1);
+					SQLQuery.write_update_File(fI.Filename, size, -1, fI.type);
 					continue;
 				}
 				int schedaID = scheda.ID;
@@ -68,20 +72,22 @@ public class AnalizeFileService implements Runnable
 				
 				NewServerQuery.uploadSchede(scheda);
 				NewServerQuery.updateFileInfo(fI.Filename, schedaID);
+				SQLQuery.write_update_File(fI.Filename, size, schedaID, fI.type);
 			}
 			else
 			{
 				NewServerQuery.updateFileInfo(fI.Filename, cache);
+				SQLQuery.write_update_File(fI.Filename, size, cache, fI.type);
 			}
 			
 		}
 		running = false;
 	}
 	
-	public static void addFile(String filename)
+	public static void addFile(String filename, String size)
 	{
 		checkRequest++;
-		pending.add(filename);
+		pending.add(new String[] { filename, size });
 		if (!running)
 		{
 			running = true;

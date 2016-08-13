@@ -94,7 +94,7 @@ public class NewServerQuery
 				if (line.startsWith("check"))
 				{
 					int id = Integer.parseInt(line.trim().split(":")[1]);
-					AnalizeFileService.addFile(((FileInfo) data.get(id)[0]).Filename);
+					AnalizeFileService.addFile(((FileInfo) data.get(id)[0]).Filename, (String) data.get(id)[1]);
 				}
 			}
 			
@@ -356,7 +356,7 @@ public class NewServerQuery
 					
 				String[] part = line.split(":--:");
 				MainType type = MainType.getMainTypeByID(Integer.parseInt(part[4]));
-				int id = SQLQuery.writeFile(part[1], part[2], Integer.parseInt(part[3]), type, false);
+				int id = SQLQuery.write_update_File(part[1], part[2], Integer.parseInt(part[3]), type);
 				
 				if (type.equals(MainType.SerieTV))
 				{

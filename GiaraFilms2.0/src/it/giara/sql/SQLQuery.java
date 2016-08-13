@@ -19,11 +19,6 @@ public class SQLQuery
 	
 	public static void initTable()
 	{
-		String query = "CREATE TABLE IF NOT EXISTS `Files` ("
-				+ "`ID`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, " + "`FileName`	TEXT NOT NULL UNIQUE, "
-				+ "`Size` TEXT, " + "`IdScheda`	INTEGER NOT NULL, " + "`Type`	INTEGER NOT NULL, "
-				+ "`LastUpdate`	INTEGER NOT NULL" + ");";
-		SQL.ExecuteQuery(query);
 		
 		String query6 = "CREATE TABLE IF NOT EXISTS `EpisodeInfo` (" + "`IdFile`	INTEGER UNIQUE, "
 				+ "`IdScheda`	INTEGER, " + "`Episode`	INTEGER, " + "`Serie`	INTEGER, " + "`LastUpdate`	INTEGER"
@@ -31,6 +26,12 @@ public class SQLQuery
 		SQL.ExecuteQuery(query6);
 		
 		// new tables
+		
+		String query = "CREATE TABLE IF NOT EXISTS `new_files` ("
+				+ "`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, " + "`filename`	TEXT NOT NULL UNIQUE, "
+				+ "`size` TEXT, " + "`schede_id`	INTEGER NOT NULL, " + "`type`	INTEGER NOT NULL, "
+				+ "`last_update`	INTEGER NOT NULL" + ");";
+		SQL.ExecuteQuery(query);
 		
 		String query1 = "CREATE TABLE IF NOT EXISTS `new_cache` ("
 				+ "`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, " + "`search`	TEXT NOT NULL UNIQUE, "
@@ -142,7 +143,8 @@ public class SQLQuery
 	
 	public synchronized static boolean uploaded_file_cache(String fileName)
 	{
-		ResultSet r = SQL.FetchData("SELECT * FROM `file_cache` WHERE `filename` = '" + SQL.escape(fileName) + "' AND `lastupload` >= "+(FunctionsUtils.getTime()-60*60*24*30)+";");
+		ResultSet r = SQL.FetchData("SELECT * FROM `file_cache` WHERE `filename` = '" + SQL.escape(fileName)
+				+ "' AND `lastupload` >= " + (FunctionsUtils.getTime() - 60 * 60 * 24 * 30) + ";");
 		try
 		{
 			if (r.next())
@@ -156,16 +158,14 @@ public class SQLQuery
 		return false;
 	}
 	
-	// -----------------------------
-	
-	// ---Schede Table---
+	// ---new_schede---
 	
 	public synchronized static int writeScheda(final TMDBScheda i)
 	{
 		if (readScheda(i.ID, i.type) == null)
 		{
 			SQL.ExecuteQuery(
-					"INSERT OR IGNORE INTO `new_schede`(`scheda_id`, `title`, `release_date`, `poster`, `background`, `description`, `genre_ids`, `vote`, `type`, `fallback`, `last_update`) VALUES "
+					"INSERT OR REPLACE INTO `new_schede`(`scheda_id`, `title`, `release_date`, `poster`, `background`, `description`, `genre_ids`, `vote`, `type`, `fallback`, `last_update`) VALUES "
 							+ "(" + SQL.escape("" + i.ID) + "," + " '" + SQL.escape(i.title) + "'," + " '"
 							+ SQL.escape(i.relese) + "'," + " '" + SQL.escape(i.poster) + "', " + " '"
 							+ SQL.escape(i.back) + "', " + " '" + SQL.escape(i.desc) + "', " + " '"
@@ -260,22 +260,48 @@ public class SQLQuery
 		}
 	}
 	
+	// -----------------------------
+	
 	// Files Table
 	
-	public synchronized static int writeFile(final String fileName, final String size, final int IdScheda,
-			final MainType t, boolean collaborate)
+	public synchronized static int write_notupdate_File(final String fileName, final String size, final int IdScheda,
+			final MainType t)
 	{
 		
-		SQL.ExecuteQuery("INSERT OR IGNORE INTO `Files`(`FileName`, `Size`, `IdScheda`, `Type`, `LastUpdate`) VALUES ('"
-				+ SQL.escape(fileName) + "', '" + SQL.escape(size) + "', " + IdScheda + ", " + t.ID + ", "
-				+ FunctionsUtils.getTime() + ");");
-				
-		ResultSet r = SQL.FetchData("SELECT * FROM `Files` WHERE `FileName` = '" + SQL.escape(fileName) + "';");
+		SQL.ExecuteQuery(
+				"INSERT OR IGNORE INTO `new_files`(`filename`, `size`, `schede_id`, `type`, `last_update`) VALUES ('"
+						+ SQL.escape(fileName) + "', '" + SQL.escape(size) + "', " + IdScheda + ", " + t.ID + ", "
+						+ FunctionsUtils.getTime() + ");");
+						
+		ResultSet r = SQL.FetchData("SELECT * FROM `new_files` WHERE `filename` = '" + SQL.escape(fileName) + "';");
 		try
 		{
 			if (r.next())
 			{
-				return r.getInt("ID");
+				return r.getInt("id");
+			}
+		} catch (SQLException e)
+		{
+			Log.stack(Log.DB, e);
+		}
+		return -1;
+	}
+	
+	public synchronized static int write_update_File(final String fileName, final String size, final int IdScheda,
+			final MainType t)
+	{
+		
+		SQL.ExecuteQuery(
+				"INSERT OR REPLACE INTO `new_files`(`filename`, `size`, `schede_id`, `type`, `last_update`) VALUES ('"
+						+ SQL.escape(fileName) + "', '" + SQL.escape(size) + "', " + IdScheda + ", " + t.ID + ", "
+						+ FunctionsUtils.getTime() + ");");
+						
+		ResultSet r = SQL.FetchData("SELECT * FROM `new_files` WHERE `filename` = '" + SQL.escape(fileName) + "';");
+		try
+		{
+			if (r.next())
+			{
+				return r.getInt("id");
 			}
 		} catch (SQLException e)
 		{
@@ -286,7 +312,7 @@ public class SQLQuery
 	
 	public synchronized static boolean existFile(String fileName)
 	{
-		ResultSet r = SQL.FetchData("SELECT * FROM `Files` WHERE `FileName` = '" + SQL.escape(fileName) + "';");
+		ResultSet r = SQL.FetchData("SELECT * FROM `new_files` WHERE `filename` = '" + SQL.escape(fileName) + "';");
 		try
 		{
 			if (r.next())
@@ -296,7 +322,7 @@ public class SQLQuery
 		} catch (SQLException e)
 		{
 			Log.stack(Log.DB, e);
-			Log.log(Log.DB, "SELECT * FROM `Files` WHERE `FileName` = '" + SQL.escape(fileName) + "';");
+			Log.log(Log.DB, "SELECT * FROM `new_files` WHERE `filename` = '" + SQL.escape(fileName) + "';");
 		}
 		return false;
 	}
@@ -305,13 +331,13 @@ public class SQLQuery
 	{
 		String[] result = new String[2];
 		
-		ResultSet r = SQL.FetchData("SELECT * FROM `Files` WHERE `ID` = " + id + ";");
+		ResultSet r = SQL.FetchData("SELECT * FROM `new_files` WHERE `id` = " + id + ";");
 		try
 		{
 			if (r.next())
 			{
-				result[0] = SQL.unescape(r.getString("FileName"));
-				result[1] = SQL.unescape(r.getString("Size"));
+				result[0] = SQL.unescape(r.getString("filename"));
+				result[1] = SQL.unescape(r.getString("size"));
 				return result;
 			}
 		} catch (SQLException e)
@@ -327,12 +353,12 @@ public class SQLQuery
 	
 	public synchronized static int getFileId(String fileName)
 	{
-		ResultSet r = SQL.FetchData("SELECT * FROM `Files` WHERE `FileName` = '" + SQL.escape(fileName) + "';");
+		ResultSet r = SQL.FetchData("SELECT * FROM `new_files` WHERE `filename` = '" + SQL.escape(fileName) + "';");
 		try
 		{
 			if (r.next())
 			{
-				return r.getInt("ID");
+				return r.getInt("id");
 			}
 		} catch (SQLException e)
 		{
@@ -343,12 +369,12 @@ public class SQLQuery
 	
 	public synchronized static int getSchedaId(String fileName)
 	{
-		ResultSet r = SQL.FetchData("SELECT * FROM `Files` WHERE `FileName` = '" + SQL.escape(fileName) + "';");
+		ResultSet r = SQL.FetchData("SELECT * FROM `new_files` WHERE `filename` = '" + SQL.escape(fileName) + "';");
 		try
 		{
 			if (r.next())
 			{
-				return r.getInt("IdScheda");
+				return r.getInt("schede_id");
 			}
 		} catch (SQLException e)
 		{
@@ -359,12 +385,12 @@ public class SQLQuery
 	
 	public synchronized static int getFileType(String fileName)
 	{
-		ResultSet r = SQL.FetchData("SELECT * FROM `Files` WHERE `FileName` = '" + SQL.escape(fileName) + "';");
+		ResultSet r = SQL.FetchData("SELECT * FROM `new_files` WHERE `filename` = '" + SQL.escape(fileName) + "';");
 		try
 		{
 			if (r.next())
 			{
-				return r.getInt("Type");
+				return r.getInt("type");
 			}
 		} catch (SQLException e)
 		{
@@ -376,13 +402,13 @@ public class SQLQuery
 	public synchronized static ArrayList<Integer> readFileListBySchedeId(int schedaID, MainType Type)
 	{
 		ArrayList<Integer> list = new ArrayList<Integer>();
-		ResultSet r = SQL
-				.FetchData("SELECT * FROM `Files` WHERE `IdScheda` = " + schedaID + " AND `Type` = " + Type.ID + ";");
+		ResultSet r = SQL.FetchData(
+				"SELECT * FROM `new_files` WHERE `schede_id` = " + schedaID + " AND `type` = " + Type.ID + ";");
 		try
 		{
 			while (r.next())
 			{
-				list.add(r.getInt("ID"));
+				list.add(r.getInt("id"));
 			}
 		} catch (SQLException e)
 		{
@@ -444,6 +470,7 @@ public class SQLQuery
 		SQL.ExecuteQuery("DROP TABLE `new_schede`");
 		SQL.ExecuteQuery("DROP TABLE `new_cache_search`");
 		SQL.ExecuteQuery("DROP TABLE `file_cache`");
+		SQL.ExecuteQuery("DROP TABLE `new_files`");
 		
 		initTable();
 	}
