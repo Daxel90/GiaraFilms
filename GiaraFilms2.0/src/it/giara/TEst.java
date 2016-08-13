@@ -11,7 +11,7 @@ import it.giara.utils.Log;
 public class TEst
 {
 	public static void main(String[] args)
-	{
+	{ //TEST
 		// ThreadManager.submitCacheTask(new InitializeRunnable(null));
 		/*
 		 * String s =
