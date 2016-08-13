@@ -6,6 +6,15 @@ public class ElaborateRequestService implements Runnable
 {
 	public static boolean running = false;
 	
+	/*
+		Accepted Commands
+		
+		C:-:FileName			checkFile
+		US:-:type:-:id			update SchedeId
+		UF:-:FileName			update File
+		
+	*/
+	
 	@Override
 	public void run()
 	{

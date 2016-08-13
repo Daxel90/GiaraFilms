@@ -19,7 +19,7 @@ import it.giara.gui.MainFrame;
 import it.giara.gui.section.FilmInfoSchede;
 import it.giara.gui.utils.ColorUtils;
 import it.giara.gui.utils.ImageUtils;
-import it.giara.tmdb.schede.TMDBScheda;
+import it.giara.tmdb.TMDBScheda;
 
 public class FilmButton extends JLabel implements MouseListener
 {

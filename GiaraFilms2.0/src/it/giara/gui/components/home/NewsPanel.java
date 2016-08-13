@@ -7,7 +7,7 @@ import it.giara.analyze.enums.MainType;
 import it.giara.gui.utils.ColorUtils;
 import it.giara.sql.SQLQuery;
 import it.giara.syncdata.NewServerQuery;
-import it.giara.tmdb.schede.TMDBScheda;
+import it.giara.tmdb.TMDBScheda;
 import it.giara.utils.FunctionsUtils;
 import it.giara.utils.ThreadManager;
 

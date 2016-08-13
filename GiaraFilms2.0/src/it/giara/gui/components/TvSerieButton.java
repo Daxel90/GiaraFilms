@@ -19,7 +19,7 @@ import it.giara.gui.MainFrame;
 import it.giara.gui.section.TVSerieInfoSchede;
 import it.giara.gui.utils.ColorUtils;
 import it.giara.gui.utils.ImageUtils;
-import it.giara.tmdb.schede.TMDBScheda;
+import it.giara.tmdb.TMDBScheda;
 
 public class TvSerieButton extends JLabel implements MouseListener
 {

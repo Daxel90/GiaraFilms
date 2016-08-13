@@ -1,4 +1,4 @@
-package it.giara.tmdb.schede;
+package it.giara.tmdb;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -14,7 +14,6 @@ import it.giara.gui.components.FilmListPanel;
 import it.giara.gui.components.home.HomeListPanel;
 import it.giara.gui.components.home.NewsButton;
 import it.giara.gui.utils.ImageUtils;
-import it.giara.tmdb.GenereType;
 import it.giara.utils.DirUtils;
 import it.giara.utils.Log;
 import it.giara.utils.MD5;

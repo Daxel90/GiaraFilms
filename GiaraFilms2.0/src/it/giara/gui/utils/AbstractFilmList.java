@@ -7,7 +7,7 @@ import javax.swing.JPanel;
 import it.giara.analyze.enums.MainType;
 import it.giara.gui.components.FilmListPanel;
 import it.giara.gui.components.home.HomeListPanel;
-import it.giara.tmdb.schede.TMDBScheda;
+import it.giara.tmdb.TMDBScheda;
 
 public class AbstractFilmList
 {

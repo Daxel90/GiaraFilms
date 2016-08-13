@@ -1,16 +1,12 @@
 package it.giara.syncdata;
 
 import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.zip.GZIPInputStream;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -24,7 +20,7 @@ import it.giara.phases.ListRequest;
 import it.giara.phases.scanservice.AnalizeFileService;
 import it.giara.sql.SQLQuery;
 import it.giara.tmdb.GenereType;
-import it.giara.tmdb.schede.TMDBScheda;
+import it.giara.tmdb.TMDBScheda;
 import it.giara.utils.GZIPCompression;
 import it.giara.utils.Log;
 import it.giara.utils.MultipartUtility;

@@ -1,9 +1,12 @@
 package it.giara;
 
+import it.giara.http.HTTPList;
 import it.giara.phases.Settings;
 import it.giara.source.ListLoader;
+import it.giara.source.SourceChan;
 import it.giara.sql.SQL;
 import it.giara.syncdata.NewServerQuery;
+import it.giara.utils.Log;
 
 public class TEst
 {
@@ -52,15 +55,16 @@ public class TEst
 		//
 		// ServerQuery.loadUntil(Integer.parseInt(Settings.getParameter("lastserversync")));
 		
-		// for (final SourceChan s : ListLoader.sources)
-		// {
-		// Log.log(Log.DEBUG, s.getStatus()+" "+s.server + " " + s.chan );
-		//
-		// }
+		for (final SourceChan s : ListLoader.sources)
+		{
+			HTTPList ht = new HTTPList(s.link,".");
+			Log.log(Log.DEBUG,ht.file.size());
+			
+		}
 		
-//		new LoadFileService().run();
+		// new LoadFileService().run();
 		
-		NewServerQuery.load100News();
+//		NewServerQuery.load100News();
 		
 		// TmdbApiSearchTVSerie film = new TmdbApiSearchTVSerie("breaking bad",
 		// -1);
@@ -70,7 +74,6 @@ public class TEst
 		// Log.log(Log.DEBUG, film.scheda.toString());
 		// }
 		//
-
 		
 	}
 }

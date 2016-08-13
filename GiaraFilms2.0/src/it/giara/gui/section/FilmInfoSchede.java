@@ -15,7 +15,7 @@ import it.giara.gui.utils.ColorUtils;
 import it.giara.gui.utils.ImageUtils;
 import it.giara.phases.Settings;
 import it.giara.syncdata.NewServerQuery;
-import it.giara.tmdb.schede.TMDBScheda;
+import it.giara.tmdb.TMDBScheda;
 import it.giara.utils.FunctionsUtils;
 import it.giara.utils.ThreadManager;
 

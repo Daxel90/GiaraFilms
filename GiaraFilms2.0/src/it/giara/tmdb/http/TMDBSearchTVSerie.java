@@ -13,7 +13,7 @@ import org.json.JSONObject;
 
 import it.giara.analyze.MatchStringAlghorithm;
 import it.giara.analyze.enums.MainType;
-import it.giara.tmdb.schede.TMDBScheda;
+import it.giara.tmdb.TMDBScheda;
 import it.giara.utils.Log;
 
 public class TMDBSearchTVSerie

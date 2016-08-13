@@ -7,9 +7,9 @@ import it.giara.analyze.FileInfo;
 import it.giara.analyze.enums.MainType;
 import it.giara.sql.SQLQuery;
 import it.giara.syncdata.NewServerQuery;
+import it.giara.tmdb.TMDBScheda;
 import it.giara.tmdb.api.TmdbApiSearchFilm;
 import it.giara.tmdb.api.TmdbApiSearchTVSerie;
-import it.giara.tmdb.schede.TMDBScheda;
 import it.giara.utils.Log;
 import it.giara.utils.ThreadManager;
 

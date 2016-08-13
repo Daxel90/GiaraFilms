@@ -8,7 +8,7 @@ import java.util.HashMap;
 import it.giara.analyze.enums.MainType;
 import it.giara.gui.utils.AbstractFilmList;
 import it.giara.tmdb.GenereType;
-import it.giara.tmdb.schede.TMDBScheda;
+import it.giara.tmdb.TMDBScheda;
 import it.giara.utils.FunctionsUtils;
 import it.giara.utils.Log;
 
