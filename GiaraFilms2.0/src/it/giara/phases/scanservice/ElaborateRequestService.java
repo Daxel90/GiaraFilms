@@ -2,7 +2,9 @@ package it.giara.phases.scanservice;
 
 import java.util.ArrayList;
 
+import it.giara.analyze.enums.MainType;
 import it.giara.syncdata.NewServerQuery;
+import it.giara.tmdb.api.TmdbApiLoadSchede;
 import it.giara.utils.FunctionsUtils;
 import it.giara.utils.Log;
 
@@ -49,6 +51,9 @@ public class ElaborateRequestService implements Runnable
 						command_update_schede++;
 						int type = Integer.parseInt(command.split(":--:")[1]);
 						int schedeid = Integer.parseInt(command.split(":--:")[2]);
+						
+						TmdbApiLoadSchede tmapi = new TmdbApiLoadSchede(schedeid, MainType.getMainTypeByID(type));
+						NewServerQuery.uploadSchede(tmapi.scheda);
 						
 					}
 				}

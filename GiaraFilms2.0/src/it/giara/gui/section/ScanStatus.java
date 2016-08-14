@@ -87,7 +87,7 @@ public class ScanStatus extends DefaultGui
 		infoJL.setBounds(FRAME_WIDTH / 6, (int) (FRAME_HEIGHT * 3f / 6) - 40, FRAME_WIDTH * 2 / 3, FRAME_HEIGHT/2);
 		infoJL.setVerticalAlignment(JLabel.TOP);
 		infoJL.setText("<html><h3>"
-				+"---Scan Service Service---<br>"
+				+"---Load File List Service---<br>"
 				+ "File Trovati: " + LoadFileService.TotalFile + "<br>" 
 				+ "Nuovi File Caricati: " + LoadFileService.newFile + "<br><br>" 
 				+ "---Analize Service---<br>" 
@@ -163,7 +163,7 @@ public class ScanStatus extends DefaultGui
 			}
 			
 			infoJL.setText("<html><h3>"
-					+"---Scan Service Service---<br>"
+					+"---Load File List Service---<br>"
 					+ "File Trovati: " + LoadFileService.TotalFile + "<br>" 
 					+ "Nuovi File Caricati: " + LoadFileService.newFile + "<br><br>" 
 					+ "---Analize Service---<br>" 
