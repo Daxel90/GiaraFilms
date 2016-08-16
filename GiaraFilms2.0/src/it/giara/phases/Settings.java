@@ -11,7 +11,7 @@ import it.giara.utils.DirUtils;
 
 public class Settings
 {
-	public final static int VERSION = 20;
+	public final static int VERSION = 21;
 	private final static int END_PreReleseVersion = Integer.MAX_VALUE;
 	private final static int END_BetaVersion = Integer.MAX_VALUE;
 	private static HashMap<String, String> config = new HashMap<String, String>();
@@ -26,11 +26,8 @@ public class Settings
 				DirUtils.getDefaultDownloadDir().getAbsolutePath()));
 				
 		config.put("scanservice", SQLQuerySettings.getCurrentParameter("scanservice", "1"));
-		config.put("scanservicethread", SQLQuerySettings.getCurrentParameter("scanservicethread", "1"));
 		config.put("servercollaborate", SQLQuerySettings.getCurrentParameter("servercollaborate", "1"));
 		config.put("removecompleted", SQLQuerySettings.getCurrentParameter("removecompleted", "0"));
-		config.put("serversync", SQLQuerySettings.getCurrentParameter("serversync", "0")); // Features
-		config.put("lastserversync", SQLQuerySettings.getCurrentParameter("lastserversync", "0")); // Features
 		config.put("tos", SQLQuerySettings.getCurrentParameter("tos", "0"));
 		
 		config.put("downloadlimit", SQLQuerySettings.getCurrentParameter("downloadlimit", "0"));
@@ -82,16 +79,28 @@ public class Settings
 	
 	public static void UpdateFixer()
 	{
+		
+		if(Integer.parseInt(Settings.getParameter("ProgramVersion")) < 21)
+		{
+			setBoolean("scanservice", true);
+			setBoolean("servercollaborate", true);
+			SQLQuerySettings.removeParameters("serversync");
+			SQLQuerySettings.removeParameters("lastserversync");
+			SQLQuerySettings.removeParameters("scanservicethread");
+			SQLQuerySettings.removeParameters("lastdbcheck");
+			prop.putBoolean("Savelog", false);
+		}
+		
+		if (Integer.parseInt(Settings.getParameter("DBversion")) < 21)
+		{
+			SQLQuery.DbClear();
+			setParameter("DBversion", "21");
+		}
+		
 		if (Integer.parseInt(Settings.getParameter("ProgramVersion")) < Settings.VERSION)
 		{
 			Settings.setParameter("ProgramVersion", "" + Settings.VERSION);
 			new ChangeLogFrame();
-		}
-		
-		if (Integer.parseInt(Settings.getParameter("DBversion")) < 18)
-		{
-			SQLQuery.DbClear();
-			setParameter("DBversion", "18");
 		}
 	}
 	

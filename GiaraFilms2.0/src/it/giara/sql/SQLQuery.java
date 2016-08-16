@@ -466,16 +466,16 @@ public class SQLQuery
 	
 	public synchronized static void DbClear()
 	{
-		SQL.ExecuteQuery("DROP TABLE `Files`");
-		SQL.ExecuteQuery("DROP TABLE `Schede`");
-		SQL.ExecuteQuery("DROP TABLE `CacheSearch`");
-		SQL.ExecuteQuery("DROP TABLE `EpisodeInfo`");
+		SQL.ExecuteQuery("DROP TABLE IF EXISTS `Files`");
+		SQL.ExecuteQuery("DROP TABLE IF EXISTS `Schede`");
+		SQL.ExecuteQuery("DROP TABLE IF EXISTS `CacheSearch`");
+		SQL.ExecuteQuery("DROP TABLE IF EXISTS `EpisodeInfo`");
 		
-		SQL.ExecuteQuery("DROP TABLE `new_cache`");
-		SQL.ExecuteQuery("DROP TABLE `new_schede`");
-		SQL.ExecuteQuery("DROP TABLE `new_cache_search`");
-		SQL.ExecuteQuery("DROP TABLE `file_cache`");
-		SQL.ExecuteQuery("DROP TABLE `new_files`");
+		SQL.ExecuteQuery("DROP TABLE IF EXISTS `new_cache`");
+		SQL.ExecuteQuery("DROP TABLE IF EXISTS `new_schede`");
+		SQL.ExecuteQuery("DROP TABLE IF EXISTS `new_cache_search`");
+		SQL.ExecuteQuery("DROP TABLE IF EXISTS `file_cache`");
+		SQL.ExecuteQuery("DROP TABLE IF EXISTS `new_files`");
 		
 		initTable();
 	}
