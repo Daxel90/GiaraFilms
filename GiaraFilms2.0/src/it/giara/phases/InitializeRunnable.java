@@ -63,7 +63,7 @@ public class InitializeRunnable implements Runnable
 			screen.bar.setValue(5);
 		}
 		
-		if (Settings.getParameter("scanservice").equals("1"))
+		if (Settings.getBoolean("scanservice"))
 		{
 			if (screen != null)
 				screen.textProgress.setText("Avvio ScanService");
@@ -71,7 +71,7 @@ public class InitializeRunnable implements Runnable
 			ThreadManager.submitCacheTask(new ElaborateRequestService());
 		}
 		
-		if (Settings.getParameter("tos").equals("1"))
+		if (Settings.getBoolean("tos"))
 			MainFrame.getInstance().setInternalPane(new HomePage());
 		else
 			MainFrame.getInstance().setInternalPane(new TOS());

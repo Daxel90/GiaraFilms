@@ -309,7 +309,7 @@ public class FileSources
 		
 		SQLQuerySettings.removeDownload(filename);
 		
-		if (Settings.getParameter("removecompleted").equals("1"))
+		if (Settings.getBoolean("removecompleted"))
 		{
 			DownloadManager.AllFile.remove(filename);
 			if (MainFrame.getInstance().internalPane instanceof Download)

@@ -90,7 +90,7 @@ public class NewServerQuery
 			
 			for (String line : response)
 			{
-				Log.log(Log.DEBUG, line);
+				Log.log(Log.BACKEND, line);
 				if (line.startsWith("check"))
 				{
 					int id = Integer.parseInt(line.trim().split(":")[1]);
@@ -123,7 +123,7 @@ public class NewServerQuery
 			
 			for (String line : response)
 			{
-				Log.log(Log.DEBUG, line);
+				Log.log(Log.BACKEND, line);
 			}
 			
 		} catch (Exception e)
@@ -161,7 +161,7 @@ public class NewServerQuery
 			
 			for (String line : response)
 			{
-				Log.log(Log.DEBUG, line);
+				Log.log(Log.BACKEND, line);
 			}
 			
 		} catch (Exception e)

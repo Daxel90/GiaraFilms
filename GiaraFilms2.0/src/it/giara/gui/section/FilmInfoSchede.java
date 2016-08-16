@@ -41,7 +41,7 @@ public class FilmInfoSchede extends DefaultGui
 		super();
 		back = gui;
 		scheda = f;
-		if (Settings.getParameter("servercollaborate").equals("1"))
+		if (Settings.getBoolean("servercollaborate"))
 		{
 			syncRunning = true;
 			Runnable r = new Runnable()

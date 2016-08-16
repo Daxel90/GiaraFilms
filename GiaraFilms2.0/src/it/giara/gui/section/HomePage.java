@@ -42,13 +42,13 @@ public class HomePage extends DefaultGui
 		if (sync != null)
 			sync.updateRunnable(OpenSync);
 			
-		if (loadingHomePage != null && Settings.getParameter("servercollaborate").equals("1"))
+		if (loadingHomePage != null && Settings.getBoolean("servercollaborate"))
 			loadingHomePage.updateRunnable(CheckHome);
 			
 		lateralDrag = new LateralDrag(this);
 		
 		Colltext = new JLabel();
-		Colltext.setVisible(!Settings.getParameter("servercollaborate").equals("1"));
+		Colltext.setVisible(!Settings.getBoolean("servercollaborate"));
 		
 		homelist = new HomeListPanel();
 		homelist.setVisible(false);
@@ -74,7 +74,7 @@ public class HomePage extends DefaultGui
 		this.add(searchTx);
 		
 		if (news == null)
-			if (Settings.getParameter("servercollaborate").equals("1"))
+			if (Settings.getBoolean("servercollaborate"))
 			{
 				news = new NewsPanel();
 				news.setVisible(NewServerQuery.newsLoaded);
@@ -122,7 +122,7 @@ public class HomePage extends DefaultGui
 		CheckSync.run();
 		this.add(sync);
 		
-		if (Settings.getParameter("servercollaborate").equals("1"))
+		if (Settings.getBoolean("servercollaborate"))
 		{
 			if (loadingHomePage == null)
 				loadingHomePage = new AnimatedImageButton("loading(n)", 9, null, CheckHome, 100);
@@ -148,7 +148,7 @@ public class HomePage extends DefaultGui
 				FRAME_WIDTH / 5 + 16, FRAME_HEIGHT - 40);
 		this.add(lateralDrag);
 		
-		if (Settings.getParameter("servercollaborate").equals("1"))
+		if (Settings.getBoolean("servercollaborate"))
 		{
 			news.setBounds(16, 56, FRAME_WIDTH - 48, FRAME_HEIGHT - 56 - 16);
 			this.add(news);
@@ -174,7 +174,7 @@ public class HomePage extends DefaultGui
 			if (news != null)
 				news.setVisible(true);
 			homelist.setVisible(false);
-			Colltext.setVisible(!Settings.getParameter("servercollaborate").equals("1"));
+			Colltext.setVisible(!Settings.getBoolean("servercollaborate"));
 		}
 		else
 		{

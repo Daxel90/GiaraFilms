@@ -34,7 +34,7 @@ public class ListRequest
 	{
 		if (genre != null)
 		{
-			if (Settings.getParameter("servercollaborate").equals("1"))
+			if (Settings.getBoolean("servercollaborate"))
 				NewServerQuery.loadSchedeList(genre, type, list, running);
 				
 			else
@@ -42,7 +42,7 @@ public class ListRequest
 		}
 		else
 		{
-			if (Settings.getParameter("servercollaborate").equals("1"))
+			if (Settings.getBoolean("servercollaborate"))
 				NewServerQuery.loadAllSchedeList(type, list, running);
 			else
 				SQLQuery.loadAllSchedeList(type, list);

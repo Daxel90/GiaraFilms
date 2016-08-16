@@ -68,7 +68,7 @@ public class TOS extends DefaultGui
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				Settings.setParameter("tos", "1");
+				Settings.setBoolean("tos", true);
 				MainFrame.getInstance().setInternalPane(new HomePage());
 			}
 		});

@@ -51,6 +51,22 @@ public class Settings
 		SQLQuerySettings.updateParameters(key, value);
 	}
 	
+	public static boolean getBoolean(String key)
+	{
+		return config.get(key).equals("1");
+	}
+	
+	public static void setBoolean(String key, boolean bval)
+	{
+		String value = "0";
+		
+		if (bval)
+			value = "1";
+			
+		config.put(key, value);
+		SQLQuerySettings.updateParameters(key, value);
+	}
+	
 	public static String getTitle(int Version)
 	{
 		String result = "GiaraFilms 2.0";

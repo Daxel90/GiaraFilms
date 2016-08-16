@@ -41,7 +41,7 @@ public class DownloadHandler
 	
 	public static void BotSetInList(String BotName)
 	{
-		if (Integer.parseInt(Settings.getParameter("downloadlimit")) != 1)
+		if (!Settings.getBoolean("downloadlimit"))
 			return;
 			
 		Log.log(Log.DEBUG, "CD:" + CurrentDownloading + " Il Bot ti ha messo in lista: " + BotName);
@@ -54,7 +54,7 @@ public class DownloadHandler
 	
 	public static void DownloadComplete(String filename)
 	{
-		if (Integer.parseInt(Settings.getParameter("downloadlimit")) != 1)
+		if (!Settings.getBoolean("downloadlimit"))
 			return;
 			
 		Log.log(Log.DEBUG, "CD:" + CurrentDownloading + " Complete download: " + filename);
@@ -86,7 +86,7 @@ public class DownloadHandler
 	
 	public static void TransmissionFailed(String filename)
 	{
-		if (Integer.parseInt(Settings.getParameter("downloadlimit")) != 1)
+		if (!Settings.getBoolean("downloadlimit"))
 			return;
 			
 		Log.log(Log.DEBUG, "CD:" + CurrentDownloading + " TransmissionFailed: " + filename);
@@ -97,7 +97,7 @@ public class DownloadHandler
 	
 	public static void DownloadCreate(String filename, FileSources fs)
 	{
-		if (Integer.parseInt(Settings.getParameter("downloadlimit")) != 1)
+		if (!Settings.getBoolean("downloadlimit"))
 			return;
 			
 		Log.log(Log.DEBUG, "CD:" + CurrentDownloading + " DownloadCreate: " + filename);
@@ -119,7 +119,7 @@ public class DownloadHandler
 	
 	public static void DownloadRestart(String filename, FileSources fs)
 	{
-		if (Integer.parseInt(Settings.getParameter("downloadlimit")) != 1)
+		if (!Settings.getBoolean("downloadlimit"))
 			return;
 			
 		Log.log(Log.DEBUG, "CD:" + CurrentDownloading + " Start Download: " + filename);
@@ -142,7 +142,7 @@ public class DownloadHandler
 	
 	public static void DownloadPause(String filename, FileSources file)
 	{
-		if (Integer.parseInt(Settings.getParameter("downloadlimit")) != 1)
+		if (!Settings.getBoolean("downloadlimit"))
 			return;
 			
 		Log.log(Log.DEBUG, "CD:" + CurrentDownloading + " Pause download: " + filename);

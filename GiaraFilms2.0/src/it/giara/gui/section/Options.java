@@ -121,7 +121,7 @@ public class Options extends DefaultGui
 		
 		final JCheckBox scanService = new JCheckBox();
 		scanService.setText("ScanService (richiede riavvio)");
-		scanService.setSelected(Settings.getParameter("scanservice").equals("1"));
+		scanService.setSelected(Settings.getBoolean("scanservice"));
 		scanService.setBounds(50, 170, FRAME_WIDTH / 2, 30);
 		scanService.setToolTipText(
 				"<html>Lo ScanService è un algoritmo di scansione in background che permette di analizzare tutte le liste,<br>"
@@ -134,12 +134,7 @@ public class Options extends DefaultGui
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				if (scanService.isSelected())
-					Settings.setParameter("scanservice", "1");
-				else
-					Settings.setParameter("scanservice", "0");
-					
-			
+				Settings.setBoolean("scanservice", scanService.isSelected());
 			}
 		});
 
@@ -147,7 +142,7 @@ public class Options extends DefaultGui
 		
 		final JCheckBox serverCollaborate = new JCheckBox();
 		serverCollaborate.setText("Collaborazione con il server");
-		serverCollaborate.setSelected(Settings.getParameter("servercollaborate").equals("1"));
+		serverCollaborate.setSelected(Settings.getBoolean("servercollaborate"));
 		serverCollaborate.setBounds(50, 210, FRAME_WIDTH / 2, 30);
 		serverCollaborate.setToolTipText(
 				"<html>La collaborazione con il server permette di condividere i dati di analisi dal tuo GiaraFilms con altri utenti,<br>"
@@ -158,10 +153,7 @@ public class Options extends DefaultGui
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				if (serverCollaborate.isSelected())
-					Settings.setParameter("servercollaborate", "1");
-				else
-					Settings.setParameter("servercollaborate", "0");
+				Settings.setBoolean("servercollaborate", serverCollaborate.isSelected());
 			}
 		});
 		
@@ -170,7 +162,7 @@ public class Options extends DefaultGui
 		
 		final JCheckBox removeCompleted = new JCheckBox();
 		removeCompleted.setText("Rimuovi Download Completati");
-		removeCompleted.setSelected(Settings.getParameter("removecompleted").equals("1"));
+		removeCompleted.setSelected(Settings.getBoolean("removecompleted"));
 		removeCompleted.setBounds(50, 250, FRAME_WIDTH / 2, 30);
 		removeCompleted.setToolTipText(
 				"<html>Permette di rimuovere automaticamente i download completati dall' elenco</html>");
@@ -180,10 +172,7 @@ public class Options extends DefaultGui
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				if (removeCompleted.isSelected())
-					Settings.setParameter("removecompleted", "1");
-				else
-					Settings.setParameter("removecompleted", "0");
+				Settings.setBoolean("removecompleted", removeCompleted.isSelected());
 			}
 		});
 		
@@ -236,7 +225,7 @@ public class Options extends DefaultGui
 		
 		final JCheckBox maxDownload = new JCheckBox();
 		maxDownload.setText("Limita Download Contemporanei (richiede riavvio)");
-		maxDownload.setSelected(Settings.getParameter("downloadlimit").equals("1"));
+		maxDownload.setSelected(Settings.getBoolean("downloadlimit"));
 		maxDownload.setBounds(50, 290, FRAME_WIDTH / 2, 30);
 		maxDownload.setToolTipText(
 				"<html>Questa funzione permette di limitare i download contemporanei</html>");
@@ -246,11 +235,7 @@ public class Options extends DefaultGui
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				if (maxDownload.isSelected())
-					Settings.setParameter("downloadlimit", "1");
-				else
-					Settings.setParameter("downloadlimit", "0");
-					
+				Settings.setBoolean("downloadlimit", maxDownload.isSelected());
 				maxDownloadN.setVisible(maxDownload.isSelected());
 				maxDownloadlabel.setVisible(maxDownload.isSelected());
 			}

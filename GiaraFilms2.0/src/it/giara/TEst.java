@@ -1,11 +1,12 @@
 package it.giara;
 
-import it.giara.http.HTTPList;
+import it.giara.analyze.enums.MainType;
 import it.giara.phases.Settings;
 import it.giara.source.ListLoader;
 import it.giara.source.SourceChan;
 import it.giara.sql.SQL;
 import it.giara.syncdata.NewServerQuery;
+import it.giara.tmdb.api.TmdbApiLoadSchede;
 import it.giara.utils.Log;
 
 public class TEst
@@ -62,7 +63,10 @@ public class TEst
 //			
 //		}
 		
-		NewServerQuery.loadRequestCommand();
+//		NewServerQuery.loadRequestCommand();
+		
+		TmdbApiLoadSchede api = new TmdbApiLoadSchede(62560,MainType.SerieTV);
+		System.out.println(api.scheda);
 		
 		// new LoadFileService().run();
 		
