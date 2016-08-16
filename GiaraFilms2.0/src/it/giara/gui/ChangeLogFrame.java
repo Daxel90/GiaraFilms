@@ -52,12 +52,13 @@ public class ChangeLogFrame extends JFrame
 		text.setOpaque(false);
 		text.setContentType("text/html");
 		text.setText("<html>"
-				+ "<h2>--------------------" + "<h2>Dev PreRelese 21 Technical UPDATE"
+				+ "<h2>--------------------" + "<h2>Dev PreRelese 21"
 				+ "<br><h3>\t- Aggiornato l'aspetto grafico del programma"
 				+ "<br><h3>\t- Creato nuovo Scan Service Modulare"
 				+ "<br><h3>\t- Creato nuovo protocollo collaborazione Server"
 				+ "<br><h3>\t- Migliorato algoritmo riconoscimento file"
-				+ "<br><h3>\t- Creata Sezione Utente"
+				+ "<br><h3>\t- Avvelocizzata ricerca file e caricamento liste"
+				+ "<br><h3>\t- Migliorato sistema di Cache"
 				+ "<br><h3>\t- Fix del Fix per i download contemporanei (Dev 20)"
 				+ "<h2>--------------------" + "<h2>Dev PreRelese 20"
 				+ "<br><h3>\t- Effettuato Fix per i download contemporanei"

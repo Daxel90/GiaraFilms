@@ -85,6 +85,7 @@ public class HomePage extends DefaultGui
 				OpenUser);
 		user.setBounds(FRAME_WIDTH * 3 / 4 - 85, 5, 32, 32);
 		user.setToolTipText("Preferiti");
+		user.setVisible(false);
 		this.add(user);
 		
 		ImageButton search = new ImageButton(ImageUtils.getImage("gui/icon32px/search.png"),
@@ -159,6 +160,7 @@ public class HomePage extends DefaultGui
 					"<html><h2>Per poter usare l'HomePage, è necessario abilitare la Collaborazione Server</html>");
 			Colltext.setHorizontalAlignment(JLabel.CENTER);
 			Colltext.setBounds(0, (FRAME_HEIGHT - 128) / 2, FRAME_WIDTH, 128);
+			Colltext.setVisible(true);
 			this.add(Colltext);
 		}
 		

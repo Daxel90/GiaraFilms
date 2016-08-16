@@ -61,6 +61,9 @@ public class ElaborateRequestService implements Runnable
 			
 			commands = NewServerQuery.loadRequestCommand();
 		}
+		running = false;
+		Log.log(Log.INFO, "GiaraFilms finish ElaborateRequestService");
 	}
+	
 	
 }

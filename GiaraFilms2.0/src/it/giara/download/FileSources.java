@@ -67,7 +67,7 @@ public class FileSources
 		if (paused  || waitLoalDownload)
 			return;
 		
-		Log.log(Log.DEBUG, "Carico Liste");
+		Log.log(Log.DOWNLOAD, "Carico Liste");
 		loadingBotList = ListLoader.sources.size();
 		
 		Runnable run = new Runnable()
@@ -96,7 +96,7 @@ public class FileSources
 	{
 		while (loadingBotList > 0)
 		{
-			Log.log(Log.DEBUG, "Bot: " + totalBot + "  " + filename);
+			Log.log(Log.DOWNLOAD, "Bot: " + totalBot + "  " + filename);
 			FunctionsUtils.sleep(1000);
 		}
 	}

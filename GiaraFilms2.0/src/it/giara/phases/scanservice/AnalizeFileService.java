@@ -89,6 +89,7 @@ public class AnalizeFileService implements Runnable
 			
 		}
 		running = false;
+		Log.log(Log.INFO, "GiaraFilms finish AnalizeFileService");
 	}
 	
 	public static synchronized void addFile(String filename, String size)

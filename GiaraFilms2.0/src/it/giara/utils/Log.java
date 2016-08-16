@@ -24,15 +24,15 @@ public class Log
 	public static LogType TMDB = LogType.TMDB;
 	public static LogType TMDBApi = LogType.TMDBApi;
 	public static LogType BACKEND = LogType.BACKEND;
+	public static LogType SearchService = LogType.SearchService;
 	
 	public static void log(LogType l, Object o)
 	{
-		if (!l.equals(TMDB) && !l.equals(NET) && !l.equals(TMDBApi) && !l.equals(FILEINFO) && !l.equals(DOWNLOAD)
-				&& !l.equals(SCANSERVICE) && !l.equals(FILMINFO))
+		if(l.print || Settings.prop.getBoolean("Savelog", false))
 		{
-			System.out.println(o);
+			System.out.println("["+l.name()+"] "+o);
 			if (o != null)
-				writeLog(o.toString());
+				writeLog("["+l.name()+"] "+o.toString());
 		}
 	}
 	
@@ -77,6 +77,28 @@ public class Log
 
 enum LogType
 {
-	NETWORK, DEBUG, INFO, CONFIG, FILEINFO, FILMINFO, DB, GUI, ERROR, IMAGE, IRC, DOWNLOAD, SCANSERVICE, TMDB, BACKEND,
-	TMDBApi
+	NETWORK(false), 
+	DEBUG(false), 
+	INFO(true), 
+	CONFIG(true), 
+	FILEINFO(false), 
+	FILMINFO(false), 
+	DB(true), 
+	GUI(true), 
+	ERROR(true), 
+	IMAGE(true), 
+	IRC(true), 
+	DOWNLOAD(false), 
+	SCANSERVICE(false), 
+	TMDB(false), 
+	BACKEND(false),
+	TMDBApi(false),
+	SearchService(false);
+	
+	LogType(boolean p)
+	{
+		print = p;
+	}
+	
+	boolean print = true;
 }
