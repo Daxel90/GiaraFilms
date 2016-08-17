@@ -136,7 +136,7 @@ public class NewServerQuery
 	// ACTION 3
 	public static void updateFileInfo(String filename, int schedaID)
 	{
-		
+		Log.log(Log.BACKEND, "UploadInfo: "+filename+"  "+schedaID);
 		JSONObject jsonData = new JSONObject();
 		
 		try

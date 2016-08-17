@@ -29,9 +29,12 @@ public class ElaborateRequestService implements Runnable
 		running = true;
 		FunctionsUtils.sleep(10000);
 		ArrayList<String> commands = NewServerQuery.loadRequestCommand();
-		
-		while (running && commands.size() > 0)
+		boolean flag = true;
+		while (running && commands.size() > 0 && flag)
 		{
+			if(commands.size() <200)
+				flag = false;
+			
 			for (String command : commands)
 			{
 				command_recived++;
