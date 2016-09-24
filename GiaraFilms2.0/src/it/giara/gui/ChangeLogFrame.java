@@ -52,8 +52,10 @@ public class ChangeLogFrame extends JFrame
 		text.setOpaque(false);
 		text.setContentType("text/html");
 		text.setText("<html>"
+				+ "<h2>--------------------" + "<h2>Dev PreRelese 23"
+				+ "<br><h3>\t- Risolto Bug importante nelle Cache del LoadFileService"
 				+ "<h2>--------------------" + "<h2>Dev PreRelese 22"
-				+ "<br><h3>\t- Risolti Fix minori riguardanti lo ScanService"
+				+ "<br><h3>\t- Risolti Bug minori riguardanti lo ScanService"
 				+ "<h2>--------------------" + "<h2>Dev PreRelese 21"
 				+ "<br><h3>\t- Aggiornato l'aspetto grafico del programma"
 				+ "<br><h3>\t- Creato nuovo Scan Service Modulare"
