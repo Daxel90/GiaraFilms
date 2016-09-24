@@ -137,7 +137,7 @@ public class SQLQuery
 	// ---file_cache---
 	public synchronized static void write_file_cache(final String fileName)
 	{
-		SQL.ExecuteQuery("INSERT OR IGNORE INTO `file_cache`(`filename`, `lastupload`) VALUES ('" + SQL.escape(fileName)
+		SQL.ExecuteQuery("INSERT OR REPLACE INTO `file_cache`(`filename`, `lastupload`) VALUES ('" + SQL.escape(fileName)
 				+ "', " + FunctionsUtils.getTime() + ");");
 	}
 	

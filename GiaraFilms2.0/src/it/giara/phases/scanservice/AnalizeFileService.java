@@ -41,7 +41,7 @@ public class AnalizeFileService implements Runnable
 			
 			if (cache == -1)
 			{
-				schede_trovate++;
+				schede_non_trovate++;
 				NewServerQuery.updateFileInfo(fileName, cache);
 				SQLQuery.write_update_File(fileName, size, cache, fI.type);
 				continue;
