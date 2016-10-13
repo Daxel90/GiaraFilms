@@ -8,8 +8,8 @@ import it.giara.source.ListLoader;
 import it.giara.source.SourceChan;
 import it.giara.sql.SQLQuery;
 import it.giara.tmdb.TMDBScheda;
-import it.giara.tmdb.http.TMDBSearchFilm;
-import it.giara.tmdb.http.TMDBSearchTVSerie;
+import it.giara.tmdb.api.TmdbApiSearchFilm;
+import it.giara.tmdb.api.TmdbApiSearchTVSerie;
 import it.giara.utils.FunctionsUtils;
 import it.giara.utils.Log;
 import it.giara.utils.ThreadManager;
@@ -98,10 +98,11 @@ public class SearchService
 													
 												if (cache == -2)
 												{
-													TMDBSearchFilm httpF = new TMDBSearchFilm(f.title, f.year);
+													TmdbApiSearchFilm httpF = new TmdbApiSearchFilm(f.title, f.year);
 													if (httpF.scheda == null)
 													{
-														SQLQuery.write_notupdate_new_cache_search(f.title, f.type, -1, f.year);
+														SQLQuery.write_notupdate_new_cache_search(f.title, f.type, -1,
+																f.year);
 														SQLQuery.write_notupdate_File(s2, size, -1, f.type);
 														break;
 													}
@@ -109,7 +110,8 @@ public class SearchService
 													
 													list.addScheda(httpF.scheda);
 													
-													SQLQuery.write_notupdate_new_cache_search(f.title, f.type, schedaID, f.year);
+													SQLQuery.write_notupdate_new_cache_search(f.title, f.type, schedaID,
+															f.year);
 													SQLQuery.write_notupdate_File(s2, size, schedaID, f.type);
 												}
 												else
@@ -120,30 +122,35 @@ public class SearchService
 											case SerieTV:
 												int cache2 = SQLQuery.get_new_cache_search(f.title, f.type, f.year);
 												Log.log(Log.SearchService, "SerieTV");
-												Log.log(Log.SearchService, "cache2:"+cache2);
+												Log.log(Log.SearchService, "cache2:" + cache2);
 												if (cache2 == -1)
 													return;
 													
 												if (cache2 == -2)
 												{
-													TMDBSearchTVSerie httpF = new TMDBSearchTVSerie(f.title);
+													TmdbApiSearchTVSerie httpF = new TmdbApiSearchTVSerie(f.title,
+															f.year);
 													if (httpF.scheda == null)
 													{
-														SQLQuery.write_notupdate_new_cache_search(f.title, f.type, -1, f.year);
+														SQLQuery.write_notupdate_new_cache_search(f.title, f.type, -1,
+																f.year);
 														break;
 													}
 													int schedaSTV = SQLQuery.writeScheda(httpF.scheda);
 													
-													SQLQuery.write_notupdate_new_cache_search(f.title, f.type, schedaSTV, f.year);
-													int FileId = SQLQuery.write_notupdate_File(s2, size, schedaSTV, f.type);
-													
+													SQLQuery.write_notupdate_new_cache_search(f.title, f.type,
+															schedaSTV, f.year);
+													int FileId = SQLQuery.write_notupdate_File(s2, size, schedaSTV,
+															f.type);
+															
 													list.addScheda(httpF.scheda);
 													
 													SQLQuery.writeEpisodeInfo(FileId, schedaSTV, f.episode, f.series);
 												}
 												else
 												{
-													int FileId = SQLQuery.write_notupdate_File(s2, size, cache2, f.type);
+													int FileId = SQLQuery.write_notupdate_File(s2, size, cache2,
+															f.type);
 													SQLQuery.writeEpisodeInfo(FileId, cache2, f.episode, f.series);
 												}
 												

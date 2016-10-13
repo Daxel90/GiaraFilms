@@ -52,6 +52,8 @@ public class ChangeLogFrame extends JFrame
 		text.setOpaque(false);
 		text.setContentType("text/html");
 		text.setText("<html>"
+				+ "<h2>--------------------" + "<h2>Dev PreRelese 24"
+				+ "<br><h3>\t- Fix importante sulla ricerca, purtroppo TMDB ha modificato il sito, adesso la ricerca è più lenta :("
 				+ "<h2>--------------------" + "<h2>Dev PreRelese 23"
 				+ "<br><h3>\t- Risolto Bug importante nelle Cache del LoadFileService"
 				+ "<h2>--------------------" + "<h2>Dev PreRelese 22"
