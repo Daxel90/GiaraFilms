@@ -91,7 +91,7 @@ public class SearchService
 										switch (f.type)
 										{
 											case Film:
-												int cache = SQLQuery.get_new_cache_search(f.title, f.type, f.year);
+												int cache = SQLQuery.get_new_cache(f.title, f.type, f.year);
 												Log.log(Log.SearchService, "Film");
 												if (cache == -1)
 													return;
@@ -101,7 +101,7 @@ public class SearchService
 													TmdbApiSearchFilm httpF = new TmdbApiSearchFilm(f.title, f.year);
 													if (httpF.scheda == null)
 													{
-														SQLQuery.write_notupdate_new_cache_search(f.title, f.type, -1,
+														SQLQuery.write_notupdate_new_cache(f.title, f.type, -1,
 																f.year);
 														SQLQuery.write_notupdate_File(s2, size, -1, f.type);
 														break;
@@ -110,7 +110,7 @@ public class SearchService
 													
 													list.addScheda(httpF.scheda);
 													
-													SQLQuery.write_notupdate_new_cache_search(f.title, f.type, schedaID,
+													SQLQuery.write_notupdate_new_cache(f.title, f.type, schedaID,
 															f.year);
 													SQLQuery.write_notupdate_File(s2, size, schedaID, f.type);
 												}
@@ -120,7 +120,7 @@ public class SearchService
 												}
 												break;
 											case SerieTV:
-												int cache2 = SQLQuery.get_new_cache_search(f.title, f.type, f.year);
+												int cache2 = SQLQuery.get_new_cache(f.title, f.type, f.year);
 												Log.log(Log.SearchService, "SerieTV");
 												Log.log(Log.SearchService, "cache2:" + cache2);
 												if (cache2 == -1)
@@ -132,13 +132,13 @@ public class SearchService
 															f.year);
 													if (httpF.scheda == null)
 													{
-														SQLQuery.write_notupdate_new_cache_search(f.title, f.type, -1,
+														SQLQuery.write_notupdate_new_cache(f.title, f.type, -1,
 																f.year);
 														break;
 													}
 													int schedaSTV = SQLQuery.writeScheda(httpF.scheda);
 													
-													SQLQuery.write_notupdate_new_cache_search(f.title, f.type,
+													SQLQuery.write_notupdate_new_cache(f.title, f.type,
 															schedaSTV, f.year);
 													int FileId = SQLQuery.write_notupdate_File(s2, size, schedaSTV,
 															f.type);

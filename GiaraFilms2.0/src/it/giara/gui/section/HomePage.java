@@ -80,13 +80,13 @@ public class HomePage extends DefaultGui
 				news.setVisible(NewServerQuery.newsLoaded);
 			}
 			
-		ImageButton user = new ImageButton(ImageUtils.getImage("gui/icon32px/user.png"),
-				ImageUtils.getImage("gui/icon32px/user_over.png"), ImageUtils.getImage("gui/icon32px/user_over.png"),
-				OpenUser);
-		user.setBounds(FRAME_WIDTH * 3 / 4 - 85, 5, 32, 32);
-		user.setToolTipText("Preferiti");
-		user.setVisible(false);
-		this.add(user);
+//		ImageButton user = new ImageButton(ImageUtils.getImage("gui/icon32px/user.png"),
+//				ImageUtils.getImage("gui/icon32px/user_over.png"), ImageUtils.getImage("gui/icon32px/user_over.png"),
+//				OpenUser);
+//		user.setBounds(FRAME_WIDTH * 3 / 4 - 85, 5, 32, 32);
+//		user.setToolTipText("Preferiti");
+//		user.setVisible(true);
+//		this.add(user);
 		
 		ImageButton search = new ImageButton(ImageUtils.getImage("gui/icon32px/search.png"),
 				ImageUtils.getImage("gui/icon32px/search_over.png"),

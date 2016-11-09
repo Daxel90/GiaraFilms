@@ -39,14 +39,21 @@ public class SQLQuery
 				+ "`last_update`	INTEGER NOT NULL" + ");";
 		SQL.ExecuteQuery(query1);
 		
-		String query2 = "CREATE TABLE IF NOT EXISTS `new_schede` (`scheda_id`	INTEGER NOT NULL,`title`	TEXT NOT NULL UNIQUE,`release_date`	TEXT,`poster`	TEXT,`background`	TEXT,`description`	TEXT,`genre_ids`	TEXT,`vote`	REAL,`type`	INTEGER NOT NULL,`fallback`	INTEGER NOT NULL,`last_update`	INTEGER NOT NULL,PRIMARY KEY(scheda_id));";
+		String query2 = "CREATE TABLE IF NOT EXISTS `new_schede` ("
+				+ "`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, "
+				+ "`scheda_id`	INTEGER NOT NULL,"
+				+ "`title`	TEXT NOT NULL UNIQUE,"
+				+ "`release_date`	TEXT,"
+				+ "`poster`	TEXT,"
+				+ "`background`	TEXT,"
+				+ "`description`	TEXT,"
+				+ "`genre_ids`	TEXT,"
+				+ "`vote`	REAL,"
+				+ "`type`	INTEGER NOT NULL,"
+				+ "`fallback`	INTEGER NOT NULL,"
+				+ "`last_update`	INTEGER NOT NULL"
+				+ ");";
 		SQL.ExecuteQuery(query2);
-		
-		String query3 = "CREATE TABLE IF NOT EXISTS `new_cache_search` ("
-				+ "`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, " + "`search`	TEXT NOT NULL UNIQUE, "
-				+ "`type`	INTEGER, " + "`id_result`	INTEGER, " + "`year`	INTEGER, "
-				+ "`last_update`	INTEGER NOT NULL" + ");";
-		SQL.ExecuteQuery(query3);
 		
 		String query4 = "CREATE TABLE IF NOT EXISTS `file_cache` ("
 				+ "`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, " + "`filename`	TEXT NOT NULL UNIQUE, "
@@ -95,50 +102,11 @@ public class SQLQuery
 		return -2;
 	}
 	
-	// ---cache_search---
-	public synchronized static void write_update_new_cache_search(String search, MainType type, int ID, int year)
-	{
-		SQL.ExecuteQuery(
-				"INSERT OR REPLACE INTO `new_cache_search`(`search`, `type`, `id_result`, `year`, `last_update`) VALUES ('"
-						+ SQL.escape(search) + "', " + type.ID + ", " + ID + ", " + year + ", "
-						+ FunctionsUtils.getTime() + ");");
-	}
-	
-	public synchronized static void write_notupdate_new_cache_search(String search, MainType type, int ID, int year)
-	{
-		SQL.ExecuteQuery(
-				"INSERT OR IGNORE INTO `new_cache_search`(`search`, `type`, `id_result`, `year`, `last_update`) VALUES ('"
-						+ SQL.escape(search) + "', " + type.ID + ", " + ID + ", " + year + ", "
-						+ FunctionsUtils.getTime() + ");");
-	}
-	
-	// -1 noResult -2 check n exist
-	public synchronized static int get_new_cache_search(String search, MainType type, int year)
-	{
-		ResultSet r = SQL.FetchData("SELECT * FROM `new_cache_search` WHERE `search` = '" + SQL.escape(search)
-				+ "' AND type = " + type.ID + " AND year = " + year + " ;");
-		try
-		{
-			if (r.next())
-			{
-				if (r.getInt("id_result") == -1 && r.getInt("last_update") + 60 + 60 + 24 >= FunctionsUtils.getTime())
-				{
-					return -2;
-				}
-				return r.getInt("id_result");
-			}
-		} catch (SQLException e)
-		{
-			Log.stack(Log.DB, e);
-		}
-		return -2;
-	}
-	
 	// ---file_cache---
 	public synchronized static void write_file_cache(final String fileName)
 	{
-		SQL.ExecuteQuery("INSERT OR REPLACE INTO `file_cache`(`filename`, `lastupload`) VALUES ('" + SQL.escape(fileName)
-				+ "', " + FunctionsUtils.getTime() + ");");
+		SQL.ExecuteQuery("INSERT OR REPLACE INTO `file_cache`(`filename`, `lastupload`) VALUES ('"
+				+ SQL.escape(fileName) + "', " + FunctionsUtils.getTime() + ");");
 	}
 	
 	public synchronized static boolean uploaded_file_cache(String fileName)
@@ -178,10 +146,11 @@ public class SQLQuery
 	public synchronized static TMDBScheda readScheda(int IdScheda, MainType t)
 	{
 		TMDBScheda scheda = new TMDBScheda();
-		ResultSet r = SQL.FetchData(
-				"SELECT * FROM `new_schede` WHERE `scheda_id` = " + IdScheda + " AND `type` = " + t.ID + ";");
 		try
 		{
+			ResultSet r = SQL.FetchData(
+					"SELECT * FROM `new_schede` WHERE `scheda_id` = " + IdScheda + " AND `type` = " + t.ID + ";");
+			
 			if (r.next())
 			{
 				scheda.ID = r.getInt("scheda_id");
@@ -293,14 +262,15 @@ public class SQLQuery
 		String sql = "INSERT INTO `new_files`(`filename`, `size`, `schede_id`, `type`, `last_update`) VALUES ('"
 				+ SQL.escape(fileName) + "', '" + SQL.escape(size) + "', " + IdScheda + ", " + t.ID + ", "
 				+ FunctionsUtils.getTime() + ");";
-		
-		if(existFile(fileName))
+				
+		if (existFile(fileName))
 		{
-			sql = "UPDATE `new_files` SET `type`= "+t.ID+" ,`schede_id`= "+IdScheda+" ,`last_update`= "+FunctionsUtils.getTime()+" WHERE `filename` = '"+SQL.escape(fileName)+"'";
+			sql = "UPDATE `new_files` SET `type`= " + t.ID + " ,`schede_id`= " + IdScheda + " ,`last_update`= "
+					+ FunctionsUtils.getTime() + " WHERE `filename` = '" + SQL.escape(fileName) + "'";
 		}
 		
 		SQL.ExecuteQuery(sql);
-						
+		
 		ResultSet r = SQL.FetchData("SELECT * FROM `new_files` WHERE `filename` = '" + SQL.escape(fileName) + "';");
 		try
 		{

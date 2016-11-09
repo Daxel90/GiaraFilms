@@ -64,7 +64,6 @@ public class AnalizeFileService implements Runnable
 				if (scheda == null)
 				{
 					SQLQuery.write_update_new_cache(fI.title, fI.type, -1, fI.year);
-					SQLQuery.write_update_new_cache_search(fI.title, fI.type, -1, fI.year);
 					NewServerQuery.updateFileInfo(fileName, -1);
 					SQLQuery.write_update_File(fileName, size, -1, fI.type);
 					schede_non_trovate++;
@@ -73,7 +72,6 @@ public class AnalizeFileService implements Runnable
 				int schedaID = scheda.ID;
 				
 				SQLQuery.write_update_new_cache(fI.title, fI.type, schedaID, fI.year);
-				SQLQuery.write_update_new_cache_search(fI.title, fI.type, schedaID, fI.year);
 				
 				NewServerQuery.uploadSchede(scheda);
 				NewServerQuery.updateFileInfo(fileName, schedaID);
