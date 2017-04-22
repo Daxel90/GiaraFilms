@@ -101,22 +101,22 @@ public class SearchService
 													TmdbApiSearchFilm httpF = new TmdbApiSearchFilm(f.title, f.year);
 													if (httpF.scheda == null)
 													{
-														SQLQuery.write_notupdate_new_cache(f.title, f.type, -1,
+														SQLQuery.write_new_cache(f.title, f.type, -1,
 																f.year);
-														SQLQuery.write_notupdate_File(s2, size, -1, f.type);
+														SQLQuery.write_File(s2, size, -1, f.type);
 														break;
 													}
 													int schedaID = SQLQuery.writeScheda(httpF.scheda);
 													
 													list.addScheda(httpF.scheda);
 													
-													SQLQuery.write_notupdate_new_cache(f.title, f.type, schedaID,
+													SQLQuery.write_new_cache(f.title, f.type, schedaID,
 															f.year);
-													SQLQuery.write_notupdate_File(s2, size, schedaID, f.type);
+													SQLQuery.write_File(s2, size, schedaID, f.type);
 												}
 												else
 												{
-													SQLQuery.write_notupdate_File(s2, size, cache, f.type);
+													SQLQuery.write_File(s2, size, cache, f.type);
 												}
 												break;
 											case SerieTV:
@@ -132,15 +132,15 @@ public class SearchService
 															f.year);
 													if (httpF.scheda == null)
 													{
-														SQLQuery.write_notupdate_new_cache(f.title, f.type, -1,
+														SQLQuery.write_new_cache(f.title, f.type, -1,
 																f.year);
 														break;
 													}
 													int schedaSTV = SQLQuery.writeScheda(httpF.scheda);
 													
-													SQLQuery.write_notupdate_new_cache(f.title, f.type,
+													SQLQuery.write_new_cache(f.title, f.type,
 															schedaSTV, f.year);
-													int FileId = SQLQuery.write_notupdate_File(s2, size, schedaSTV,
+													int FileId = SQLQuery.write_File(s2, size, schedaSTV,
 															f.type);
 															
 													list.addScheda(httpF.scheda);
@@ -149,7 +149,7 @@ public class SearchService
 												}
 												else
 												{
-													int FileId = SQLQuery.write_notupdate_File(s2, size, cache2,
+													int FileId = SQLQuery.write_File(s2, size, cache2,
 															f.type);
 													SQLQuery.writeEpisodeInfo(FileId, cache2, f.episode, f.series);
 												}

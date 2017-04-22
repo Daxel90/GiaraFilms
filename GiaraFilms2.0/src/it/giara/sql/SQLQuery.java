@@ -64,18 +64,10 @@ public class SQLQuery
 	// ----------NEW TABLES----------
 	
 	// ---cache---
-	public synchronized static void write_update_new_cache(String search, MainType type, int ID, int year)
+	public synchronized static void write_new_cache(String search, MainType type, int ID, int year)
 	{
 		SQL.ExecuteQuery(
 				"INSERT OR REPLACE INTO `new_cache`(`search`, `type`, `id_result`, `year`, `last_update`) VALUES ('"
-						+ SQL.escape(search) + "', " + type.ID + ", " + ID + ", " + year + ", "
-						+ FunctionsUtils.getTime() + ");");
-	}
-	
-	public synchronized static void write_notupdate_new_cache(String search, MainType type, int ID, int year)
-	{
-		SQL.ExecuteQuery(
-				"INSERT OR IGNORE INTO `new_cache`(`search`, `type`, `id_result`, `year`, `last_update`) VALUES ('"
 						+ SQL.escape(search) + "', " + type.ID + ", " + ID + ", " + year + ", "
 						+ FunctionsUtils.getTime() + ");");
 	}
@@ -233,30 +225,7 @@ public class SQLQuery
 	
 	// Files Table
 	
-	public synchronized static int write_notupdate_File(final String fileName, final String size, final int IdScheda,
-			final MainType t)
-	{
-		
-		SQL.ExecuteQuery(
-				"INSERT OR IGNORE INTO `new_files`(`filename`, `size`, `schede_id`, `type`, `last_update`) VALUES ('"
-						+ SQL.escape(fileName) + "', '" + SQL.escape(size) + "', " + IdScheda + ", " + t.ID + ", "
-						+ FunctionsUtils.getTime() + ");");
-						
-		ResultSet r = SQL.FetchData("SELECT * FROM `new_files` WHERE `filename` = '" + SQL.escape(fileName) + "';");
-		try
-		{
-			if (r.next())
-			{
-				return r.getInt("id");
-			}
-		} catch (SQLException e)
-		{
-			Log.stack(Log.DB, e);
-		}
-		return -1;
-	}
-	
-	public synchronized static int write_update_File(final String fileName, final String size, final int IdScheda,
+	public synchronized static int write_File(final String fileName, final String size, final int IdScheda,
 			final MainType t)
 	{
 		String sql = "INSERT INTO `new_files`(`filename`, `size`, `schede_id`, `type`, `last_update`) VALUES ('"

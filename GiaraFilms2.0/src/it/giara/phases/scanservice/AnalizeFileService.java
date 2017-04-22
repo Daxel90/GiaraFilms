@@ -43,7 +43,7 @@ public class AnalizeFileService implements Runnable
 			{
 				schede_non_trovate++;
 				NewServerQuery.updateFileInfo(fileName, cache);
-				SQLQuery.write_update_File(fileName, size, cache, fI.type);
+				SQLQuery.write_File(fileName, size, cache, fI.type);
 				continue;
 			}
 			else if (cache == -2)
@@ -63,25 +63,25 @@ public class AnalizeFileService implements Runnable
 				
 				if (scheda == null)
 				{
-					SQLQuery.write_update_new_cache(fI.title, fI.type, -1, fI.year);
+					SQLQuery.write_new_cache(fI.title, fI.type, -1, fI.year);
 					NewServerQuery.updateFileInfo(fileName, -1);
-					SQLQuery.write_update_File(fileName, size, -1, fI.type);
+					SQLQuery.write_File(fileName, size, -1, fI.type);
 					schede_non_trovate++;
 					continue;
 				}
 				int schedaID = scheda.ID;
 				
-				SQLQuery.write_update_new_cache(fI.title, fI.type, schedaID, fI.year);
+				SQLQuery.write_new_cache(fI.title, fI.type, schedaID, fI.year);
 				
 				NewServerQuery.uploadSchede(scheda);
 				NewServerQuery.updateFileInfo(fileName, schedaID);
-				SQLQuery.write_update_File(fileName, size, schedaID, fI.type);
+				SQLQuery.write_File(fileName, size, schedaID, fI.type);
 				schede_trovate++;
 			}
 			else
 			{
 				NewServerQuery.updateFileInfo(fileName, cache);
-				SQLQuery.write_update_File(fileName, size, cache, fI.type);
+				SQLQuery.write_File(fileName, size, cache, fI.type);
 				schede_trovate++;
 			}
 			

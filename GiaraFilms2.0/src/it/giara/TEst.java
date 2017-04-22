@@ -1,18 +1,17 @@
 package it.giara;
 
+import it.giara.analyze.FileInfo;
 import it.giara.analyze.enums.MainType;
 import it.giara.phases.Settings;
 import it.giara.source.ListLoader;
-import it.giara.source.SourceChan;
 import it.giara.sql.SQL;
-import it.giara.syncdata.NewServerQuery;
 import it.giara.tmdb.api.TmdbApiLoadSchede;
 import it.giara.utils.Log;
 
 public class TEst
 {
 	public static void main(String[] args)
-	{ //TEST
+	{ // TEST
 		// ThreadManager.submitCacheTask(new InitializeRunnable(null));
 		/*
 		 * String s =
@@ -32,22 +31,20 @@ public class TEst
 		ListLoader.loadSources();
 		// ServerQuery.load150News();
 		
-		// FileInfo f = new
-		// FileInfo("Dheepan.Una.Nuova.Vita.2015.iTALiAN.AC3.DvdRip.XviD-FoRaCrEw.avi",
-		// true);
-		// f.parseTags();
-		//
-		// Log.log(Log.DEBUG, f.type);
-		// Log.log(Log.DEBUG, f.title);
-		// Log.log(Log.DEBUG, f.series);
-		// Log.log(Log.DEBUG, f.episode);
-		// Log.log(Log.DEBUG, f.year);
-		//
-		// Log.log(Log.DEBUG, f.video);
-		// Log.log(Log.DEBUG, f.audio);
-		// for (int x = 0; x < f.tags.size(); x++)
-		// Log.log(Log.DEBUG, f.tags.get(x));
+		FileInfo f = new FileInfo("The Walking Dead - 4x11 - Salvare Il Mondo.mkv", true);
+		f.parseTags();
 		
+		Log.log(Log.DEBUG, f.type);
+		Log.log(Log.DEBUG, f.title);
+		Log.log(Log.DEBUG, f.series);
+		Log.log(Log.DEBUG, f.episode);
+		Log.log(Log.DEBUG, f.year);
+		//
+		Log.log(Log.DEBUG, f.video);
+		Log.log(Log.DEBUG, f.audio);
+		for (int x = 0; x < f.tags.size(); x++)
+			Log.log(Log.DEBUG, f.tags.get(x));
+			
 		// Log.log(Log.DEBUG, f.year);
 		// ServerQuery.sendScheda(SQLQuery.readScheda(674, MainType.Film));
 		// Log.log(Log.DEBUG, ServerQuery.requestScheda(676, MainType.Film));
@@ -56,21 +53,21 @@ public class TEst
 		//
 		// ServerQuery.loadUntil(Integer.parseInt(Settings.getParameter("lastserversync")));
 		
-//		for (final SourceChan s : ListLoader.sources)
-//		{
-//			HTTPList ht = new HTTPList(s.link,".");
-//			Log.log(Log.DEBUG,ht.file.size());
-//			
-//		}
+		// for (final SourceChan s : ListLoader.sources)
+		// {
+		// HTTPList ht = new HTTPList(s.link,".");
+		// Log.log(Log.DEBUG,ht.file.size());
+		//
+		// }
 		
-//		NewServerQuery.loadRequestCommand();
+		// NewServerQuery.loadRequestCommand();
 		
-		TmdbApiLoadSchede api = new TmdbApiLoadSchede(62560,MainType.SerieTV);
-		System.out.println(api.scheda);
+//		TmdbApiLoadSchede api = new TmdbApiLoadSchede(62560, MainType.SerieTV);
+//		System.out.println(api.scheda);
 		
 		// new LoadFileService().run();
 		
-//		NewServerQuery.load100News();
+		// NewServerQuery.load100News();
 		
 		// TmdbApiSearchTVSerie film = new TmdbApiSearchTVSerie("breaking bad",
 		// -1);

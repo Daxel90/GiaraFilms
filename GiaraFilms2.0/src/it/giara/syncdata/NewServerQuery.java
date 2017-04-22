@@ -355,7 +355,7 @@ public class NewServerQuery
 					
 				String[] part = line.split(":--:");
 				MainType type = MainType.getMainTypeByID(Integer.parseInt(part[4]));
-				int id = SQLQuery.write_update_File(part[1], part[2], Integer.parseInt(part[3]), type);
+				int id = SQLQuery.write_File(part[1], part[2], Integer.parseInt(part[3]), type);
 				
 				if (type.equals(MainType.SerieTV))
 				{

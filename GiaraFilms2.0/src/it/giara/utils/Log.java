@@ -78,7 +78,7 @@ public class Log
 enum LogType
 {
 	NETWORK(false), 
-	DEBUG(false), 
+	DEBUG(true), 
 	INFO(true), 
 	CONFIG(true), 
 	FILEINFO(false), 
