@@ -126,8 +126,8 @@ public class DownloadBlock extends JPanel
 		if (file.xdcc != null)
 		{
 			bar.setEnabled(true);
-			bar.setMaximum((int) file.xdcc.getSize() / 1000);
-			bar.setValue((int) file.xdcc.getProgress() / 1000);
+			bar.setMaximum(10000);
+			bar.setValue((int)(file.xdcc.getProgressPercentage()*100));
 			size.setVisible(true);
 			size.setText("<html> <h4>" + StringUtils.humanReadableByteCount(file.xdcc.getProgress(), 2) + " / "
 					+ StringUtils.humanReadableByteCount(file.xdcc.getSize(), 2) + "</html>");

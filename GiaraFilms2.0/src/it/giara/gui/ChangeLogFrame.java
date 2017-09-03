@@ -52,6 +52,10 @@ public class ChangeLogFrame extends JFrame
 		text.setOpaque(false);
 		text.setContentType("text/html");
 		text.setText("<html>"
+				+ "<h2>--------------------" + "<h2>Dev PreRelese 26"
+				+ "<br><h3>\t- Fix della Progress Bar nel download di file più grandi di 4Gb"
+				+ "<br><h3>\t- Migliorato riconoscimento qualità video"
+				+ "<br><h3>\t- Ottimizzato Database Locale"
 				+ "<h2>--------------------" + "<h2>Dev PreRelese 25"
 				+ "<br><h3>\t- Fix importante sul database, Molti Film/SerieTv non comparivano durante una ricerca"
 				+ "<h2>--------------------" + "<h2>Dev PreRelese 24"
