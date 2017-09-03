@@ -35,6 +35,7 @@ public class TVSerieInfoSchede extends DefaultGui
 	
 	public boolean syncRunning = false;
 	AnimatedImageButton sync;
+	JLabel sync_label = new JLabel();
 	
 	public TVSerieInfoSchede(DefaultGui gui, TMDBScheda f)
 	{
@@ -48,10 +49,11 @@ public class TVSerieInfoSchede extends DefaultGui
 			{
 				public void run()
 				{
-					NewServerQuery.loadFileOfSchede(scheda);
+					NewServerQuery.loadFileOfSchede(scheda, sync_label);
 					syncRunning = false;
 					downloads.setVisible(!syncRunning);
 					sync.setVisible(syncRunning);
+					sync_label.setVisible(syncRunning);
 				}
 			};
 			ThreadManager.submitCacheTask(r);
@@ -147,6 +149,11 @@ public class TVSerieInfoSchede extends DefaultGui
 		downloads.setVisible(!syncRunning);
 		downloads.setToolTipText("Scarica");
 		this.add(downloads);
+		
+		sync_label.setBounds((FRAME_WIDTH - 128) / 2, FRAME_HEIGHT - 170, 128, 64);
+		sync_label.setText("<html><h4>Connessione...</html>");
+		sync_label.setHorizontalAlignment(JLabel.CENTER);
+		this.add(sync_label);
 		
 		sync = new AnimatedImageButton("SyncBig(n)", 5, null, 500);
 		sync.setBounds((FRAME_WIDTH - 64) / 2, FRAME_HEIGHT - 100, 64, 64);

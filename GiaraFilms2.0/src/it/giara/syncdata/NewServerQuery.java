@@ -8,6 +8,8 @@ import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JLabel;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -27,6 +29,7 @@ import it.giara.utils.MultipartUtility;
 
 public class NewServerQuery
 {
+	private static String ApiUrl = "http://giaratest.altervista.org/giarafilms/backend/new_backend26.php";
 	
 	// ACTION 1
 	// ArrayList<Object[FileInfo,String]>
@@ -81,8 +84,7 @@ public class NewServerQuery
 		
 		try
 		{
-			MultipartUtility multipart = new MultipartUtility(
-					"http://giaratest.altervista.org/giarafilms/backend/new_backend.php", "UTF-8");
+			MultipartUtility multipart = new MultipartUtility(ApiUrl, "UTF-8");
 			multipart.addFormField("action", "1");
 			multipart.addByteArrayPart("data", gzipData);
 			// Log.log(Log.DEBUG, gzipData.length);
@@ -114,8 +116,7 @@ public class NewServerQuery
 		
 		try
 		{
-			MultipartUtility multipart = new MultipartUtility(
-					"http://giaratest.altervista.org/giarafilms/backend/new_backend.php", "UTF-8");
+			MultipartUtility multipart = new MultipartUtility(ApiUrl, "UTF-8");
 			multipart.addFormField("action", "2");
 			multipart.addByteArrayPart("data", gzipData);
 			// Log.log(Log.DEBUG, gzipData.length);
@@ -136,7 +137,7 @@ public class NewServerQuery
 	// ACTION 3
 	public static void updateFileInfo(String filename, int schedaID)
 	{
-		Log.log(Log.BACKEND, "UploadInfo: "+filename+"  "+schedaID);
+		Log.log(Log.BACKEND, "UploadInfo: " + filename + "  " + schedaID);
 		JSONObject jsonData = new JSONObject();
 		
 		try
@@ -153,8 +154,7 @@ public class NewServerQuery
 		
 		try
 		{
-			MultipartUtility multipart = new MultipartUtility(
-					"http://giaratest.altervista.org/giarafilms/backend/new_backend.php", "UTF-8");
+			MultipartUtility multipart = new MultipartUtility(ApiUrl, "UTF-8");
 			multipart.addFormField("action", "3");
 			multipart.addByteArrayPart("data", gzipData);
 			List<String> response = multipart.finish();
@@ -177,8 +177,7 @@ public class NewServerQuery
 		TMDBScheda scheda = null;
 		try
 		{
-			MultipartUtility multipart = new MultipartUtility(
-					"http://giaratest.altervista.org/giarafilms/backend/new_backend.php", "UTF-8");
+			MultipartUtility multipart = new MultipartUtility(ApiUrl, "UTF-8");
 			multipart.addFormField("action", "4");
 			multipart.addFormField("schede_id", id + "");
 			multipart.addFormField("type", type.ID + "");
@@ -210,7 +209,7 @@ public class NewServerQuery
 		{
 			String data = "action=5";
 			
-			URL url = new URL("http://giaratest.altervista.org/giarafilms/backend/new_backend.php");
+			URL url = new URL(ApiUrl);
 			URLConnection conn;
 			conn = url.openConnection();
 			conn.setRequestProperty("accept-encoding", "gzip, deflate");
@@ -230,7 +229,7 @@ public class NewServerQuery
 					newsLoaded = true;
 				if (!line.contains(":--:"))
 					break;
-					
+				
 				String[] part = line.split(":--:");
 				int n = Integer.parseInt(part[0]);
 				
@@ -255,7 +254,7 @@ public class NewServerQuery
 		{
 			String data = "action=6&type=" + t.ID + "&genre_ids=" + g.Id;
 			
-			URL url = new URL("http://giaratest.altervista.org/giarafilms/backend/new_backend.php");
+			URL url = new URL(ApiUrl);
 			URLConnection conn;
 			conn = url.openConnection();
 			conn.setDoOutput(true);
@@ -270,7 +269,7 @@ public class NewServerQuery
 				Log.log(Log.BACKEND, line);
 				if (!line.contains(":--:"))
 					break;
-					
+				
 				String[] part = line.split(":--:");
 				
 				JSONObject json = new JSONObject(part[1]);
@@ -296,7 +295,7 @@ public class NewServerQuery
 		{
 			String data = "action=7&type=" + t.ID;
 			
-			URL url = new URL("http://giaratest.altervista.org/giarafilms/backend/new_backend.php");
+			URL url = new URL(ApiUrl);
 			URLConnection conn;
 			conn = url.openConnection();
 			conn.setDoOutput(true);
@@ -311,7 +310,7 @@ public class NewServerQuery
 				Log.log(Log.BACKEND, line);
 				if (!line.contains(":--:"))
 					break;
-					
+				
 				String[] part = line.split(":--:");
 				
 				JSONObject json = new JSONObject(part[1]);
@@ -330,13 +329,13 @@ public class NewServerQuery
 	}
 	
 	// ACTION 8
-	public static void loadFileOfSchede(TMDBScheda scheda)
+	public static void loadFileOfSchede(TMDBScheda scheda, JLabel label)
 	{
 		try
 		{
 			String data = "action=8&scheda_id=" + scheda.ID + "&type=" + scheda.type.ID;
 			
-			URL url = new URL("http://giaratest.altervista.org/giarafilms/backend/new_backend.php");
+			URL url = new URL(ApiUrl);
 			URLConnection conn;
 			conn = url.openConnection();
 			conn.setRequestProperty("accept-encoding", "gzip, deflate");
@@ -347,13 +346,45 @@ public class NewServerQuery
 			wr.flush();
 			BufferedReader rd = GZIPCompression.decompressConnection(conn);
 			String line;
+			
+			int expected = -1;
+			int status = 0;
+			
 			while ((line = rd.readLine()) != null)
 			{
 				Log.log(Log.BACKEND, line);
+				
+				if (expected == -1)
+				{
+					try
+					{
+						expected = Integer.parseInt(line.trim());
+					}catch (Exception e)
+					{
+						Log.log(Log.BACKEND, e);
+					}
+					continue;
+				}
+				
 				if (!line.contains(":--:"))
 					break;
-					
+				
 				String[] part = line.split(":--:");
+				
+				try
+				{
+					status = Integer.parseInt(part[0])+1;
+					
+					if(label != null)
+					{
+						label.setText("<html><h4>"+status+"/"+expected+"</html>");
+					}
+					
+				}catch (Exception e)
+				{
+					Log.log(Log.BACKEND, e);
+				}
+				
 				MainType type = MainType.getMainTypeByID(Integer.parseInt(part[4]));
 				int id = SQLQuery.write_File(part[1], part[2], Integer.parseInt(part[3]), type);
 				
@@ -374,16 +405,16 @@ public class NewServerQuery
 		}
 	}
 	
-	//ACTION 9
+	// ACTION 9
 	
-	public static ArrayList<String>  loadRequestCommand()
+	public static ArrayList<String> loadRequestCommand()
 	{
 		ArrayList<String> commands = new ArrayList<String>();
 		try
 		{
 			String data = "action=9";
 			
-			URL url = new URL("http://giaratest.altervista.org/giarafilms/backend/new_backend.php");
+			URL url = new URL(ApiUrl);
 			URLConnection conn;
 			conn = url.openConnection();
 			conn.setRequestProperty("accept-encoding", "gzip, deflate");
@@ -411,6 +442,5 @@ public class NewServerQuery
 		
 		return commands;
 	}
-	
 	
 }
