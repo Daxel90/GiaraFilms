@@ -127,7 +127,7 @@ public class SQLQuery
 			SQL.ExecuteQuery(
 					"INSERT OR REPLACE INTO `new_schede`(`scheda_id`, `title`, `release_date`, `poster`, `background`, `description`, `genre_ids`, `vote`, `type`, `fallback`, `last_update`) VALUES "
 							+ "(" + SQL.escape("" + i.ID) + "," + " '" + SQL.escape(i.title) + "'," + " '"
-							+ SQL.escape(i.relese) + "'," + " '" + SQL.escape(i.poster) + "', " + " '"
+							+ SQL.escape(i.release) + "'," + " '" + SQL.escape(i.poster) + "', " + " '"
 							+ SQL.escape(i.back) + "', " + " '" + SQL.escape(i.desc) + "', " + " '"
 							+ SQL.escape(i.getGeneriIDs()) + "', " + i.vote + ", " + i.type.ID + ", " + i.fallback_desc
 							+ ", " + FunctionsUtils.getTime() + ");");
@@ -147,7 +147,7 @@ public class SQLQuery
 			{
 				scheda.ID = r.getInt("scheda_id");
 				scheda.title = SQL.unescape(r.getString("title"));
-				scheda.relese = SQL.unescape(r.getString("release_date"));
+				scheda.release = SQL.unescape(r.getString("release_date"));
 				scheda.poster = SQL.unescape(r.getString("poster"));
 				scheda.back = SQL.unescape(r.getString("background"));
 				scheda.desc = SQL.unescape(r.getString("description"));
@@ -176,7 +176,7 @@ public class SQLQuery
 				TMDBScheda scheda = new TMDBScheda();
 				scheda.ID = r.getInt("scheda_id");
 				scheda.title = SQL.unescape(r.getString("title"));
-				scheda.relese = SQL.unescape(r.getString("release_date"));
+				scheda.release = SQL.unescape(r.getString("release_date"));
 				scheda.poster = SQL.unescape(r.getString("poster"));
 				scheda.back = SQL.unescape(r.getString("background"));
 				scheda.desc = SQL.unescape(r.getString("description"));
@@ -204,7 +204,7 @@ public class SQLQuery
 				TMDBScheda scheda = new TMDBScheda();
 				scheda.ID = r.getInt("scheda_id");
 				scheda.title = SQL.unescape(r.getString("title"));
-				scheda.relese = SQL.unescape(r.getString("release_date"));
+				scheda.release = SQL.unescape(r.getString("release_date"));
 				scheda.poster = SQL.unescape(r.getString("poster"));
 				scheda.back = SQL.unescape(r.getString("background"));
 				scheda.desc = SQL.unescape(r.getString("description"));

@@ -134,7 +134,7 @@ public class FilmInfoSchede extends DefaultGui
 			info.setBounds((int) ((FRAME_HEIGHT / 2) * 0.67) + 60, FRAME_HEIGHT / 2 + 50,
 					FRAME_WIDTH - ((int) ((FRAME_HEIGHT / 2) * 0.67) + 80), 30);
 					
-		info.setText("<html><h4> " + "Data di Uscita: " + scheda.relese + "<br>" + "Generi: " + scheda.getGeneri()
+		info.setText("<html><h4> " + "Data di Uscita: " + scheda.release + "<br>" + "Generi: " + scheda.getGeneri()
 				+ "</html>");
 		info.setVisible(true);
 		this.add(info);

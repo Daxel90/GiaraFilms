@@ -94,7 +94,7 @@ public class TmdbApiSearchFilm
 					{
 						scheda.ID = film.getInt("id");
 						scheda.title = film.optString("title");
-						scheda.relese = film.optString("release_date");
+						scheda.release = film.optString("release_date");
 						scheda.poster = film.optString("poster_path");
 						scheda.back = film.optString("backdrop_path");
 						scheda.desc = film.optString("overview");
@@ -120,7 +120,7 @@ public class TmdbApiSearchFilm
 						matchName = m;
 						scheda.ID = film.getInt("id");
 						scheda.title = film.optString("title");
-						scheda.relese = film.optString("release_date");
+						scheda.release = film.optString("release_date");
 						scheda.poster = film.optString("poster_path");
 						scheda.back = film.optString("backdrop_path");
 						scheda.desc = film.optString("overview");

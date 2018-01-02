@@ -23,7 +23,7 @@ public class TMDBScheda
 {
 	public int ID;
 	public String title;
-	public String relese;
+	public String release;
 	public String poster;
 	public String back;
 	public String desc;
@@ -389,7 +389,7 @@ public class TMDBScheda
 		{
 			json.put("scheda_id", ID);
 			json.put("title", title);
-			json.put("release_date", relese);
+			json.put("release_date", release);
 			json.put("poster", poster);
 			json.put("background", back);
 			json.put("description", desc);
@@ -411,7 +411,7 @@ public class TMDBScheda
 		{
 			ID = json.getInt("scheda_id");
 			title = json.getString("title");
-			relese = json.getString("release_date");
+			release = json.getString("release_date");
 			poster = json.getString("poster");
 			back = json.getString("background");
 			desc = json.getString("description");
@@ -428,7 +428,7 @@ public class TMDBScheda
 	@Override
 	public String toString()
 	{
-		String result = "ID: " + ID + " title: " + title + " relese: " + relese + " poster: " + poster + " back: "
+		String result = "ID: " + ID + " title: " + title + " release: " + release + " poster: " + poster + " back: "
 				+ back + " desc: " + desc + " vote: " + vote + " genre_ids: ";
 				
 		for (int a : genre_ids)

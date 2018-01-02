@@ -94,7 +94,7 @@ public class TmdbApiSearchTVSerie
 					{
 						scheda.ID = film.getInt("id");
 						scheda.title = film.optString("name");
-						scheda.relese = film.optString("first_air_date");
+						scheda.release = film.optString("first_air_date");
 						scheda.poster = film.optString("poster_path");
 						scheda.back = film.optString("backdrop_path");
 						scheda.desc = film.optString("overview");
@@ -120,7 +120,7 @@ public class TmdbApiSearchTVSerie
 						matchName = m;
 						scheda.ID = film.getInt("id");
 						scheda.title = film.optString("name");
-						scheda.relese = film.optString("first_air_date");
+						scheda.release = film.optString("first_air_date");
 						scheda.poster = film.optString("poster_path");
 						scheda.back = film.optString("backdrop_path");
 						scheda.desc = film.optString("overview");

@@ -65,7 +65,7 @@ public class NewsButton extends JLabel implements MouseListener
 			Stext = "<html><h4>" + newTitle;
 		}
 		
-		String[] year = f.relese.split("-");
+		String[] year = f.release.split("-");
 		if (year.length == 3)
 			Stext += "<br> <h3> <center>" + year[0]+"</center>";
 		Stext += "</html>";

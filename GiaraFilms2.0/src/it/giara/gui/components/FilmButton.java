@@ -81,7 +81,7 @@ public class FilmButton extends JLabel implements MouseListener
 		
 		String textover = Stext.replace("</html>", "");
 		
-		String[] year = f.relese.split("-");
+		String[] year = f.release.split("-");
 		if (year.length == 3)
 			textover += "<html><br> <h3> <center>" + year[0]+"</center>";
 		textover += "</html>";

@@ -12,7 +12,7 @@ import it.giara.utils.DirUtils;
 public class Settings
 {
 	public final static int VERSION = 27;
-	private final static int END_PreReleseVersion = Integer.MAX_VALUE;
+	private final static int END_PreReleaseVersion = Integer.MAX_VALUE;
 	private final static int END_BetaVersion = Integer.MAX_VALUE;
 	private static HashMap<String, String> config = new HashMap<String, String>();
 	
@@ -67,9 +67,9 @@ public class Settings
 	public static String getTitle(int Version)
 	{
 		String result = "GiaraFilms 2.0";
-		if (Version <= END_PreReleseVersion)
-			result = "GiaraFilms 2.0 Dev PreRelese " + Version;
-		else if (Version > END_PreReleseVersion)
+		if (Version <= END_PreReleaseVersion)
+			result = "GiaraFilms 2.0 Dev PreRelease " + Version;
+		else if (Version > END_PreReleaseVersion)
 			result = "GiaraFilms 2.0 Beta " + Version;
 		else if (Version > END_BetaVersion)
 			result = "GiaraFilms 2.0 Build " + Version;
