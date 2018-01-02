@@ -29,7 +29,7 @@ import it.giara.utils.MultipartUtility;
 
 public class NewServerQuery
 {
-	private static String ApiUrl = "http://giaratest.altervista.org/giarafilms/backend/new_backend26.php";
+	private static String ApiUrl = "http://giaratest.altervista.org/giarafilms/backend/new_backend27.php";
 	
 	// ACTION 1
 	// ArrayList<Object[FileInfo,String]>

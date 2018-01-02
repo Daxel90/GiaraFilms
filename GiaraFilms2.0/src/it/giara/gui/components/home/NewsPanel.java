@@ -9,6 +9,7 @@ import it.giara.sql.SQLQuery;
 import it.giara.syncdata.NewServerQuery;
 import it.giara.tmdb.TMDBScheda;
 import it.giara.utils.FunctionsUtils;
+import it.giara.utils.Log;
 import it.giara.utils.ThreadManager;
 
 public class NewsPanel extends JPanel
@@ -108,7 +109,11 @@ public class NewsPanel extends JPanel
 				if (scheme[y][x] == 0)
 					break;
 					
+				if(nScheda >= 100)
+					return;
+				
 				TMDBScheda scheda = SQLQuery.readScheda(NewServerQuery.news[nScheda], MainType.Film);
+				
 				while (scheda == null || scheda.back.equals("") || scheda.poster.equals(""))
 				{
 					nScheda++;

@@ -52,6 +52,10 @@ public class ChangeLogFrame extends JFrame
 		text.setOpaque(false);
 		text.setContentType("text/html");
 		text.setText("<html>"
+				+ "<h2>--------------------" + "<h2>Dev PreRelese 27"
+				+ "<br><h3>\t- Risolto problema sincronizzazione con il server"
+				+ "<br><h3>\t- Risolto problema caricamento News nella HomePage"
+				+ "<br><h3>\t- Azzerate cache Server per rimuovere file inesistenti"
 				+ "<h2>--------------------" + "<h2>Dev PreRelese 26"
 				+ "<br><h3>\t- Aggiunta progressione sincronizzazione file"
 				+ "<br><h3>\t- Fix della Progress Bar nel download di file più grandi di 4Gb"

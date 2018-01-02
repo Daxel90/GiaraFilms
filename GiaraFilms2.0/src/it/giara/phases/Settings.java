@@ -11,7 +11,7 @@ import it.giara.utils.DirUtils;
 
 public class Settings
 {
-	public final static int VERSION = 26;
+	public final static int VERSION = 27;
 	private final static int END_PreReleseVersion = Integer.MAX_VALUE;
 	private final static int END_BetaVersion = Integer.MAX_VALUE;
 	private static HashMap<String, String> config = new HashMap<String, String>();
@@ -91,7 +91,7 @@ public class Settings
 			prop.putBoolean("Savelog", false);
 		}
 		
-		if (Integer.parseInt(Settings.getParameter("DBversion")) < 26)
+		if (Integer.parseInt(Settings.getParameter("DBversion")) < 27)
 		{
 			SQLQuery.DbClear();
 			setParameter("DBversion", "26");
