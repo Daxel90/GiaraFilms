@@ -41,7 +41,7 @@ public class TMDBScheda
 	
 	public BufferedImage initPoster_w140(final JPanel filmListPanel)
 	{
-		final String link = "http://image.tmdb.org/t/p/w148";
+		final String link = "http://image.tmdb.org/t/p/w185";
 		if (poster_w140 == null)
 		{
 			final File f = new File(DirUtils.getCacheDir() + File.separator + "image",
@@ -64,7 +64,7 @@ public class TMDBScheda
 							
 							if (poster_w140 != null)
 							{
-								poster_w140 = ImageUtils.scaleImage(poster_w140, 140, 200);
+								poster_w140 = ImageUtils.scaleImage(poster_w140, 140, 200); // Fast Fix Resizing Image
 								try
 								{
 									if (!f.getParentFile().exists())
@@ -160,7 +160,7 @@ public class TMDBScheda
 	
 	public BufferedImage initBack_w1920(final JLabel label)
 	{
-		final String link = "http://image.tmdb.org/t/p/w1920";
+		final String link = "http://image.tmdb.org/t/p/original";
 		if (back_w1920 == null)
 		{
 			final File f = new File(DirUtils.getCacheDir() + File.separator + "image",
@@ -183,6 +183,7 @@ public class TMDBScheda
 							back_w1920 = ImageUtils.getHttpBufferedImage(link + back);
 							if (back_w1920 != null)
 							{
+								back_w1920 = ImageUtils.scaleImage(back_w1920, 1920, 1080); //Fast Fix Resizing Image
 								try
 								{
 									if (!f.getParentFile().exists())
